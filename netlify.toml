@@ -1,0 +1,11 @@
+# Netlify-configuratie voor de Caro Leriche site
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Decap CMS gebruikt Netlify Identity + Git Gateway voor Caro's login.
+# Zet in de Netlify-UI (na deploy) aan:
+#   Site settings > Identity > Enable Identity
+#   Identity > Services > Git Gateway > Enable
+#   Identity > Registration > Invite only  (zodat alleen genodigden inloggen)
+# Nodig daarna Caro uit via Identity > Invite users.
