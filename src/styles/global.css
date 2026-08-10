@@ -105,7 +105,8 @@ section.pad{padding:104px 0}
 .contact{background:var(--teal);color:#fff}
 .contact .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:center}
 .agent-card{display:flex;gap:22px;align-items:center}
-.agent-photo{width:118px;height:118px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid rgba(255,255,255,.35);background:var(--teal-deep)}
+.agent-photo{width:118px;height:118px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid rgba(255,255,255,.35);background:#fff;display:grid;place-items:center}
+.agent-photo img{width:62%;height:62%;object-fit:contain}
 .agent-card h3{font-size:1.7rem}
 .agent-card .role{opacity:.8;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:#f3ddce}
 .contact h2{font-size:clamp(2rem,3.4vw,2.9rem);margin-bottom:.4em}
