@@ -4,7 +4,7 @@ const {
   title = 'Caro Leriche — Real Estate Spain',
   description = 'Persoonlijk en exclusief vastgoed in Spanje. Caro Leriche begeleidt kopers bij het vinden van hun plek in de zon — en fotografeert de woningen zelf.',
 } = Astro.props;
-const SITE_VERSION = 'v1.03';
+const SITE_VERSION = 'v1.04';
 const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%232A7385'/%3E%3Ctext%20x='32'%20y='45'%20font-family='Georgia,serif'%20font-size='32'%20fill='white'%20text-anchor='middle'%3ECL%3C/text%3E%3C/svg%3E";
 ---
 <!doctype html>
@@ -65,18 +65,6 @@ const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%
       if (v) v.muted = !on;
       sb.textContent = on ? '🔊 geluid aan' : '🔈 tik voor geluid';
     });
-  </script>
-
-  <!-- Netlify Identity: nodig voor Caro's login op /admin (uitnodiging + wachtwoord) -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <script is:inline>
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on('init', function (user) {
-        if (!user) {
-          window.netlifyIdentity.on('login', function () { document.location.href = '/admin/'; });
-        }
-      });
-    }
   </script>
 </body>
 </html>

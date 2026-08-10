@@ -1,15 +1,16 @@
 ---
 import Base from '../layouts/Base.astro';
-import { getCollection } from 'astro:content';
+import { sanityClient } from 'sanity:client';
+import { urlFor, WONINGEN_QUERY } from '../sanity/lib';
 
-const alle = (await getCollection('woningen'))
-  .filter((w) => w.data.beschikbaar)
-  .sort((a, b) => a.data.volgorde - b.data.volgorde);
+const alle = await sanityClient.fetch(WONINGEN_QUERY);
 
-const uitgelicht = alle.find((w) => w.data.uitgelicht) || alle[0];
+const uitgelicht = alle.find((w) => w.uitgelicht) || alle[0];
 const overige = alle.filter((w) => !uitgelicht || w.slug !== uitgelicht.slug);
 
-const euro = (n) => '€ ' + n.toLocaleString('nl-NL');
+const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
+const heroUrl = (w, width, height) =>
+  w && w.hero ? urlFor(w.hero).width(width).height(height).fit('crop').url() : '';
 const homeHero = 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1900&q=70';
 ---
 <Base>
@@ -41,21 +42,21 @@ const homeHero = 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?a
       {uitgelicht && (
         <div class="spotlight reveal">
           <a href={`/woning/${uitgelicht.slug}/`} class="img">
-            <img src={uitgelicht.data.hero} alt={uitgelicht.data.titel} onerror="this.remove()" />
-            <span class="badge">{uitgelicht.data.status}</span>
+            <img src={heroUrl(uitgelicht, 1400, 900)} alt={uitgelicht.titel} onerror="this.remove()" />
+            <span class="badge">{uitgelicht.status}</span>
           </a>
           <div class="info">
             <div>
-              <h3>{uitgelicht.data.titel}</h3>
-              <div class="plaats">{uitgelicht.data.plaats}</div>
+              <h3>{uitgelicht.titel}</h3>
+              <div class="plaats">{uitgelicht.plaats}</div>
               <div class="meta">
-                <span>{uitgelicht.data.slaapkamers} slaapkamers</span>
-                <span>{uitgelicht.data.badkamers} badkamers</span>
-                <span>{uitgelicht.data.woonoppervlak} m²</span>
+                <span>{uitgelicht.slaapkamers} slaapkamers</span>
+                <span>{uitgelicht.badkamers} badkamers</span>
+                <span>{uitgelicht.woonoppervlak} m²</span>
               </div>
             </div>
             <div class="right">
-              <div class="prijs">{euro(uitgelicht.data.prijs)}</div>
+              <div class="prijs">{euro(uitgelicht.prijs)}</div>
               <a class="go" href={`/woning/${uitgelicht.slug}/`}>Bekijk woning →</a>
             </div>
           </div>
@@ -71,24 +72,30 @@ const homeHero = 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?a
             {overige.map((w) => (
               <a class="card" href={`/woning/${w.slug}/`}>
                 <div class="img">
-                  <img src={w.data.hero} alt={w.data.titel} loading="lazy" onerror="this.remove()" />
-                  <span class="status">{w.data.status}</span>
+                  <img src={heroUrl(w, 800, 600)} alt={w.titel} loading="lazy" onerror="this.remove()" />
+                  <span class="status">{w.status}</span>
                 </div>
                 <div class="body">
-                  <h3>{w.data.titel}</h3>
-                  <div class="plaats">{w.data.plaats}</div>
+                  <h3>{w.titel}</h3>
+                  <div class="plaats">{w.plaats}</div>
                   <div class="meta">
-                    <span>{w.data.slaapkamers} slk</span>
-                    <span>{w.data.badkamers} bad</span>
-                    <span>{w.data.woonoppervlak} m²</span>
+                    <span>{w.slaapkamers} slk</span>
+                    <span>{w.badkamers} bad</span>
+                    <span>{w.woonoppervlak} m²</span>
                   </div>
-                  <div class="prijs">{euro(w.data.prijs)}</div>
+                  <div class="prijs">{euro(w.prijs)}</div>
                   <div class="link">Bekijk woning →</div>
                 </div>
               </a>
             ))}
           </div>
         </div>
+      )}
+
+      {alle.length === 0 && (
+        <p class="reveal" style="text-align:center;color:var(--muted)">
+          Nog geen woningen toegevoegd. Voeg de eerste toe via <a href="/studio">het beheerportaal</a>.
+        </p>
       )}
     </div>
   </section>

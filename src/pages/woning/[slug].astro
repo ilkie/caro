@@ -1,16 +1,26 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { getCollection } from 'astro:content';
+import { sanityClient } from 'sanity:client';
+import { urlFor, omschrijvingToHtml, WONING_SLUGS_QUERY, WONING_QUERY } from '../../sanity/lib';
 
 export async function getStaticPaths() {
-  const woningen = await getCollection('woningen');
-  return woningen.map((w) => ({ params: { slug: w.slug }, props: { woning: w } }));
+  const slugs = await sanityClient.fetch(WONING_SLUGS_QUERY);
+  const woningen = await Promise.all(
+    slugs.map((s) => sanityClient.fetch(WONING_QUERY, { slug: s.slug }))
+  );
+  return woningen
+    .filter(Boolean)
+    .map((w) => ({ params: { slug: w.slug }, props: { woning: w } }));
 }
 
-const { woning } = Astro.props;
-const d = woning.data;
-const { Content } = await woning.render();
-const euro = (n) => '€ ' + n.toLocaleString('nl-NL');
+const { woning: d } = Astro.props;
+const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
+const heroUrl = d.hero ? urlFor(d.hero).width(2000).height(1200).fit('crop').url() : '';
+const galerij = d.galerij || [];
+const kenmerkenBinnen = d.kenmerkenBinnen || [];
+const kenmerkenBuiten = d.kenmerkenBuiten || [];
+const afstanden = d.afstanden || [];
+const verhaalHtml = omschrijvingToHtml(d.omschrijving);
 const pageTitle = `${d.titel}, ${d.plaats} — ${d.status} | Caro Leriche`;
 const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaapkamers, ${d.woonoppervlak} m². Persoonlijk begeleid door Caro Leriche, Real Estate Spain.`;
 ---
@@ -18,15 +28,14 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
   <!-- VIDEO-HERO -->
   <section class="hero">
     <div class="ph kenburns">
-      <img class="photo" src={d.hero} alt={d.titel} onerror="this.remove()" />
+      <img class="photo" src={heroUrl} alt={d.titel} onerror="this.remove()" />
       {d.video && d.video.length > 0 && (
-        <video class="bgvid" autoplay muted loop playsinline poster={d.hero}>
+        <video class="bgvid" autoplay muted loop playsinline poster={heroUrl}>
           <source src={d.video} type="video/mp4" />
         </video>
       )}
     </div>
     <div class="hero-inner">
-      <!-- ✎ Vervang de "CL" door Caro's echte logo (SVG/PNG) in Base of hier -->
       <div class="heromark"><img src="/logo-cl.png" alt="Caro Leriche" /></div>
       <div class="eyebrow">{d.status} · {d.regio}</div>
       <h1 class="vname"><span class="typed" data-text={d.titel}></span><span class="caret"></span></h1>
@@ -56,18 +65,18 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
     <div class="wrap lead reveal">
       <div class="eyebrow">Welkom thuis</div>
       <h2>{d.titel}</h2>
-      <Content />
+      <div set:html={verhaalHtml} />
     </div>
   </section>
 
   <!-- GALERIJ -->
-  {d.galerij.length > 0 && (
+  {galerij.length > 0 && (
     <section class="pad" style="padding-top:0">
       <div class="wrap">
         <div class="masonry reveal">
-          {d.galerij.map((g) => (
+          {galerij.map((g) => (
             <div class="item">
-              <img src={g.src} alt={g.label || d.titel} loading="lazy" onerror="this.style.opacity=0" />
+              <img src={g.src ? urlFor(g.src).width(1200).url() : ''} alt={g.label || d.titel} loading="lazy" onerror="this.style.opacity=0" />
               {g.label && <span class="tag">{g.label}</span>}
             </div>
           ))}
@@ -86,18 +95,18 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
       <div class="feat-grid">
         <div class="col">
           <h3>Binnen</h3>
-          <ul>{d.kenmerkenBinnen.map((k) => <li>{k}</li>)}</ul>
+          <ul>{kenmerkenBinnen.map((k) => <li>{k}</li>)}</ul>
         </div>
         <div class="col">
           <h3>Buiten</h3>
-          <ul>{d.kenmerkenBuiten.map((k) => <li>{k}</li>)}</ul>
+          <ul>{kenmerkenBuiten.map((k) => <li>{k}</li>)}</ul>
         </div>
       </div>
     </div>
   </section>
 
   <!-- LOCATIE -->
-  {d.afstanden.length > 0 && (
+  {afstanden.length > 0 && (
     <section class="pad">
       <div class="wrap loc-grid reveal">
         <div class="ph" style="background:linear-gradient(135deg,#E7D3BF,#7Fb8bf)">
@@ -109,7 +118,7 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
           <h2 style="font-size:clamp(1.7rem,3vw,2.3rem);font-weight:400;margin:.3em 0 .5em">{d.plaats}</h2>
           <p style="color:var(--muted)">Rustig gelegen, met alles binnen handbereik.</p>
           <div class="dist">
-            {d.afstanden.map((a) => (
+            {afstanden.map((a) => (
               <div class="d"><span>{a.plek}</span><span>{a.tijd}</span></div>
             ))}
           </div>
