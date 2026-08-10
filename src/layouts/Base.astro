@@ -4,7 +4,7 @@ const {
   title = 'Caro Leriche — Real Estate Spain',
   description = 'Persoonlijk en exclusief vastgoed in Spanje. Caro Leriche begeleidt kopers bij het vinden van hun plek in de zon — en fotografeert de woningen zelf.',
 } = Astro.props;
-const SITE_VERSION = 'v1.05';
+const SITE_VERSION = 'v1.06';
 const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%232A7385'/%3E%3Ctext%20x='32'%20y='45'%20font-family='Georgia,serif'%20font-size='32'%20fill='white'%20text-anchor='middle'%3ECL%3C/text%3E%3C/svg%3E";
 ---
 <!doctype html>
@@ -49,8 +49,15 @@ const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%
       <div>Real Estate Spain · Werkzaam in heel Spanje</div>
       <div>RAICV 3994 · © 2026 Caro Leriche</div>
       <div style="opacity:.5;font-size:.72rem;letter-spacing:.12em;width:100%;text-align:center;margin-top:6px">{SITE_VERSION}</div>
+      <a href="/beheer/" class="beheer-link" aria-label="Inloggen (beheer)" title="Beheer">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10" rx="2"></rect><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"></path></svg>
+      </a>
     </div>
   </footer>
+  <style>
+    .beheer-link{opacity:.25;color:inherit;display:inline-flex;width:100%;justify-content:center;margin-top:12px;transition:opacity .2s}
+    .beheer-link:hover{opacity:.7}
+  </style>
 
   <script is:inline>
     var io = new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
