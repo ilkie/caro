@@ -1,16 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
-import { sanityClient } from 'sanity:client';
-import { urlFor, WONINGEN_QUERY } from '../sanity/lib';
+import { getWoningen } from '../lib/supabase';
 
-const alle = await sanityClient.fetch(WONINGEN_QUERY);
+const alle = await getWoningen();
 
 const uitgelicht = alle.find((w) => w.uitgelicht) || alle[0];
 const overige = alle.filter((w) => !uitgelicht || w.slug !== uitgelicht.slug);
 
 const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
-const heroUrl = (w, width, height) =>
-  w && w.hero ? urlFor(w.hero).width(width).height(height).fit('crop').url() : '';
 const homeHero = 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1900&q=70';
 ---
 <Base>
@@ -42,7 +39,7 @@ const homeHero = 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?a
       {uitgelicht && (
         <div class="spotlight reveal">
           <a href={`/woning/${uitgelicht.slug}/`} class="img">
-            <img src={heroUrl(uitgelicht, 1400, 900)} alt={uitgelicht.titel} onerror="this.remove()" />
+            <img src={uitgelicht.hero} alt={uitgelicht.titel} onerror="this.remove()" />
             <span class="badge">{uitgelicht.status}</span>
           </a>
           <div class="info">
@@ -72,7 +69,7 @@ const homeHero = 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?a
             {overige.map((w) => (
               <a class="card" href={`/woning/${w.slug}/`}>
                 <div class="img">
-                  <img src={heroUrl(w, 800, 600)} alt={w.titel} loading="lazy" onerror="this.remove()" />
+                  <img src={w.hero} alt={w.titel} loading="lazy" onerror="this.remove()" />
                   <span class="status">{w.status}</span>
                 </div>
                 <div class="body">
@@ -94,7 +91,7 @@ const homeHero = 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?a
 
       {alle.length === 0 && (
         <p class="reveal" style="text-align:center;color:var(--muted)">
-          Nog geen woningen toegevoegd. Voeg de eerste toe via <a href="/studio">het beheerportaal</a>.
+          Nog geen woningen toegevoegd. Voeg de eerste toe via <a href="/beheer/">het beheer-dashboard</a>.
         </p>
       )}
     </div>

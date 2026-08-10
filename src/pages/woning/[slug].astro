@@ -1,26 +1,19 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { sanityClient } from 'sanity:client';
-import { urlFor, omschrijvingToHtml, WONING_SLUGS_QUERY, WONING_QUERY } from '../../sanity/lib';
+import { getAlleWoningen } from '../../lib/supabase';
 
 export async function getStaticPaths() {
-  const slugs = await sanityClient.fetch(WONING_SLUGS_QUERY);
-  const woningen = await Promise.all(
-    slugs.map((s) => sanityClient.fetch(WONING_QUERY, { slug: s.slug }))
-  );
-  return woningen
-    .filter(Boolean)
-    .map((w) => ({ params: { slug: w.slug }, props: { woning: w } }));
+  const woningen = await getAlleWoningen();
+  return woningen.map((w) => ({ params: { slug: w.slug }, props: { woning: w } }));
 }
 
 const { woning: d } = Astro.props;
 const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
-const heroUrl = d.hero ? urlFor(d.hero).width(2000).height(1200).fit('crop').url() : '';
 const galerij = d.galerij || [];
-const kenmerkenBinnen = d.kenmerkenBinnen || [];
-const kenmerkenBuiten = d.kenmerkenBuiten || [];
+const kenmerkenBinnen = d.kenmerken_binnen || [];
+const kenmerkenBuiten = d.kenmerken_buiten || [];
 const afstanden = d.afstanden || [];
-const verhaalHtml = omschrijvingToHtml(d.omschrijving);
+const alineas = (d.omschrijving || '').split(/\n{2,}|\n/).map((s) => s.trim()).filter(Boolean);
 const pageTitle = `${d.titel}, ${d.plaats} — ${d.status} | Caro Leriche`;
 const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaapkamers, ${d.woonoppervlak} m². Persoonlijk begeleid door Caro Leriche, Real Estate Spain.`;
 ---
@@ -28,9 +21,9 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
   <!-- VIDEO-HERO -->
   <section class="hero">
     <div class="ph kenburns">
-      <img class="photo" src={heroUrl} alt={d.titel} onerror="this.remove()" />
+      <img class="photo" src={d.hero} alt={d.titel} onerror="this.remove()" />
       {d.video && d.video.length > 0 && (
-        <video class="bgvid" autoplay muted loop playsinline poster={heroUrl}>
+        <video class="bgvid" autoplay muted loop playsinline poster={d.hero}>
           <source src={d.video} type="video/mp4" />
         </video>
       )}
@@ -65,7 +58,7 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
     <div class="wrap lead reveal">
       <div class="eyebrow">Welkom thuis</div>
       <h2>{d.titel}</h2>
-      <div set:html={verhaalHtml} />
+      {alineas.map((p) => <p>{p}</p>)}
     </div>
   </section>
 
@@ -76,7 +69,7 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
         <div class="masonry reveal">
           {galerij.map((g) => (
             <div class="item">
-              <img src={g.src ? urlFor(g.src).width(1200).url() : ''} alt={g.label || d.titel} loading="lazy" onerror="this.style.opacity=0" />
+              <img src={g.src} alt={g.label || d.titel} loading="lazy" onerror="this.style.opacity=0" />
               {g.label && <span class="tag">{g.label}</span>}
             </div>
           ))}
