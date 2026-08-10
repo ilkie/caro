@@ -1,0 +1,80 @@
+---
+import '../styles/global.css';
+const {
+  title = 'Caro Leriche — Real Estate Spain',
+  description = 'Persoonlijk en exclusief vastgoed in Spanje. Caro Leriche begeleidt kopers bij het vinden van hun plek in de zon — en fotografeert de woningen zelf.',
+} = Astro.props;
+const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%232A7385'/%3E%3Ctext%20x='32'%20y='45'%20font-family='Georgia,serif'%20font-size='32'%20fill='white'%20text-anchor='middle'%3ECL%3C/text%3E%3C/svg%3E";
+---
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Inter:wght@300;400;500;600&family=Noto+Serif+Display:wdth,wght@62.5..100,400..600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img class="brandlogo" src="/logo-cl.png" alt="Caro Leriche" />
+        <span class="name">Caro Leriche<small>Real Estate Spain</small></span>
+      </a>
+      <nav>
+        <a href="/#woningen">Woningen</a>
+        <a href="/#fotografie">Fotografie</a>
+        <a href="/#over">Over Caro</a>
+        <a href="/#contact">Contact</a>
+        <a class="cta" href="/#contact">Plan bezichtiging</a>
+      </nav>
+      <button class="burger" aria-label="menu" type="button" onclick="var n=document.querySelector('.top nav');n.style.display=(getComputedStyle(n).display==='none'?'flex':'none')">☰</button>
+    </div>
+  </header>
+
+  <slot />
+
+  <footer class="site">
+    <div class="wrap">
+      <div class="fname">Caro Leriche</div>
+      <div>Real Estate Spain · Werkzaam in heel Spanje</div>
+      <div>RAICV 3994 · © 2026 Caro Leriche</div>
+    </div>
+  </footer>
+
+  <script is:inline>
+    var io = new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+    document.querySelectorAll('.typed').forEach(function(el){
+      var t = el.getAttribute('data-text') || '', i = 0;
+      (function tick(){ el.textContent = t.slice(0,i); if(i++ < t.length) setTimeout(tick, 95); })();
+    });
+    var sb = document.querySelector('.soundbtn'), v = document.querySelector('.bgvid');
+    if (sb) sb.addEventListener('click', function(){
+      var on = sb.classList.toggle('on');
+      if (v) v.muted = !on;
+      sb.textContent = on ? '🔊 geluid aan' : '🔈 tik voor geluid';
+    });
+  </script>
+
+  <!-- Netlify Identity: nodig voor Caro's login op /admin (uitnodiging + wachtwoord) -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script is:inline>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on('init', function (user) {
+        if (!user) {
+          window.netlifyIdentity.on('login', function () { document.location.href = '/admin/'; });
+        }
+      });
+    }
+  </script>
+</body>
+</html>

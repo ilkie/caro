@@ -1,0 +1,143 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const woningen = await getCollection('woningen');
+  return woningen.map((w) => ({ params: { slug: w.slug }, props: { woning: w } }));
+}
+
+const { woning } = Astro.props;
+const d = woning.data;
+const { Content } = await woning.render();
+const euro = (n) => '€ ' + n.toLocaleString('nl-NL');
+const pageTitle = `${d.titel}, ${d.plaats} — ${d.status} | Caro Leriche`;
+const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaapkamers, ${d.woonoppervlak} m². Persoonlijk begeleid door Caro Leriche, Real Estate Spain.`;
+---
+<Base title={pageTitle} description={pageDesc}>
+  <!-- VIDEO-HERO -->
+  <section class="hero">
+    <div class="ph kenburns">
+      <img class="photo" src={d.hero} alt={d.titel} onerror="this.remove()" />
+      {d.video && d.video.length > 0 && (
+        <video class="bgvid" autoplay muted loop playsinline poster={d.hero}>
+          <source src={d.video} type="video/mp4" />
+        </video>
+      )}
+    </div>
+    <div class="hero-inner">
+      <!-- ✎ Vervang de "CL" door Caro's echte logo (SVG/PNG) in Base of hier -->
+      <div class="heromark"><img src="/logo-cl.png" alt="Caro Leriche" /></div>
+      <div class="eyebrow">{d.status} · {d.regio}</div>
+      <h1 class="vname"><span class="typed" data-text={d.titel}></span><span class="caret"></span></h1>
+      <div class="loc">{d.plaats}</div>
+    </div>
+    <button class="soundbtn" type="button" aria-label="Geluid aan of uit">🔈 tik voor geluid</button>
+    <a class="scrollcue" href="#presentatie">Scroll voor de woning ↓</a>
+  </section>
+
+  <div class="pricebar" id="presentatie">
+    <div class="wrap">{d.titel} · {d.plaats} — <strong>{euro(d.prijs)}</strong> vraagprijs</div>
+  </div>
+
+  <!-- FACTS -->
+  <section class="facts">
+    <div class="wrap">
+      <div class="f"><div class="n">{d.slaapkamers}</div><div class="l">Slaapkamers</div></div>
+      <div class="f"><div class="n">{d.badkamers}</div><div class="l">Badkamers</div></div>
+      <div class="f"><div class="n">{d.woonoppervlak}</div><div class="l">m² woonopp.</div></div>
+      <div class="f"><div class="n">{d.perceel}</div><div class="l">m² perceel</div></div>
+      <div class="f"><div class="n">{d.bouwjaar}</div><div class="l">Bouwjaar</div></div>
+    </div>
+  </section>
+
+  <!-- VERHAAL -->
+  <section class="pad">
+    <div class="wrap lead reveal">
+      <div class="eyebrow">Welkom thuis</div>
+      <h2>{d.titel}</h2>
+      <Content />
+    </div>
+  </section>
+
+  <!-- GALERIJ -->
+  {d.galerij.length > 0 && (
+    <section class="pad" style="padding-top:0">
+      <div class="wrap">
+        <div class="masonry reveal">
+          {d.galerij.map((g) => (
+            <div class="item">
+              <img src={g.src} alt={g.label || d.titel} loading="lazy" onerror="this.style.opacity=0" />
+              {g.label && <span class="tag">{g.label}</span>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- KENMERKEN -->
+  <section class="pad feat">
+    <div class="wrap reveal">
+      <div class="section-head">
+        <div class="eyebrow">Kenmerken</div>
+        <h2>Alles wat deze woning bijzonder maakt</h2>
+      </div>
+      <div class="feat-grid">
+        <div class="col">
+          <h3>Binnen</h3>
+          <ul>{d.kenmerkenBinnen.map((k) => <li>{k}</li>)}</ul>
+        </div>
+        <div class="col">
+          <h3>Buiten</h3>
+          <ul>{d.kenmerkenBuiten.map((k) => <li>{k}</li>)}</ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCATIE -->
+  {d.afstanden.length > 0 && (
+    <section class="pad">
+      <div class="wrap loc-grid reveal">
+        <div class="ph" style="background:linear-gradient(135deg,#E7D3BF,#7Fb8bf)">
+          <!-- ✎ VUL IN: vervang door een Google Maps-embed -->
+          <span class="tag">Kaart / locatie</span>
+        </div>
+        <div>
+          <div class="eyebrow">Locatie</div>
+          <h2 style="font-size:clamp(1.7rem,3vw,2.3rem);font-weight:400;margin:.3em 0 .5em">{d.plaats}</h2>
+          <p style="color:var(--muted)">Rustig gelegen, met alles binnen handbereik.</p>
+          <div class="dist">
+            {d.afstanden.map((a) => (
+              <div class="d"><span>{a.plek}</span><span>{a.tijd}</span></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- CONTACT -->
+  <section class="pad contact">
+    <div class="wrap">
+      <div class="agent-card">
+        <div class="agent-photo"></div>
+        <div>
+          <div class="role">Jouw makelaar</div>
+          <h3>Caro Leriche</h3>
+          <div style="opacity:.85;font-size:.9rem;margin-top:4px">Real Estate Spain · Costa Blanca</div>
+        </div>
+      </div>
+      <div>
+        <h2>Deze woning met eigen ogen zien?</h2>
+        <p>Ik begeleid je persoonlijk — plan een vrijblijvende bezichtiging, ter plaatse of via een videorondleiding.</p>
+        <div class="btns">
+          <a class="btn btn-primary" href="https://wa.me/34600000000">WhatsApp Caro</a>
+          <a class="btn btn-ghost" href="mailto:caro@example.com">Stuur een e-mail</a>
+          <a class="btn btn-ghost" href="tel:+34600000000">+34 600 000 000</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
