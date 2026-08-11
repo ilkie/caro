@@ -257,3 +257,9 @@ body.theme-dark{background:#0a1c22;color:var(--cream)}
 .theme-dark .loc-grid p{color:rgba(241,232,219,.7)}
 
 @media(max-width:720px){ .wp-gal{grid-template-columns:repeat(6,1fr)} .wp-tile.t-wide{grid-column:1/-1} .wp-tile.t-tall{grid-column:span 3} }
+
+/* Persoonlijk bandje (footer woningpagina) */
+.wp-personal{padding:66px 0;text-align:center;border-top:1px solid rgba(241,232,219,.14)}
+.wp-personal .portret{width:96px;height:96px;border-radius:50%;object-fit:cover;object-position:center 22%;margin:0 auto 22px;border:2px solid rgba(241,232,219,.35)}
+.wp-personal blockquote{font-family:var(--serif);font-size:clamp(1.4rem,2.6vw,2rem);font-style:italic;font-weight:400;color:var(--cream);max-width:620px;margin:0 auto;line-height:1.35;font-stretch:82%}
+.wp-personal .ondertekening{font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:#c97a55;margin-top:18px}
