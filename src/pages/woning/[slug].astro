@@ -17,7 +17,7 @@ const alineas = (d.omschrijving || '').split(/\n{2,}|\n/).map((s) => s.trim()).f
 const pageTitle = `${d.titel}, ${d.plaats} — ${d.status} | Caro Leriche`;
 const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaapkamers, ${d.woonoppervlak} m². Persoonlijk begeleid door Caro Leriche, Real Estate Spain.`;
 ---
-<Base title={pageTitle} description={pageDesc}>
+<Base title={pageTitle} description={pageDesc} nav="minimal">
   <!-- VIDEO-HERO -->
   <section class="hero">
     <div class="ph kenburns">
@@ -135,7 +135,7 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
         <p>Ik begeleid je persoonlijk — plan een vrijblijvende bezichtiging, ter plaatse of via een videorondleiding.</p>
         <div class="btns">
           <a class="btn btn-primary" href="https://wa.me/34604272907">WhatsApp Caro</a>
-          <a class="btn btn-ghost" href="mailto:caro@example.com">Stuur een e-mail</a>
+          <a class="btn btn-ghost" href="mailto:caro.realestate.spain@gmail.com">Stuur een e-mail</a>
           <a class="btn btn-ghost" href="tel:+34604272907">+34 604 27 29 07</a>
         </div>
       </div>

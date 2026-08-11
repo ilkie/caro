@@ -3,8 +3,9 @@ import '../styles/global.css';
 const {
   title = 'Caro Leriche — Real Estate Spain',
   description = 'Persoonlijk en exclusief vastgoed in Spanje. Caro Leriche begeleidt kopers bij het vinden van hun plek in de zon — en fotografeert de woningen zelf.',
+  nav = 'full',
 } = Astro.props;
-const SITE_VERSION = 'v1.09';
+const SITE_VERSION = 'v1.10';
 const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%232A7385'/%3E%3Ctext%20x='32'%20y='45'%20font-family='Georgia,serif'%20font-size='32'%20fill='white'%20text-anchor='middle'%3ECL%3C/text%3E%3C/svg%3E";
 ---
 <!doctype html>
@@ -30,14 +31,20 @@ const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%
         <img class="brandlogo" src="/logo-cl.png" alt="Caro Leriche" />
         <span class="name">Caro Leriche<small>Real Estate Spain</small></span>
       </a>
-      <nav>
-        <a href="/#woningen">Woningen</a>
-        <a href="/#fotografie">Fotografie</a>
-        <a href="/#over">Over Caro</a>
-        <a href="/#contact">Contact</a>
-        <a class="cta" href="/#contact">Plan bezichtiging</a>
-      </nav>
-      <button class="burger" aria-label="menu" type="button" onclick="var n=document.querySelector('.top nav');n.style.display=(getComputedStyle(n).display==='none'?'flex':'none')">☰</button>
+      {nav === 'full' ? (
+        <Fragment>
+          <nav>
+            <a href="/#woningen">Woningen</a>
+            <a href="/#fotografie">Fotografie</a>
+            <a href="/#over">Over Caro</a>
+            <a href="/#contact">Contact</a>
+            <a class="cta" href="/#contact">Plan bezichtiging</a>
+          </nav>
+          <button class="burger" aria-label="menu" type="button" onclick="var n=document.querySelector('.top nav');n.style.display=(getComputedStyle(n).display==='none'?'flex':'none')">☰</button>
+        </Fragment>
+      ) : (
+        <nav><a class="cta" href="https://wa.me/34604272907">WhatsApp Caro</a></nav>
+      )}
     </div>
   </header>
 

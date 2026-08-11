@@ -62,7 +62,7 @@ header.top{position:sticky;top:0;z-index:50;background:rgba(251,247,241,.9);back
 .pricebar strong{color:#fff;font-weight:500}
 
 /* ---------- Facts ---------- */
-.facts{border-bottom:1px solid var(--line)}
+.facts{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:26px}
 .facts .wrap{display:grid;grid-template-columns:repeat(5,1fr)}
 .facts .f{padding:34px 12px;text-align:center;border-right:1px solid var(--line)}
 .facts .f:first-child{border-left:1px solid var(--line)}
