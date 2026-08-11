@@ -233,14 +233,14 @@ body.theme-dark{background:#0a1c22;color:var(--cream)}
 .theme-dark .section-head p{color:rgba(241,232,219,.7)}
 
 /* Editorial galerij (asymmetrisch) */
-.wp-gal{max-width:1200px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(12,1fr);gap:16px;grid-auto-flow:dense}
+.wp-gal{max-width:1200px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(12,1fr);gap:12px;grid-auto-flow:dense}
 .wp-tile{position:relative;border-radius:4px;overflow:hidden;background:linear-gradient(135deg,#173c44,#0d262d);min-height:120px}
 .wp-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s}
 .wp-tile:hover img{transform:scale(1.04)}
 .wp-tile span{position:absolute;left:12px;bottom:10px;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.9);text-shadow:0 1px 4px rgba(0,0,0,.5)}
-.wp-tile.t-wide{grid-column:span 7;aspect-ratio:16/10}
-.wp-tile.t-tall{grid-column:span 5;aspect-ratio:4/5}
-.wp-tile.t-full{grid-column:1/-1;aspect-ratio:24/8}
+.wp-tile.t-sm{grid-column:span 4;aspect-ratio:3/4}
+.wp-tile.t-wide{grid-column:span 6;aspect-ratio:3/2}
+.wp-tile.t-full{grid-column:1/-1;aspect-ratio:21/6}
 
 /* Kenmerken dark */
 .theme-dark .feat{background:#0d232b;border-color:rgba(241,232,219,.14)}
@@ -256,7 +256,7 @@ body.theme-dark{background:#0a1c22;color:var(--cream)}
 .theme-dark .loc-grid h2{color:var(--cream)}
 .theme-dark .loc-grid p{color:rgba(241,232,219,.7)}
 
-@media(max-width:720px){ .wp-gal{grid-template-columns:repeat(6,1fr)} .wp-tile.t-wide{grid-column:1/-1} .wp-tile.t-tall{grid-column:span 3} }
+@media(max-width:720px){ .wp-gal{grid-template-columns:repeat(6,1fr)} .wp-tile.t-sm{grid-column:span 3} .wp-tile.t-wide,.wp-tile.t-full{grid-column:1/-1} }
 
 /* Persoonlijk bandje (footer woningpagina) */
 .wp-personal{padding:66px 0;text-align:center;border-top:1px solid rgba(241,232,219,.14)}
