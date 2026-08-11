@@ -14,35 +14,33 @@ const kenmerkenBinnen = d.kenmerken_binnen || [];
 const kenmerkenBuiten = d.kenmerken_buiten || [];
 const afstanden = d.afstanden || [];
 const alineas = (d.omschrijving || '').split(/\n{2,}|\n/).map((s) => s.trim()).filter(Boolean);
+const heeftVideo = !!(d.video && d.video.length > 0);
 const pageTitle = `${d.titel}, ${d.plaats} — ${d.status} | Caro Leriche`;
 const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaapkamers, ${d.woonoppervlak} m². Persoonlijk begeleid door Caro Leriche, Real Estate Spain.`;
+const tegelClass = (i) => (i % 5 === 4 ? 't-full' : i % 2 === 0 ? 't-wide' : 't-tall');
 ---
-<Base title={pageTitle} description={pageDesc} nav="minimal">
-  <!-- VIDEO-HERO -->
-  <section class="hero">
-    <div class="ph kenburns">
-      <img class="photo" src={d.hero} alt={d.titel} onerror="this.remove()" />
-      {d.video && d.video.length > 0 && (
-        <video class="bgvid" autoplay muted loop playsinline poster={d.hero}>
-          <source src={d.video} type="video/mp4" />
-        </video>
-      )}
+<Base title={pageTitle} description={pageDesc} nav="minimal" theme="dark">
+  <!-- VIDEO-HERO (kleiner, met fijn kader) -->
+  <section class="wp-hero" id="top">
+    <div class="wrap">
+      <div class="frame">
+        <div class="stage">
+          {d.hero && <img src={d.hero} alt={d.titel} onerror="this.remove()" />}
+          {heeftVideo && (
+            <video class="bgvid" autoplay muted loop playsinline poster={d.hero}>
+              <source src={d.video} type="video/mp4" />
+            </video>
+          )}
+        </div>
+      </div>
+      <h1 class="naam"><span class="typed" data-text={d.titel}></span><span class="caret"></span></h1>
+      <div class="prijs">{euro(d.prijs)}</div>
+      <div class="sub">{d.status} · {d.plaats}{d.regio ? `, ${d.regio}` : ''}</div>
+      {heeftVideo && <button class="soundbtn" type="button" aria-label="Geluid aan of uit">🔈 tik voor geluid</button>}
     </div>
-    <div class="hero-inner">
-      <div class="heromark"><img src="/logo-cl.png" alt="Caro Leriche" /></div>
-      <div class="eyebrow">{d.status} · {d.regio}</div>
-      <h1 class="vname"><span class="typed" data-text={d.titel}></span><span class="caret"></span></h1>
-      <div class="loc">{d.plaats}</div>
-    </div>
-    <button class="soundbtn" type="button" aria-label="Geluid aan of uit">🔈 tik voor geluid</button>
-    <a class="scrollcue" href="#presentatie">Scroll voor de woning ↓</a>
   </section>
 
-  <div class="pricebar" id="presentatie">
-    <div class="wrap">{d.titel} · {d.plaats} — <strong>{euro(d.prijs)}</strong> vraagprijs</div>
-  </div>
-
-  <!-- FACTS -->
+  <!-- FEITEN (los, dunne lijn) -->
   <section class="facts">
     <div class="wrap">
       <div class="f"><div class="n">{d.slaapkamers}</div><div class="l">Slaapkamers</div></div>
@@ -62,18 +60,17 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
     </div>
   </section>
 
-  <!-- GALERIJ -->
+  <!-- EDITORIAL GALERIJ -->
   {galerij.length > 0 && (
-    <section class="pad" style="padding-top:0">
-      <div class="wrap">
-        <div class="masonry reveal">
-          {galerij.map((g) => (
-            <div class="item">
-              <img src={g.src} alt={g.label || d.titel} loading="lazy" onerror="this.style.opacity=0" />
-              {g.label && <span class="tag">{g.label}</span>}
-            </div>
-          ))}
-        </div>
+    <section style="padding:20px 0 90px">
+      <div class="wrap" style="margin-bottom:22px"><div class="eyebrow">Beeld</div></div>
+      <div class="wp-gal">
+        {galerij.map((g, i) => (
+          <div class={`wp-tile ${tegelClass(i)}`}>
+            {g.src && <img src={g.src} alt={g.label || d.titel} loading="lazy" onerror="this.style.opacity=0" />}
+            {g.label && <span>{g.label}</span>}
+          </div>
+        ))}
       </div>
     </section>
   )}
@@ -102,14 +99,14 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
   {afstanden.length > 0 && (
     <section class="pad">
       <div class="wrap loc-grid reveal">
-        <div class="ph" style="background:linear-gradient(135deg,#E7D3BF,#7Fb8bf)">
+        <div class="ph" style="background:linear-gradient(135deg,#123039,#0b2027)">
           <!-- ✎ VUL IN: vervang door een Google Maps-embed -->
           <span class="tag">Kaart / locatie</span>
         </div>
         <div>
           <div class="eyebrow">Locatie</div>
           <h2 style="font-size:clamp(1.7rem,3vw,2.3rem);font-weight:400;margin:.3em 0 .5em">{d.plaats}</h2>
-          <p style="color:var(--muted)">Rustig gelegen, met alles binnen handbereik.</p>
+          <p>Rustig gelegen, met alles binnen handbereik.</p>
           <div class="dist">
             {afstanden.map((a) => (
               <div class="d"><span>{a.plek}</span><span>{a.tijd}</span></div>
