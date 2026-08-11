@@ -395,7 +395,7 @@ $('deleteBtn').addEventListener('click', async ()=>{
 /* Site opnieuw laten bouwen */
 async function triggerRebuild(){
   if (typeof NETLIFY_BUILD_HOOK==='string' && NETLIFY_BUILD_HOOK){
-    try{ await fetch(NETLIFY_BUILD_HOOK, { method:'POST' }); }catch(e){ /* niet blokkerend */ }
+    try{ await fetch(NETLIFY_BUILD_HOOK, { method:'POST', mode:'no-cors' }); }catch(e){ /* niet blokkerend */ }
   }
 }
 

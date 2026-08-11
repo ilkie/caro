@@ -10,4 +10,4 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 // Netlify build hook — na opslaan laat het dashboard de site herbouwen.
 // Vul later de build hook-URL in (Netlify → Site config → Build & deploy → Build hooks).
-const NETLIFY_BUILD_HOOK = '';
+const NETLIFY_BUILD_HOOK = 'https://api.netlify.com/build_hooks/6a7b19d6e0e4171503362881';
