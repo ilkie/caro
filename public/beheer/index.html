@@ -65,10 +65,10 @@ textarea{min-height:90px;resize:vertical}
 
 /* Form */
 .overlay{position:fixed;inset:0;background:rgba(23,48,57,.45);z-index:40;display:flex;justify-content:center;align-items:flex-start;overflow:auto;padding:28px 16px}
-.panel{width:100%;max-width:760px;background:var(--cream);border-radius:var(--r);box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
-.panel-head{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0}
+.panel{width:100%;max-width:760px;background:var(--cream);border-radius:var(--r);box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden;display:flex;flex-direction:column;max-height:calc(100vh - 48px)}
+.panel-head{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;background:#fff;border-bottom:1px solid var(--line);flex-shrink:0}
 .panel-head h3{font-family:var(--serif);font-weight:500;font-size:1.3rem;font-stretch:75%}
-.panel-body{padding:22px}
+.panel-body{padding:22px;overflow-y:auto;flex:1 1 auto}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
 .field{margin-bottom:14px}
@@ -80,7 +80,7 @@ textarea{min-height:90px;resize:vertical}
 .gitem,.aitem{display:flex;gap:8px;align-items:center;margin-bottom:8px}
 .gitem img{width:60px;height:46px;object-fit:cover;border-radius:6px;flex-shrink:0;background:var(--sand)}
 .mini{background:transparent;color:var(--terra);font-size:1.1rem;line-height:1;padding:0 6px}
-.panel-foot{display:flex;justify-content:space-between;gap:12px;padding:16px 22px;background:#fff;border-top:1px solid var(--line);position:sticky;bottom:0}
+.panel-foot{display:flex;justify-content:space-between;gap:12px;padding:16px 22px;background:#fff;border-top:1px solid var(--line);flex-shrink:0}
 .busy{position:fixed;inset:0;background:rgba(251,247,241,.7);display:grid;place-items:center;z-index:60;font-weight:600;color:var(--teal-deep)}
 .hint{font-size:.75rem;color:var(--muted);margin-top:4px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 20px;border-radius:999px;font-size:.9rem;z-index:80;box-shadow:var(--shadow)}
@@ -191,7 +191,7 @@ textarea{min-height:90px;resize:vertical}
       <button class="btn btn-danger" id="deleteBtn">Verwijderen</button>
       <div style="display:flex;gap:10px">
         <button class="btn btn-ghost" id="cancelBtn">Annuleren</button>
-        <button class="btn btn-primary" id="saveBtn">Opslaan</button>
+        <button class="btn btn-primary" id="saveBtn">Woning opslaan</button>
       </div>
     </div>
   </div>
