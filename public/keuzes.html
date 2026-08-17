@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Caro — even kiezen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+Display:wdth,wght@62.5..100,400..600&display=swap" rel="stylesheet" />
+<style>
+  :root{--cream:#FBF7F1;--ink:#221E1A;--muted:#8A7C70;--teal:#298296;--teal-deep:#1E6675;--line:#DAC9B6;--terracotta:#B15B3C}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',-apple-system,'Segoe UI',sans-serif;background:#F3EADF;color:var(--ink);line-height:1.65;font-weight:300;-webkit-font-smoothing:antialiased}
+  .page{max-width:1080px;margin:0 auto;padding:44px 24px 130px}
+  h1.t{font-family:'Noto Serif Display',Georgia,serif;font-stretch:62.5%;font-size:2.6rem;font-weight:500;line-height:1.05}
+  .intro{color:var(--muted);max-width:620px;margin-top:12px}
+  .blok{background:var(--cream);border:1px solid var(--line);border-radius:16px;padding:26px;margin-top:34px}
+  .blok h2{font-family:'Noto Serif Display',Georgia,serif;font-stretch:62.5%;font-size:1.8rem;font-weight:500}
+  .blok .uitleg{color:var(--muted);font-size:.92rem;margin-top:6px;max-width:640px}
+  .chips{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 16px}
+  .groep .chips{margin-top:0}
+  .chip{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:10px 18px;font:inherit;font-size:.88rem;cursor:pointer;transition:.15s}
+  .chip:hover{border-color:var(--teal)}
+  .chip[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+  .chip small{display:block;font-size:.7rem;opacity:.7;letter-spacing:.04em}
+  .rij{display:flex;gap:34px;flex-wrap:wrap;align-items:flex-start;margin-top:20px}
+  .groep{min-width:200px}
+  .groep .kop{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  iframe{width:100%;border:1px solid var(--line);border-radius:10px;background:#fff;display:block}
+  .keuze{position:sticky;bottom:0;margin-top:34px;background:var(--ink);color:var(--cream);border-radius:16px;padding:20px 24px;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .keuze .lijst{font-size:.95rem}
+  .keuze b{font-weight:600;color:#fff}
+  .kopieer{background:var(--cream);color:var(--ink);border:0;border-radius:999px;padding:11px 22px;font:inherit;font-size:.88rem;cursor:pointer}
+  .kopieer:hover{background:#fff}
+  .voet{color:var(--muted);font-size:.82rem;margin-top:26px}
+  @media(max-width:640px){ .page{padding:28px 14px 150px} h1.t{font-size:2rem} .blok{padding:18px}
+    .chip{width:100%;text-align:left} .groep{min-width:100%} .keuze{flex-direction:column;align-items:flex-start} }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1 class="t">Even kiezen, Caro</h1>
+  <p class="intro">Alles uit je feedback van 17 augustus is verwerkt. Op twee punten was je er nog niet uit — die staan hieronder. Klik op een optie en je ziet hem meteen. Onderaan staat wat je gekozen hebt; stuur dat door en ik zet het vast.</p>
+
+  <div class="blok">
+    <h2>1 · De zin bovenaan de site</h2>
+    <p class="uitleg">Je wilde het woord 'makelaar' eruit, en dat het meer over verbinding gaat. Hier zijn drie voorstellen — en je eigen huidige zin, voor het geval die toch het beste blijft.</p>
+    <div class="chips" id="kopChips"></div>
+    <iframe id="lichtFrame" height="580" title="Voorbeeld hoofdsite"></iframe>
+  </div>
+
+  <div class="blok">
+    <h2>2 · Het menu op de woningpagina</h2>
+    <p class="uitleg">Op de nieuwe donkere achtergrond. Twee dingen: of er een fijn cirkeltje rond de CL komt, en welke kleuren "REAL ESTATE SPAIN" en de knop krijgen.</p>
+    <div class="rij">
+      <div class="groep">
+        <div class="kop">Cirkel rond CL</div>
+        <div class="chips" id="cirkelChips"></div>
+      </div>
+      <div class="groep">
+        <div class="kop">Kleuren</div>
+        <div class="chips" id="kleurChips"></div>
+      </div>
+    </div>
+    <iframe id="donkerFrame" height="470" title="Voorbeeld woningpagina"></iframe>
+    <p class="uitleg" style="margin-top:12px">Het cirkeltje geldt voor allebei de pagina's — je ziet het hierboven bij punt 1 dus meteen mee veranderen.</p>
+  </div>
+
+  <div class="keuze">
+    <div class="lijst" id="samenvatting"></div>
+    <button class="kopieer" id="kopieerBtn" type="button">Kopieer mijn keuze</button>
+  </div>
+
+  <p class="voet">De rest — de uitlijning van het menu, de foto in de kijker, je nieuwe teksten, de galerij zonder afgesneden foto's en het vergrote beeld met pijlen — staat klaar en gaat mee zodra Ilka publiceert.</p>
+</div>
+
+<script type="text/plain" id="siteCss">/* =========================================================
+   Caro Leriche · Real Estate Spain — design system
+   Mix-stijl: strakke basis met fijne lijntjes + zachte accenten.
+   Koppen: Noto Serif Display Extra Condensed (Caro's IG-font). Body: Inter.
+   ========================================================= */
+:root{
+  --cream:#FBF7F1;--sand:#F3EADF;--teal:#298296;--teal-deep:#1E6675;--teal-ink:#123842;
+  --terracotta:#B15B3C;--ink:#221E1A;--muted:#8A7C70;--line:#DAC9B6;
+  --r-soft:14px;--r-pill:999px;
+  --soft:0 22px 55px -26px rgba(30,90,105,.4);--soft2:0 14px 34px -18px rgba(30,90,105,.32);
+  --serif:'Noto Serif Display','Cormorant Garamond',Georgia,serif;
+  --sans:'Inter',-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--ink);background:var(--cream);line-height:1.7;font-weight:300;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.05;font-stretch:62.5%}
+.wrap{max-width:1200px;margin:0 auto;padding:0 40px}
+.eyebrow{text-transform:uppercase;letter-spacing:.32em;font-size:.68rem;font-weight:400;color:var(--terracotta)}
+
+.ph{position:relative;overflow:hidden;border-radius:var(--r-soft);background:linear-gradient(135deg,#E7D3BF,#cdb79f)}
+.ph .photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ph .tag{position:absolute;left:12px;bottom:12px;z-index:3;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#fff;background:rgba(19,51,60,.55);padding:6px 12px;border-radius:var(--r-pill);font-weight:400}
+
+/* ---------- Nav ---------- */
+header.top{position:sticky;top:0;z-index:50;background:rgba(251,247,241,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:76px}
+/* Merkblok: logo en tekstblok exact even hoog (--brandh), en "REAL ESTATE
+   SPAIN" precies even breed als "Caro Leriche". De negatieve margin-right
+   heft de spatie op die letter-spacing achter de laatste letter zet —
+   zonder die correctie oogt de onderregel scheef verdeeld. */
+.brand{--brandh:44px;display:flex;align-items:center;gap:13px}
+.monogram{width:40px;height:40px;border-radius:10px;background:var(--teal);color:#fff;display:grid;place-items:center;font-family:var(--serif);font-size:1.15rem;font-stretch:70%}
+.brand .brandlogo{height:var(--brandh);width:auto;display:block}
+.brand.circled .brandlogo{width:var(--brandh);height:var(--brandh);object-fit:contain;padding:7px;border:1px solid var(--line);border-radius:50%}
+.brand .name{font-family:var(--serif);font-size:1.5rem;line-height:1;letter-spacing:.03em;font-stretch:85%;height:var(--brandh);display:flex;flex-direction:column;justify-content:space-between}
+.brand .name small{display:block;font-family:var(--sans);font-size:.55rem;line-height:1;letter-spacing:.16em;margin-right:-.16em;text-transform:uppercase;color:var(--terracotta);font-weight:400;text-align:justify;text-align-last:justify}
+.top nav{display:flex;gap:30px;align-items:center}
+.top nav a{font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.top nav a:hover{color:var(--teal)}
+.top .cta{background:var(--teal);color:#fff;padding:11px 22px;border-radius:var(--r-pill);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;transition:.2s}
+.top .cta:hover{background:var(--teal-deep)}
+.burger{display:none;background:none;border:0;cursor:pointer;font-size:1.4rem;color:var(--teal)}
+
+/* ---------- Video-hero (woningpagina) ---------- */
+.hero{position:relative;height:92vh;min-height:600px;color:#fff}
+.hero .ph{position:absolute;inset:0;border-radius:0}
+.hero::after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,rgba(19,51,60,.28),rgba(19,51,60,.06) 45%,rgba(19,51,60,.74))}
+.hero .bgvid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;border:0}
+.kenburns .photo{animation:kb 20s ease-in-out infinite alternate}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.12)}}
+.hero-inner{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 30px}
+.heromark{font-family:var(--serif);font-size:clamp(4.5rem,13vw,10rem);line-height:.8;letter-spacing:.06em;color:#fff;margin-bottom:24px;font-stretch:62.5%}
+.heromark img{max-height:130px;width:auto;filter:brightness(0) invert(1)}
+.hero .eyebrow{color:#f0dccd;margin-bottom:14px}
+.hero .vname{font-size:clamp(1.6rem,3.4vw,2.6rem);font-weight:400;letter-spacing:.02em}
+.hero .loc{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;opacity:.9;margin-top:10px}
+.caret{display:inline-block;width:2px;height:.9em;background:currentColor;margin-left:5px;vertical-align:-1px;animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.soundbtn{position:absolute;z-index:4;right:26px;bottom:26px;background:rgba(19,51,60,.4);color:#fff;border:1px solid rgba(255,255,255,.5);padding:9px 16px;border-radius:var(--r-pill);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;backdrop-filter:blur(4px)}
+.soundbtn:hover{background:rgba(19,51,60,.7)}
+.scrollcue{position:absolute;z-index:4;left:50%;transform:translateX(-50%);bottom:26px;color:#fff;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;opacity:.85;animation:bob 2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(5px)}}
+.pricebar{background:var(--teal-ink);color:#fff;text-align:center;padding:15px;font-size:.82rem;letter-spacing:.05em}
+.pricebar strong{color:#fff;font-weight:500}
+
+/* ---------- Facts ---------- */
+.facts{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:26px}
+.facts .wrap{display:grid;grid-template-columns:repeat(5,1fr)}
+.facts .f{padding:34px 12px;text-align:center;border-right:1px solid var(--line)}
+.facts .f:first-child{border-left:1px solid var(--line)}
+.facts .n{font-family:var(--serif);font-size:2.1rem;color:var(--teal-deep);line-height:1;font-stretch:80%}
+.facts .l{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+
+/* ---------- Secties ---------- */
+section.pad{padding:104px 0}
+.lead{max-width:720px}
+.lead h2{font-size:clamp(2.2rem,4vw,3.4rem);font-weight:400;margin:.35em 0 .55em}
+.lead p{color:var(--muted);font-size:1.05rem;margin-bottom:1.1em}
+.lead p:last-child{margin-bottom:0}
+
+/* Masonry-fotogalerij (woningpagina) */
+.masonry{column-count:3;column-gap:14px}
+.masonry .item{break-inside:avoid;margin:0 0 14px;border-radius:var(--r-soft);overflow:hidden;position:relative;background:linear-gradient(135deg,#E7D3BF,#cdb79f);aspect-ratio:3/4}
+.masonry .item:nth-child(3n+1){aspect-ratio:4/5}
+.masonry .item:nth-child(4n){aspect-ratio:1/1}
+.masonry .item:nth-child(5n){aspect-ratio:5/4}
+.masonry .item img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.masonry .item:hover img{transform:scale(1.05)}
+.masonry .item .tag{position:absolute;left:12px;bottom:12px;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:#fff;background:rgba(19,51,60,.55);padding:6px 12px;border-radius:var(--r-pill)}
+
+.feat{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--sand)}
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+.feat .col{background:#fff;border-radius:var(--r-soft);padding:34px;box-shadow:var(--soft2)}
+.feat h3{font-size:1.5rem;margin-bottom:16px;color:var(--teal-deep)}
+.feat ul{list-style:none}
+.feat li{padding:11px 0;border-bottom:1px solid var(--line);font-size:.96rem;display:flex;gap:12px}
+.feat li:last-child{border-bottom:0}
+.feat li:before{content:"—";color:var(--terracotta)}
+
+.loc-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:52px;align-items:center}
+.loc-grid .ph{min-height:380px;box-shadow:var(--soft2)}
+.dist{margin-top:26px;display:grid;grid-template-columns:1fr 1fr;gap:10px 24px}
+.dist .d{display:flex;justify-content:space-between;background:#fff;border-radius:12px;padding:11px 16px;box-shadow:var(--soft2);font-size:.9rem}
+.dist .d span:first-child{color:var(--muted)}
+.dist .d span:last-child{color:var(--teal-deep);font-weight:500}
+
+.contact{background:var(--teal);color:#fff}
+.contact .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:center}
+.agent-card{display:flex;gap:22px;align-items:center}
+.agent-photo{width:118px;height:118px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid rgba(255,255,255,.35);background:#fff;display:grid;place-items:center}
+.agent-photo img{width:62%;height:62%;object-fit:contain}
+.agent-card h3{font-size:1.7rem}
+.agent-card .role{opacity:.8;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:#f3ddce}
+.contact h2{font-size:clamp(2rem,3.4vw,2.9rem);margin-bottom:.4em}
+.contact p{opacity:.9;margin-bottom:26px;max-width:460px}
+.btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn{padding:14px 26px;border-radius:var(--r-pill);font-size:.9rem;transition:transform .15s;display:inline-flex;gap:8px;align-items:center}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:#fff;color:var(--teal-deep);font-weight:600}
+.btn-ghost{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.4)}
+
+footer.site{background:var(--teal-ink);color:#a9c4cc;padding:44px 0;font-size:.82rem;letter-spacing:.03em}
+footer.site .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+footer.site .fname{color:#fff;font-family:var(--serif);font-size:1.4rem;letter-spacing:.04em;font-stretch:80%}
+footer.site a:hover{color:#fff}
+
+/* ---------- Homepage ---------- */
+.home-hero{position:relative;min-height:80vh;display:flex;align-items:center;color:#fff;overflow:hidden}
+.home-hero .ph{position:absolute;inset:0;border-radius:0}
+.home-hero::after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(120deg,rgba(19,51,60,.72),rgba(19,51,60,.22))}
+.home-hero .inner{position:relative;z-index:3;max-width:760px}
+.home-hero h1{font-size:clamp(3rem,7vw,5.6rem);font-weight:400;margin:.15em 0 .35em;letter-spacing:.01em}
+.home-hero p{font-size:1.15rem;opacity:.94;max-width:560px;font-weight:300}
+.home-hero .btns{margin-top:30px}
+
+.section-head{text-align:center;max-width:660px;margin:0 auto 48px}
+.section-head h2{font-size:clamp(2.2rem,4vw,3.2rem);font-weight:400;margin:.25em 0 .4em}
+.section-head p{color:var(--muted)}
+
+/* Uitgelicht pand (spotlight) */
+.spotlight{margin-bottom:56px}
+.spotlight .img{display:block;position:relative;height:44vh;min-height:340px;border-radius:var(--r-soft);overflow:hidden;background:linear-gradient(120deg,#2A7385,#EBC79C)}
+/* object-position hoger dan het midden: de uitsnede toont de woning i.p.v.
+   vooral de ondergrond. Wil Caro nog hoger/lager: alleen dit percentage wijzigen. */
+.spotlight .img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.spotlight .badge{position:absolute;top:16px;left:16px;background:var(--terracotta);color:#fff;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;padding:6px 13px;border-radius:var(--r-pill)}
+.spotlight .kick{position:absolute;top:16px;right:16px;background:rgba(19,51,60,.5);color:#fff;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;padding:6px 13px;border-radius:var(--r-pill);backdrop-filter:blur(4px)}
+/* Spotlight-info als raster van 2 kolommen × 3 rijen, op basislijn uitgelijnd:
+   rij 1 = titel + prijs op dezelfde hoogte, rij 3 = kenmerken + knop op
+   dezelfde hoogte. De rechterkolom is zo breed als de knop en begint links,
+   dus de € staat exact boven de B van BEKIJK WONING. */
+.spotlight .info{display:grid;grid-template-columns:1fr auto;column-gap:40px;align-items:baseline;margin-top:22px}
+.spotlight .info h3{grid-column:1;grid-row:1;font-size:clamp(1.9rem,3.4vw,2.8rem);font-weight:400}
+.spotlight .info .plaats{grid-column:1;grid-row:2;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.spotlight .info .meta{grid-column:1;grid-row:3;display:flex;gap:16px;margin-top:12px;font-size:.85rem;color:var(--muted)}
+.spotlight .info .prijs{grid-column:2;grid-row:1;justify-self:start;font-family:var(--serif);font-size:1.9rem;color:var(--teal-deep);font-stretch:80%}
+.spotlight .info .go{grid-column:2;grid-row:3;justify-self:start;margin-top:12px;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);border-bottom:1px solid var(--teal);padding-bottom:3px}
+
+.woningen-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:30px;max-width:980px;margin:0 auto}
+.card{background:#fff;border-radius:var(--r-soft);overflow:hidden;box-shadow:var(--soft2);transition:transform .2s, box-shadow .2s;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-5px);box-shadow:var(--soft)}
+.card .img{position:relative;aspect-ratio:16/10;overflow:hidden;background:linear-gradient(135deg,#E7D3BF,#cdb79f)}
+.card .img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.card .status{position:absolute;top:12px;left:12px;background:var(--terracotta);color:#fff;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;padding:5px 11px;border-radius:var(--r-pill)}
+.card .body{padding:22px 24px 26px;display:flex;flex-direction:column;flex:1}
+.card h3{font-size:1.6rem;line-height:1.05}
+.card .plaats{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.card .meta{display:flex;gap:16px;margin-top:16px;font-size:.82rem;color:var(--muted)}
+.card .prijs{margin-top:16px;font-family:var(--serif);font-size:1.6rem;color:var(--teal-deep);font-stretch:80%}
+.card .link{margin-top:16px;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+
+/* Fotografie-sectie */
+.foto{background:var(--teal-ink);color:#fff}
+.foto .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.foto .ph{aspect-ratio:4/3;border-radius:var(--r-soft);box-shadow:var(--soft)}
+.foto .eyebrow{color:#f0dccd}
+.foto h2{font-size:clamp(2rem,3.4vw,2.9rem);color:#fff;margin:.2em 0 .5em;font-weight:400}
+.foto p{opacity:.9;margin-bottom:26px;max-width:470px}
+
+.about{background:var(--sand);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.about .wrap{display:grid;grid-template-columns:.7fr 1.3fr;gap:52px;align-items:center}
+.about .ph{aspect-ratio:1;border-radius:50%;max-width:280px;box-shadow:var(--soft2)}
+.about h2{font-size:clamp(2rem,3.2vw,2.8rem);font-weight:400;margin:.2em 0 .5em}
+.about p{color:var(--muted);margin-bottom:1em}
+
+/* ---------- 404 ---------- */
+.err{min-height:70vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 30px}
+.err .big{font-family:var(--serif);font-size:clamp(5rem,14vw,9rem);color:var(--teal);line-height:.9;font-stretch:62.5%}
+.err h1{font-size:2.2rem;font-weight:400;margin:.4em 0 .3em}
+.err p{color:var(--muted);margin-bottom:26px}
+
+.reveal{opacity:0;transform:translateY(20px);transition:.7s}
+.reveal.in{opacity:1;transform:none}
+
+@media(max-width:900px){
+  .wrap{padding:0 22px}
+  .top nav{display:none}.burger{display:block}
+  .facts .wrap{grid-template-columns:repeat(3,1fr)}
+  .masonry{column-count:2}
+  .feat-grid{grid-template-columns:1fr;gap:20px}
+  .loc-grid{grid-template-columns:1fr;gap:26px}
+  .contact .wrap{grid-template-columns:1fr;gap:32px}
+  .foto .wrap{grid-template-columns:1fr;gap:26px}
+  .woningen-grid{grid-template-columns:1fr;max-width:440px}
+  .about .wrap{grid-template-columns:1fr;gap:26px;text-align:center}
+  .about .ph{margin:0 auto}
+  .spotlight .info{grid-template-columns:1fr;column-gap:0}
+  .spotlight .info h3{grid-row:1}
+  .spotlight .info .plaats{grid-row:2}
+  .spotlight .info .meta{grid-row:3}
+  .spotlight .info .prijs{grid-column:1;grid-row:4;margin-top:14px}
+  .spotlight .info .go{grid-column:1;grid-row:5;margin-top:6px}
+  section.pad{padding:70px 0}.hero{height:82vh}
+  .dist{grid-template-columns:1fr}
+}
+@media(max-width:560px){ .masonry{column-count:1} .facts .wrap{grid-template-columns:repeat(2,1fr)} }
+
+/* ================= Donkere onepager (woningpagina) ================= */
+/* Achtergrond = Caro's kleurstaal van 17 aug (#1D3841). Alle donkere
+   vlakken hieronder zijn daarop afgestemd. Eén plek om te wijzigen: --wp-bg. */
+body.theme-dark{--wp-bg:#1D3841;--wp-panel:#16303a;--wp-line:rgba(241,232,219,.16);background:var(--wp-bg);color:var(--cream)}
+.theme-dark header.top{background:rgba(29,56,65,.88);border-bottom:1px solid var(--wp-line)}
+.theme-dark .brand .name{color:var(--cream)}
+.theme-dark .brand.circled .brandlogo{border-color:rgba(241,232,219,.45)}
+.theme-dark .eyebrow{color:#c97a55}
+
+/* ⚙️ KEUZE CARO — kleuren van "REAL ESTATE SPAIN" en de menuknop op de
+   nieuwe achtergrond. Nu: zand + crème knop. Wil Caro het teal/terracotta
+   van de hoofdsite terug, dan deze twee regels weghalen. */
+.theme-dark .brand .name small{color:var(--sand)}
+.theme-dark .top .cta{background:var(--cream);color:var(--teal-ink)}
+.theme-dark .top .cta:hover{background:#fff}
+
+/* Framed video-hero */
+.wp-hero{padding:60px 0 44px;text-align:center}
+.wp-hero .frame{max-width:820px;margin:0 auto;border:1px solid rgba(241,232,219,.5);border-radius:6px;padding:12px;background:rgba(255,255,255,.02)}
+.wp-hero .stage{position:relative;aspect-ratio:16/9;border-radius:3px;overflow:hidden;background:radial-gradient(120% 120% at 30% 20%,rgba(63,151,169,.30),transparent 60%),linear-gradient(160deg,#24505c,#16303a 70%)}
+.wp-hero .stage img,.wp-hero .stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.wp-hero .naam{font-family:var(--serif);font-size:clamp(2rem,4vw,3rem);font-weight:400;margin-top:30px;letter-spacing:.03em;font-stretch:62.5%;min-height:1.1em}
+.wp-hero .prijs{font-family:var(--serif);font-size:1.5rem;color:var(--sand);margin-top:6px;font-stretch:70%}
+.wp-hero .sub{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(241,232,219,.7);margin-top:8px}
+.wp-hero .soundbtn{position:static;margin-top:18px;display:inline-block;background:transparent;border:1px solid rgba(241,232,219,.3);color:var(--cream);border-radius:999px;padding:8px 16px;font-size:.7rem;letter-spacing:.1em;cursor:pointer}
+
+/* Facts dark */
+.theme-dark .facts{border-color:rgba(241,232,219,.16)}
+.theme-dark .facts .f{border-right-color:rgba(241,232,219,.16)}
+.theme-dark .facts .f:first-child{border-left-color:rgba(241,232,219,.16)}
+.theme-dark .facts .n{color:var(--cream)}
+.theme-dark .facts .l{color:rgba(241,232,219,.55)}
+
+/* Verhaal dark */
+.theme-dark .lead h2{color:var(--cream)}
+.theme-dark .lead p{color:rgba(241,232,219,.8)}
+.theme-dark .section-head p{color:rgba(241,232,219,.7)}
+
+/* Galerij: kolommen (masonry). Elke foto houdt zijn eigen verhouding, dus
+   er wordt niets afgesneden, en de marge tussen de beelden is overal exact
+   --gal-gap — horizontaal én verticaal. */
+.wp-gal{--gal-gap:8px;max-width:1200px;margin:0 auto;padding:0 24px;column-count:3;column-gap:var(--gal-gap)}
+.wp-tile{position:relative;display:block;width:100%;margin:0 0 var(--gal-gap);break-inside:avoid;-webkit-column-break-inside:avoid;border-radius:3px;overflow:hidden;background:var(--wp-panel,#16303a);cursor:zoom-in;border:0;padding:0}
+.wp-tile img{width:100%;height:auto;display:block;transition:opacity .3s}
+.wp-tile:hover img{opacity:.86}
+.wp-tile span{position:absolute;left:12px;bottom:10px;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.9);text-shadow:0 1px 4px rgba(0,0,0,.5)}
+
+/* Vergroot beeld (lightbox) met vorige/volgende */
+.lb{position:fixed;inset:0;z-index:200;display:none;background:rgba(14,30,36,.96);backdrop-filter:blur(3px)}
+.lb.open{display:block}
+.lb figure{position:absolute;inset:56px 84px 72px;display:flex;align-items:center;justify-content:center;margin:0}
+.lb img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;border-radius:2px}
+.lb figcaption{position:absolute;left:0;right:0;bottom:26px;text-align:center;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(241,232,219,.75)}
+.lb .lb-btn{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:1px solid rgba(241,232,219,.3);background:transparent;color:var(--cream);font-size:1.1rem;cursor:pointer;display:grid;place-items:center;transition:.2s}
+.lb .lb-btn:hover{background:rgba(241,232,219,.12)}
+.lb .lb-prev{left:20px}
+.lb .lb-next{right:20px}
+.lb .lb-close{position:absolute;top:18px;right:20px;transform:none;width:42px;height:42px;font-size:1rem}
+.lb .lb-tel{position:absolute;top:26px;left:24px;font-size:.62rem;letter-spacing:.2em;color:rgba(241,232,219,.6)}
+@media(max-width:720px){ .lb figure{inset:52px 12px 64px} .lb .lb-btn{width:40px;height:40px} .lb .lb-prev{left:6px} .lb .lb-next{right:6px} }
+
+/* Kenmerken dark */
+.theme-dark .feat{background:var(--wp-panel);border-color:var(--wp-line)}
+.theme-dark .feat .col{background:rgba(255,255,255,.03);box-shadow:none;border:1px solid rgba(241,232,219,.1)}
+.theme-dark .feat h3{color:var(--sand)}
+.theme-dark .feat li{border-bottom-color:rgba(241,232,219,.12)}
+
+/* Locatie dark */
+.theme-dark .loc-grid .ph{box-shadow:none;border:1px solid rgba(241,232,219,.14)}
+.theme-dark .dist .d{background:rgba(255,255,255,.04);box-shadow:none}
+.theme-dark .dist .d span:first-child{color:rgba(241,232,219,.6)}
+.theme-dark .dist .d span:last-child{color:var(--sand)}
+.theme-dark .loc-grid h2{color:var(--cream)}
+.theme-dark .loc-grid p{color:rgba(241,232,219,.7)}
+
+@media(max-width:900px){ .wp-gal{column-count:2} }
+@media(max-width:560px){ .wp-gal{column-count:1} }
+
+/* Persoonlijk bandje (footer woningpagina) */
+.wp-personal{padding:66px 0;text-align:center;border-top:1px solid rgba(241,232,219,.14)}
+.wp-personal .portret{width:96px;height:96px;border-radius:50%;object-fit:cover;object-position:center 22%;margin:0 auto 22px;border:2px solid rgba(241,232,219,.35)}
+.wp-personal blockquote{font-family:var(--serif);font-size:clamp(1.4rem,2.6vw,2rem);font-style:italic;font-weight:400;color:var(--cream);max-width:620px;margin:0 auto;line-height:1.35;font-stretch:82%}
+.wp-personal .ondertekening{font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:#c97a55;margin-top:18px}
+</script>
+<script>
+const LOGO = "data:image/png;base64,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";
+const SITE = "https://cre01.netlify.app";
+const css = document.getElementById('siteCss').textContent;
+
+const KOPPEN = [
+  { id:'nu', label:'Zoals nu',  sub:'Meer dan een makelaar.',        tekst:'Meer dan een makelaar.' },
+  { id:'A',  label:'Voorstel A', sub:'Meer dan een adres.',           tekst:'Meer dan een adres.' },
+  { id:'B',  label:'Voorstel B', sub:'Eerst jou leren kennen.',       tekst:'Eerst jou leren kennen.' },
+  { id:'C',  label:'Voorstel C', sub:'Wonen begint met een gesprek.', tekst:'Wonen begint met een gesprek.' },
+];
+const CIRKELS = [ { id:'uit', label:'Geen cirkel' }, { id:'aan', label:'Wel een cirkel' } ];
+const KLEUREN = [
+  { id:'zand', label:'Zand + crème knop', sub:'rustig' },
+  { id:'oud',  label:'Terracotta + teal', sub:'zoals de hoofdsite' },
+];
+
+let staat = { kop:'nu', cirkel:'uit', kleur:'zand' };
+
+function chips(el, opties, veld) {
+  el.innerHTML = '';
+  opties.forEach(function (o) {
+    const b = document.createElement('button');
+    b.className = 'chip';
+    b.type = 'button';
+    b.setAttribute('aria-pressed', staat[veld] === o.id);
+    b.innerHTML = o.label + (o.sub ? '<small>' + o.sub + '</small>' : '');
+    b.addEventListener('click', function () { staat[veld] = o.id; teken(); });
+    el.appendChild(b);
+  });
+}
+
+function merk() {
+  return '<a class="brand' + (staat.cirkel === 'aan' ? ' circled' : '') + '" href="#">' +
+    '<img class="brandlogo" src="' + LOGO + '" alt="Caro Leriche" />' +
+    '<span class="name">Caro Leriche<small>Real Estate Spain</small></span></a>';
+}
+
+function lichtePagina() {
+  const kop = KOPPEN.find(function (k) { return k.id === staat.kop; }).tekst;
+  return '<!doctype html><html lang="nl"><head><meta charset="utf-8">' +
+    '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+Display:wdth,wght@62.5..100,400..600&display=swap" rel="stylesheet">' +
+    '<style>' + css + ' body{overflow:hidden}</style></head><body>' +
+    '<header class="top"><div class="wrap">' + merk() +
+      '<nav><a href="#">Woningen</a><a href="#">Fotografie</a><a href="#">Over Caro</a><a href="#">Contact</a>' +
+      '<a class="cta" href="#">Plan bezichtiging</a></nav></div></header>' +
+    '<section class="home-hero" style="height:500px;min-height:0">' +
+      '<div class="ph" style="background:linear-gradient(120deg,#2A7385,#EBC79C)">' +
+        '<img class="photo" src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1900&q=70" alt="" onerror="this.remove()"></div>' +
+      '<div class="wrap"><div class="inner">' +
+        '<div class="eyebrow" style="color:#f0dccd">Real Estate Spain</div>' +
+        '<h1 style="font-size:clamp(2.2rem,4.6vw,3.5rem)">' + kop + '</h1>' +
+        '<p style="font-size:1rem;max-width:430px;opacity:.92">Persoonlijk, met oog voor beeld, sfeer en verhaal — van de eerste kennismaking tot ver na de sleutel.</p>' +
+        '<div class="btns"><a class="btn btn-primary" href="#">Neem contact op</a></div>' +
+      '</div></div></section></body></html>';
+}
+
+function donkerePagina() {
+  const oud = staat.kleur === 'oud'
+    ? '.theme-dark .brand .name small{color:var(--terracotta)!important}' +
+      '.theme-dark .top .cta{background:var(--teal)!important;color:#fff!important}'
+    : '';
+  return '<!doctype html><html lang="nl"><head><meta charset="utf-8">' +
+    '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+Display:wdth,wght@62.5..100,400..600&display=swap" rel="stylesheet">' +
+    '<style>' + css + oud + ' body{overflow:hidden}</style></head><body class="theme-dark">' +
+    '<header class="top"><div class="wrap">' + merk() +
+      '<nav><a class="cta" href="#">WhatsApp Caro</a></nav></div></header>' +
+    '<section class="wp-hero" style="padding:34px 0 20px"><div class="wrap">' +
+      '<div class="frame" style="max-width:560px"><div class="stage">' +
+        '<img src="' + SITE + '/media/paz/hero.jpg" alt="" onerror="this.remove()"></div></div>' +
+      '<h1 class="naam" style="margin-top:22px">Casa Paz</h1>' +
+      '<div class="prijs">€ 828.000</div>' +
+      '<div class="sub">Te koop · Elche - Valverde, Costa Blanca</div>' +
+    '</div></section></body></html>';
+}
+
+function teken() {
+  chips(document.getElementById('kopChips'), KOPPEN, 'kop');
+  chips(document.getElementById('cirkelChips'), CIRKELS, 'cirkel');
+  chips(document.getElementById('kleurChips'), KLEUREN, 'kleur');
+  document.getElementById('lichtFrame').srcdoc = lichtePagina();
+  document.getElementById('donkerFrame').srcdoc = donkerePagina();
+  document.getElementById('samenvatting').innerHTML =
+    'Mijn keuze — zin bovenaan: <b>“' + KOPPEN.find(function (k) { return k.id === staat.kop; }).tekst + '”</b>' +
+    ' · cirkel rond CL: <b>' + (staat.cirkel === 'aan' ? 'ja' : 'nee') + '</b>' +
+    ' · kleuren menu woningpagina: <b>' + (staat.kleur === 'zand' ? 'zand + crème knop' : 'terracotta + teal') + '</b>';
+}
+
+document.getElementById('kopieerBtn').addEventListener('click', function () {
+  const t = document.getElementById('samenvatting').textContent;
+  const knop = this;
+  navigator.clipboard.writeText(t).then(function () {
+    knop.textContent = 'Gekopieerd ✓';
+    setTimeout(function () { knop.textContent = 'Kopieer mijn keuze'; }, 1800);
+  }).catch(function () {
+    knop.textContent = 'Selecteer de tekst links';
+  });
+});
+
+teken();
+</script>
+</body>
+</html>

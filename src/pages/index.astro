@@ -42,20 +42,18 @@ const homeHero = 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?a
             <img src={uitgelicht.hero} alt={uitgelicht.titel} onerror="this.remove()" />
             <span class="badge">{uitgelicht.status}</span>
           </a>
+          <!-- Volgorde in de HTML = leesvolgorde op mobiel; op desktop plaatst
+               het raster in global.css prijs en knop in de rechterkolom. -->
           <div class="info">
-            <div>
-              <h3>{uitgelicht.titel}</h3>
-              <div class="plaats">{uitgelicht.plaats}</div>
-              <div class="meta">
-                <span>{uitgelicht.slaapkamers} slaapkamers</span>
-                <span>{uitgelicht.badkamers} badkamers</span>
-                <span>{uitgelicht.woonoppervlak} m²</span>
-              </div>
+            <h3>{uitgelicht.titel}</h3>
+            <div class="prijs">{euro(uitgelicht.prijs)}</div>
+            <div class="plaats">{uitgelicht.plaats}</div>
+            <div class="meta">
+              <span>{uitgelicht.slaapkamers} slaapkamers</span>
+              <span>{uitgelicht.badkamers} badkamers</span>
+              <span>{uitgelicht.woonoppervlak} m²</span>
             </div>
-            <div class="right">
-              <div class="prijs">{euro(uitgelicht.prijs)}</div>
-              <a class="go" href={`/woning/${uitgelicht.slug}/`}>Bekijk woning →</a>
-            </div>
+            <a class="go" href={`/woning/${uitgelicht.slug}/`}>Bekijk woning →</a>
           </div>
         </div>
       )}
@@ -106,7 +104,7 @@ const homeHero = 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?a
       <div class="reveal">
         <div class="eyebrow">Ook fotografie</div>
         <h2>Ik fotografeer en film de woningen zelf</h2>
-        <p>Geen standaard makelaarskiekjes: elke woning leg ik vast met oog voor licht, sfeer en verhaal — in foto én video. Wil je jouw woning zo in beeld gebracht zien? Vraag gerust naar de mogelijkheden.</p>
+        <p>Geen snelle standaard ‘kiekjes’: elke woning krijgt de aandacht die ze verdient, met de focus op licht, sfeer en verhaal — in foto én video. Wil je jouw woning zo in beeld gebracht zien? Vraag gerust naar de mogelijkheden.</p>
         <div class="btns">
           <a class="btn btn-primary" href="mailto:caro.realestate.spain@gmail.com?subject=Fotografie">Vraag naar fotografie</a>
         </div>
@@ -122,8 +120,8 @@ const homeHero = 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?a
       </div>
       <div class="reveal">
         <div class="eyebrow">Over Caro</div>
-        <h2>Een makelaar die je écht leert kennen</h2>
-        <p>Ik geloof niet in eindeloze lijstjes met identieke pandjes. Ik werk persoonlijk, met oog voor beeld en verhaal, en begeleid je van de eerste kennismaking tot ver na de aankoop.</p>
+        <h2>Eerst kennismaken, dan pas zoeken</h2>
+        <p>Ik kijk niet alleen naar waar je wil wonen, maar luister vooral naar hoe je wil leven. Daarbij begin ik niet met eindeloze lijstjes met bezichtigingen, maar is jou leren kennen de allereerste stap.</p>
         <p>Op zoek naar een woning, of denk je aan bouwen in Spanje? Laten we kennismaken — dan zoek ik gericht met je mee.</p>
       </div>
     </div>
@@ -142,6 +140,7 @@ const homeHero = 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?a
       <div>
         <h2>Op zoek naar jouw woning in Spanje?</h2>
         <p>Vertel me waar je naar zoekt — ik begeleid je persoonlijk, ook als de juiste woning nog gevonden moet worden.</p>
+        <p>Ik help je niet alleen bij aankoop, maar ook bij verkoop: van woningen tot gronden en projecten. En omdat kopen of bouwen in Spanje veel vragen oproept, leg ik je het hele proces uit en blijf ik naast je staan — tot en met een eventueel bouwtraject.</p>
         <div class="btns">
           <!-- ✎ VUL IN: echte gegevens -->
           <a class="btn btn-primary" href="https://wa.me/34604272907">WhatsApp Caro</a>

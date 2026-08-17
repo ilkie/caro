@@ -6,7 +6,11 @@ const {
   nav = 'full',
   theme = 'light',
 } = Astro.props;
-const SITE_VERSION = 'v1.13';
+const SITE_VERSION = 'v1.14';
+
+// ⚙️ KEUZE CARO — fijne cirkel rond het CL-logo in het menu.
+//    false = logo zoals nu · true = dun rondje eromheen.
+const CL_CIRKEL = false;
 const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%232A7385'/%3E%3Ctext%20x='32'%20y='45'%20font-family='Georgia,serif'%20font-size='32'%20fill='white'%20text-anchor='middle'%3ECL%3C/text%3E%3C/svg%3E";
 ---
 <!doctype html>
@@ -28,7 +32,7 @@ const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%
 <body class={theme === 'dark' ? 'theme-dark' : undefined}>
   <header class="top">
     <div class="wrap">
-      <a class="brand" href="/">
+      <a class={CL_CIRKEL ? 'brand circled' : 'brand'} href="/">
         <img class="brandlogo" src="/logo-cl.png" alt="Caro Leriche" />
         <span class="name">Caro Leriche<small>Real Estate Spain</small></span>
       </a>
@@ -54,7 +58,7 @@ const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%
   <footer class="site">
     <div class="wrap">
       <div class="fname">Caro Leriche</div>
-      <div>Real Estate Spain · Werkzaam in heel Spanje</div>
+      <div>Real Estate Spain</div>
       <div>RAICV 3994 · © 2026 Caro Leriche</div>
       <div style="opacity:.5;font-size:.72rem;letter-spacing:.12em;width:100%;text-align:center;margin-top:6px">{SITE_VERSION}</div>
       <a href="/beheer/" class="beheer-link" aria-label="Inloggen (beheer)" title="Beheer">
