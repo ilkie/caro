@@ -1,0 +1,21 @@
+---
+// Header met grote foto. Tekst en beeld staan hier vast;
+// Caro kan de sectie via het dashboard aan- of uitzetten.
+const homeHero = 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1900&q=70';
+---
+<!-- HOME HERO -->
+<section class="home-hero" data-sectie="hero">
+  <div class="ph kenburns" style="background:linear-gradient(120deg,var(--accent-soft),var(--sand-deep))">
+    <img class="photo" src={homeHero} alt="Spanje" onerror="this.remove()" />
+  </div>
+  <div class="wrap">
+    <div class="inner">
+      <div class="eyebrow" style="color:var(--sand-deep)">Real Estate Spain</div>
+      <h1 style="font-size:clamp(2.2rem,4.6vw,3.5rem)">Meer dan een makelaar.</h1>
+      <p style="font-size:1rem;max-width:430px;opacity:.92">Persoonlijk, met oog voor beeld, sfeer en verhaal — van de eerste kennismaking tot ver na de sleutel.</p>
+      <div class="btns">
+        <a class="btn btn-primary" href="#contact">Neem contact op</a>
+      </div>
+    </div>
+  </div>
+</section>

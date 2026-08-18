@@ -1,0 +1,133 @@
+{
+  "versie": 1,
+  "toelichting": "Kleurpaletten voor de site. De namen zijn rollen, geen kleuren: 'accent' is de hoofdkleur (knoppen, links), 'accent2' de tweede kleur (kleine kapitalen, badges). Dit bestand wordt gelezen door de site bij het bouwen en door het beheer-dashboard. Alle paletten zijn getest op leesbaarheid. 'accent-op-donker' is de knopkleur op de donkere woningpagina; die is alleen anders als de gewone accentkleur daar te veel wegvalt.",
+  "paletten": [
+    {
+      "id": "huisstijl",
+      "naam": "Huisstijl",
+      "omschrijving": "Zoals de site nu is: petrolblauw met terracotta op crème.",
+      "kleuren": {
+        "accent": "#298296",
+        "accent-deep": "#1E6675",
+        "accent-ink": "#123842",
+        "accent-soft": "#2A7385",
+        "accent-op-donker": "#298296",
+        "accent2": "#B15B3C",
+        "accent2-soft": "#D68C67",
+        "cream": "#FBF7F1",
+        "sand": "#F3EADF",
+        "sand-deep": "#E7D3BF",
+        "sand-deeper": "#CDB79F",
+        "line": "#DAC9B6",
+        "ink": "#221E1A",
+        "muted": "#736457",
+        "wp-bg": "#1D3841",
+        "wp-panel": "#16303A",
+        "wp-glow": "#24505C"
+      },
+      "afwijkingen": {
+        "witte knoptekst op accent": "petrolblauw #298296 is Caros merkkleur — 4,44 i.p.v. 4,50; opgevangen met font-weight 500",
+        "witte tekst op contactvlak": "zelfde merkkleur als achtergrond van het contactblok",
+        "accent als link op crème": "zelfde merkkleur",
+        "tweede accent op crème": "terracotta #B15B3C is Caros merkkleur, gebruikt voor kleine kapitalen",
+        "tweede accent op zand": "idem"
+      }
+    },
+    {
+      "id": "zand",
+      "naam": "Zand & klei",
+      "omschrijving": "Warmer en aardser. Terracotta voert, petrolblauw ondersteunt.",
+      "kleuren": {
+        "accent": "#9C4E31",
+        "accent-deep": "#7F3D24",
+        "accent-ink": "#3E2519",
+        "accent-soft": "#B0603F",
+        "accent-op-donker": "#9C4E31",
+        "accent2": "#2C6F78",
+        "accent2-soft": "#D89A78",
+        "cream": "#FDF9F4",
+        "sand": "#F2E7DA",
+        "sand-deep": "#E6D2BC",
+        "sand-deeper": "#CBB49B",
+        "line": "#DFC9B2",
+        "ink": "#251E18",
+        "muted": "#756253",
+        "wp-bg": "#33251D",
+        "wp-panel": "#2A1E17",
+        "wp-glow": "#4A3327"
+      }
+    },
+    {
+      "id": "olijf",
+      "naam": "Olijf & linnen",
+      "omschrijving": "Mediterraan groen op linnen. Rustig en natuurlijk.",
+      "kleuren": {
+        "accent": "#55663F",
+        "accent-deep": "#41502F",
+        "accent-ink": "#26301C",
+        "accent-soft": "#6B7D52",
+        "accent-op-donker": "#66794B",
+        "accent2": "#9C5729",
+        "accent2-soft": "#DC9A68",
+        "cream": "#FAF8F2",
+        "sand": "#EDEADF",
+        "sand-deep": "#DFDAC6",
+        "sand-deeper": "#C3BDA5",
+        "line": "#D6D2C0",
+        "ink": "#232319",
+        "muted": "#6A6756",
+        "wp-bg": "#2B3327",
+        "wp-panel": "#222A1F",
+        "wp-glow": "#3D4936"
+      }
+    },
+    {
+      "id": "petrol",
+      "naam": "Diep petrol",
+      "omschrijving": "Donkerder en chiquer. Meer contrast, minder crème.",
+      "kleuren": {
+        "accent": "#256C78",
+        "accent-deep": "#1B5560",
+        "accent-ink": "#0F2A31",
+        "accent-soft": "#3E9AA8",
+        "accent-op-donker": "#256C78",
+        "accent2": "#944D29",
+        "accent2-soft": "#D07E52",
+        "cream": "#F7F5F1",
+        "sand": "#E9E6DF",
+        "sand-deep": "#D8D3C8",
+        "sand-deeper": "#BDB7A9",
+        "line": "#D2CCC1",
+        "ink": "#1B1F20",
+        "muted": "#5C6264",
+        "wp-bg": "#12262C",
+        "wp-panel": "#0E1E23",
+        "wp-glow": "#1E4550"
+      }
+    },
+    {
+      "id": "inkt",
+      "naam": "Inkt & wit",
+      "omschrijving": "Bijna zwart-wit, met terracotta als enige kleur. Heel grafisch.",
+      "kleuren": {
+        "accent": "#2B2B2B",
+        "accent-deep": "#141414",
+        "accent-ink": "#111111",
+        "accent-soft": "#454545",
+        "accent-op-donker": "#5A5A5A",
+        "accent2": "#9C5029",
+        "accent2-soft": "#D08A63",
+        "cream": "#FFFFFF",
+        "sand": "#F2F1EE",
+        "sand-deep": "#E2E0DB",
+        "sand-deeper": "#C4C1BA",
+        "line": "#DDDBD6",
+        "ink": "#111111",
+        "muted": "#6B6966",
+        "wp-bg": "#171717",
+        "wp-panel": "#101010",
+        "wp-glow": "#2E2E2E"
+      }
+    }
+  ]
+}

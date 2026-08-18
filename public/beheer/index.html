@@ -85,6 +85,42 @@ textarea{min-height:90px;resize:vertical}
 .hint{font-size:.75rem;color:var(--muted);margin-top:4px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 20px;border-radius:999px;font-size:.9rem;z-index:80;box-shadow:var(--shadow)}
 @media(max-width:640px){.grid2,.grid3{grid-template-columns:1fr}}
+
+/* ---------- Tabs + vormgeving ---------- */
+.tabs{display:flex;gap:8px;border-bottom:1px solid var(--line);margin:0 0 22px}
+.tab{background:none;border:0;border-bottom:2px solid transparent;padding:12px 4px;margin-right:18px;font:inherit;font-size:.95rem;color:var(--muted);cursor:pointer}
+.tab:hover{color:var(--ink)}
+.tab.actief{color:var(--teal);border-bottom-color:var(--teal);font-weight:600}
+.vg-grid{display:grid;grid-template-columns:minmax(300px,380px) 1fr;gap:26px;align-items:start}
+.vg-kop{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.vg-blok + .vg-blok{margin-top:30px}
+.palet-lijst{display:grid;gap:10px}
+.palet{display:flex;gap:14px;align-items:center;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;font:inherit;transition:.15s}
+.palet:hover{border-color:var(--teal)}
+.palet.actief{border-color:var(--teal);box-shadow:0 0 0 2px rgba(41,130,150,.18)}
+.palet .stalen{display:flex;flex-shrink:0}
+.palet .stalen i{width:18px;height:34px;display:block}
+.palet .stalen i:first-child{border-radius:6px 0 0 6px}
+.palet .stalen i:last-child{border-radius:0 6px 6px 0}
+.palet .naam{display:block;font-weight:600;font-size:.94rem}
+.palet .oms{display:block;color:var(--muted);font-size:.8rem;line-height:1.35;margin-top:2px}
+.sectie-lijst{display:grid;gap:8px}
+.sectie{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 12px}
+.sectie.uit{opacity:.55}
+.sectie .grip{color:var(--muted);font-size:.8rem;width:18px;text-align:center}
+.sectie .txt{flex:1;min-width:0}
+.sectie .txt b{display:block;font-size:.92rem;font-weight:600}
+.sectie .txt span{color:var(--muted);font-size:.78rem}
+.sectie .knoppen{display:flex;gap:4px}
+.sectie .knoppen button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer;font-size:.85rem;line-height:1}
+.sectie .knoppen button:disabled{opacity:.3;cursor:default}
+.schakel{display:inline-flex;align-items:center;gap:7px;font-size:.82rem;color:var(--muted);cursor:pointer;white-space:nowrap}
+.vb-wrap{position:sticky;top:20px}
+.vb-kop{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.vb-kop .st{font-size:.78rem;color:var(--muted)}
+.vb-frame{width:100%;height:660px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.vg-let{background:rgba(41,130,150,.08);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:11px 14px;font-size:.84rem;margin-top:14px;color:var(--ink)}
+@media(max-width:1000px){ .vg-grid{grid-template-columns:1fr} .vb-wrap{position:static} .vb-frame{height:460px} }
 </style>
 </head>
 <body>
@@ -117,11 +153,50 @@ textarea{min-height:90px;resize:vertical}
     <div class="who"><span id="whoEmail"></span> <button class="btn btn-ghost btn-sm" id="logoutBtn">Uitloggen</button></div>
   </div>
   <div class="container">
-    <div class="page-head">
-      <h2>Woningen</h2>
-      <button class="btn btn-primary" id="newBtn">+ Nieuwe woning</button>
+    <div class="tabs">
+      <button class="tab actief" type="button" data-tab="woningen">Woningen</button>
+      <button class="tab" type="button" data-tab="vormgeving">Vormgeving</button>
     </div>
-    <div class="list" id="list"></div>
+
+    <div id="tab-woningen">
+      <div class="page-head">
+        <h2>Woningen</h2>
+        <button class="btn btn-primary" id="newBtn">+ Nieuwe woning</button>
+      </div>
+      <div class="list" id="list"></div>
+    </div>
+
+    <div id="tab-vormgeving" class="hidden">
+      <div class="page-head">
+        <h2>Vormgeving</h2>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-ghost" id="vgHerstel" type="button">Terug naar de huisstijl</button>
+          <button class="btn btn-primary" id="vgOpslaan" type="button" disabled>Opslaan</button>
+        </div>
+      </div>
+
+      <div class="vg-grid">
+        <div>
+          <div class="vg-blok">
+            <p class="vg-kop">Kleuren</p>
+            <div class="palet-lijst" id="paletLijst"></div>
+          </div>
+          <div class="vg-blok">
+            <p class="vg-kop">Blokken op de homepage</p>
+            <div class="sectie-lijst" id="sectieLijst"></div>
+            <div class="vg-let">Wat je hier kiest zie je meteen rechts in het voorbeeld. Pas als je op <b>Opslaan</b> klikt, verandert de echte site — dat duurt daarna nog een minuut of twee.</div>
+          </div>
+        </div>
+
+        <div class="vb-wrap">
+          <div class="vb-kop">
+            <p class="vg-kop" style="margin:0">Voorbeeld</p>
+            <span class="st" id="vbStatus">laden…</span>
+          </div>
+          <iframe class="vb-frame" id="vbFrame" src="/" title="Voorbeeld van de site"></iframe>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -218,6 +293,7 @@ async function refresh(){
     $('app').classList.remove('hidden');
     $('whoEmail').textContent = session.user.email;
     loadWoningen();
+    laadVormgeving();
   } else {
     $('app').classList.add('hidden');
     $('login').classList.remove('hidden');
@@ -416,6 +492,172 @@ async function triggerRebuild(){
 
 sb.auth.onAuthStateChange(()=>refresh());
 refresh();
+
+/* ================= Vormgeving: kleurpaletten + blokken =================
+   De kleuren komen uit /paletten.json, de blokken uit /secties.json — dezelfde
+   bestanden die de site zelf gebruikt. De doorzichtige tinten worden hier op
+   dezelfde manier berekend als in src/lib/palet.js; wijzig je daar iets, pas
+   het dan ook hier aan. */
+let PALETTEN = [], SECTIE_INFO = [], vg = null, vgOpgeslagen = '';
+
+function vgTint(hex, alpha){
+  const h = String(hex).replace('#','');
+  const r = parseInt(h.slice(0,2),16), g = parseInt(h.slice(2,4),16), b = parseInt(h.slice(4,6),16);
+  return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+}
+function vgVariabelen(k){
+  return {
+    '--accent':k.accent, '--accent-deep':k['accent-deep'], '--accent-ink':k['accent-ink'],
+    '--accent-soft':k['accent-soft'], '--accent-op-donker':k['accent-op-donker']||k.accent, '--accent2':k.accent2, '--accent2-soft':k['accent2-soft'],
+    '--cream':k.cream, '--sand':k.sand, '--sand-deep':k['sand-deep'], '--sand-deeper':k['sand-deeper'],
+    '--line':k.line, '--ink':k.ink, '--muted':k.muted,
+    '--wp-bg':k['wp-bg'], '--wp-panel':k['wp-panel'], '--wp-glow':k['wp-glow'],
+    '--cream-15':vgTint(k.cream,0.15), '--cream-30':vgTint(k.cream,0.3), '--cream-50':vgTint(k.cream,0.5),
+    '--cream-70':vgTint(k.cream,0.7), '--cream-85':vgTint(k.cream,0.85), '--cream-90':vgTint(k.cream,0.9),
+    '--wp-bg-88':vgTint(k['wp-bg'],0.88), '--wp-panel-96':vgTint(k['wp-panel'],0.96),
+    '--accent-35':vgTint(k.accent,0.35), '--accent-60':vgTint(k.accent,0.6),
+    '--accent-soft-30':vgTint(k['accent-soft'],0.3), '--ink-a55':vgTint(k['accent-ink'],0.55),
+  };
+}
+function vgStandaard(){
+  return { palet:'huisstijl', secties: SECTIE_INFO.map(s => ({ id:s.id, aan:true })) };
+}
+function vgNormaliseer(ruw){
+  const bekend = new Set(SECTIE_INFO.map(s => s.id));
+  const uit = [];
+  (Array.isArray(ruw) ? ruw : []).forEach(item => {
+    const id = item && typeof item.id === 'string' ? item.id : null;
+    if (!id || !bekend.has(id) || uit.some(x => x.id === id)) return;
+    uit.push({ id: id, aan: item.aan !== false });
+  });
+  SECTIE_INFO.forEach(s => { if (!uit.some(x => x.id === s.id)) uit.push({ id:s.id, aan:true }); });
+  return uit;
+}
+
+async function laadVormgeving(){
+  try {
+    const [pr, sr] = await Promise.all([fetch('/paletten.json'), fetch('/secties.json')]);
+    PALETTEN = (await pr.json()).paletten;
+    SECTIE_INFO = (await sr.json()).secties;
+  } catch(e){
+    $('paletLijst').innerHTML = '<div class="empty">Kon de kleurenbestanden niet laden.</div>';
+    return;
+  }
+  const { data, error } = await sb.from('instellingen').select('palet,secties').eq('id','site').maybeSingle();
+  if (error){
+    $('paletLijst').innerHTML = '<div class="empty">Kon de instellingen niet laden: ' + error.message +
+      '<br><br>Draait <b>instellingen.sql</b> al in Supabase?</div>';
+    return;
+  }
+  vg = { palet: (data && data.palet) || 'huisstijl', secties: vgNormaliseer(data && data.secties) };
+  if (!PALETTEN.some(p => p.id === vg.palet)) vg.palet = 'huisstijl';
+  vgOpgeslagen = JSON.stringify(vg);
+  tekenVormgeving();
+}
+
+function tekenVormgeving(){
+  if (!vg) return;
+  /* paletten */
+  const pl = $('paletLijst'); pl.innerHTML = '';
+  PALETTEN.forEach(p => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'palet' + (p.id === vg.palet ? ' actief' : '');
+    const k = p.kleuren;
+    b.innerHTML =
+      '<span class="stalen">' +
+        ['cream','sand','accent','accent2','wp-bg'].map(n => '<i style="background:' + k[n] + '"></i>').join('') +
+      '</span><span><span class="naam">' + p.naam + '</span><span class="oms">' + p.omschrijving + '</span></span>';
+    b.addEventListener('click', () => { vg.palet = p.id; tekenVormgeving(); });
+    pl.appendChild(b);
+  });
+
+  /* blokken */
+  const sl = $('sectieLijst'); sl.innerHTML = '';
+  vg.secties.forEach((s, i) => {
+    const info = SECTIE_INFO.find(x => x.id === s.id) || { naam: s.id, uitleg: '' };
+    const rij = document.createElement('div');
+    rij.className = 'sectie' + (s.aan ? '' : ' uit');
+    rij.innerHTML =
+      '<span class="grip">' + (i + 1) + '</span>' +
+      '<span class="txt"><b>' + info.naam + '</b><span>' + (info.uitleg || '') + '</span></span>' +
+      '<label class="schakel"><input type="checkbox"' + (s.aan ? ' checked' : '') + '> tonen</label>' +
+      '<span class="knoppen">' +
+        '<button type="button" title="omhoog"' + (i === 0 ? ' disabled' : '') + '>↑</button>' +
+        '<button type="button" title="omlaag"' + (i === vg.secties.length - 1 ? ' disabled' : '') + '>↓</button>' +
+      '</span>';
+    rij.querySelector('input').addEventListener('change', (e) => { s.aan = e.target.checked; tekenVormgeving(); });
+    const [op, neer] = rij.querySelectorAll('.knoppen button');
+    op.addEventListener('click', () => { const a = vg.secties; [a[i-1], a[i]] = [a[i], a[i-1]]; tekenVormgeving(); });
+    neer.addEventListener('click', () => { const a = vg.secties; [a[i+1], a[i]] = [a[i], a[i+1]]; tekenVormgeving(); });
+    sl.appendChild(rij);
+  });
+
+  $('vgOpslaan').disabled = JSON.stringify(vg) === vgOpgeslagen;
+  ververVoorbeeld();
+}
+
+function ververVoorbeeld(){
+  const f = $('vbFrame');
+  const doc = f && f.contentDocument;
+  if (!doc || !doc.body || !vg) return;
+  const palet = PALETTEN.find(p => p.id === vg.palet);
+  if (!palet) return;
+
+  let st = doc.getElementById('vg-voorbeeld');
+  if (!st){ st = doc.createElement('style'); st.id = 'vg-voorbeeld'; doc.head.appendChild(st); }
+  const vars = vgVariabelen(palet.kleuren);
+  st.textContent = ':root:root{' + Object.keys(vars).map(n => n + ':' + vars[n] + ';').join('') + '}';
+
+  const voet = doc.querySelector('footer.site');
+  vg.secties.forEach(s => {
+    const el = doc.querySelector('[data-sectie="' + s.id + '"]');
+    if (!el) return;
+    el.style.display = s.aan ? '' : 'none';
+    if (voet) doc.body.insertBefore(el, voet);   // zet ze in de gekozen volgorde
+  });
+  $('vbStatus').textContent = vg.secties.filter(s => s.aan).length + ' van de ' + vg.secties.length + ' blokken zichtbaar';
+}
+
+/* tabs */
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.toggle('actief', x === t));
+    $('tab-woningen').classList.toggle('hidden', t.dataset.tab !== 'woningen');
+    $('tab-vormgeving').classList.toggle('hidden', t.dataset.tab !== 'vormgeving');
+    if (t.dataset.tab === 'vormgeving') ververVoorbeeld();
+  });
+});
+
+$('vbFrame').addEventListener('load', ververVoorbeeld);
+
+$('vgHerstel').addEventListener('click', () => {
+  vg = vgStandaard();
+  tekenVormgeving();
+  toast('Terug naar de huisstijl — klik op Opslaan om het door te voeren');
+});
+
+$('vgOpslaan').addEventListener('click', async () => {
+  if (!vg) return;
+  busy(true);
+  try {
+    const { data, error } = await sb.from('instellingen')
+      .update({ palet: vg.palet, secties: vg.secties })
+      .eq('id', 'site')
+      .select();
+    if (error) throw error;
+    if (!data || !data.length) throw new Error('De rij met instellingen bestaat nog niet. Draai instellingen.sql in Supabase.');
+    await triggerRebuild();
+    vgOpgeslagen = JSON.stringify(vg);
+    $('vgOpslaan').disabled = true;
+    busy(false);
+    toast('Opgeslagen — de site wordt bijgewerkt (1 à 2 minuten)');
+  } catch(err){
+    busy(false);
+    alert('Opslaan mislukt: ' + (err.message || err));
+  }
+});
+
 </script>
 </body>
 </html>

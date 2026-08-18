@@ -4,8 +4,38 @@
    Koppen: Noto Serif Display Extra Condensed (Caro's IG-font). Body: Inter.
    ========================================================= */
 :root{
-  --cream:#FBF7F1;--sand:#F3EADF;--teal:#298296;--teal-deep:#1E6675;--teal-ink:#123842;
-  --terracotta:#B15B3C;--ink:#221E1A;--muted:#8A7C70;--line:#DAC9B6;
+/* PALET-START — standaardpalet "Huisstijl". Gegenereerd door scripts/sync-root.mjs;
+   niet met de hand wijzigen. Het beheer-dashboard overschrijft dit per palet. */
+  --accent:#298296;
+  --accent-deep:#1E6675;
+  --accent-ink:#123842;
+  --accent-soft:#2A7385;
+  --accent-op-donker:#298296;
+  --accent2:#B15B3C;
+  --accent2-soft:#D68C67;
+  --cream:#FBF7F1;
+  --sand:#F3EADF;
+  --sand-deep:#E7D3BF;
+  --sand-deeper:#CDB79F;
+  --line:#DAC9B6;
+  --ink:#221E1A;
+  --muted:#736457;
+  --wp-bg:#1D3841;
+  --wp-panel:#16303A;
+  --wp-glow:#24505C;
+  --cream-15:rgba(251,247,241,0.15);
+  --cream-30:rgba(251,247,241,0.3);
+  --cream-50:rgba(251,247,241,0.5);
+  --cream-70:rgba(251,247,241,0.7);
+  --cream-85:rgba(251,247,241,0.85);
+  --cream-90:rgba(251,247,241,0.9);
+  --wp-bg-88:rgba(29,56,65,0.88);
+  --wp-panel-96:rgba(22,48,58,0.96);
+  --accent-35:rgba(41,130,150,0.35);
+  --accent-60:rgba(41,130,150,0.6);
+  --accent-soft-30:rgba(42,115,133,0.3);
+  --ink-a55:rgba(18,56,66,0.55);
+  /* PALET-EINDE */
   --r-soft:14px;--r-pill:999px;
   --soft:0 22px 55px -26px rgba(30,90,105,.4);--soft2:0 14px 34px -18px rgba(30,90,105,.32);
   --serif:'Noto Serif Display','Cormorant Garamond',Georgia,serif;
@@ -18,35 +48,35 @@ img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.05;font-stretch:62.5%}
 .wrap{max-width:1200px;margin:0 auto;padding:0 40px}
-.eyebrow{text-transform:uppercase;letter-spacing:.32em;font-size:.68rem;font-weight:400;color:var(--terracotta)}
+.eyebrow{text-transform:uppercase;letter-spacing:.32em;font-size:.68rem;font-weight:400;color:var(--accent2)}
 
-.ph{position:relative;overflow:hidden;border-radius:var(--r-soft);background:linear-gradient(135deg,#E7D3BF,#cdb79f)}
+.ph{position:relative;overflow:hidden;border-radius:var(--r-soft);background:linear-gradient(135deg,var(--sand-deep),var(--sand-deeper))}
 .ph .photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.ph .tag{position:absolute;left:12px;bottom:12px;z-index:3;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#fff;background:rgba(19,51,60,.55);padding:6px 12px;border-radius:var(--r-pill);font-weight:400}
+.ph .tag{position:absolute;left:12px;bottom:12px;z-index:3;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#fff;background:var(--ink-a55);padding:6px 12px;border-radius:var(--r-pill);font-weight:400}
 
 /* ---------- Nav ---------- */
-header.top{position:sticky;top:0;z-index:50;background:rgba(251,247,241,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header.top{position:sticky;top:0;z-index:50;background:var(--cream-90);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;justify-content:space-between;height:76px}
 /* Merkblok: logo en tekstblok exact even hoog (--brandh), en "REAL ESTATE
    SPAIN" precies even breed als "Caro Leriche". De negatieve margin-right
    heft de spatie op die letter-spacing achter de laatste letter zet —
    zonder die correctie oogt de onderregel scheef verdeeld. */
 .brand{--brandh:44px;display:flex;align-items:center;gap:13px}
-.monogram{width:40px;height:40px;border-radius:10px;background:var(--teal);color:#fff;display:grid;place-items:center;font-family:var(--serif);font-size:1.15rem;font-stretch:70%}
+.monogram{width:40px;height:40px;border-radius:10px;background:var(--accent);color:#fff;display:grid;place-items:center;font-family:var(--serif);font-size:1.15rem;font-stretch:70%}
 .brand .brandlogo{height:var(--brandh);width:auto;display:block}
 /* Cirkel rond het CL-logo — sterkte via de klasse c-fijn/c-feller/c-fel,
    gezet met CL_CIRKEL in Base.astro. */
 .brand.circled .brandlogo{width:var(--brandh);height:var(--brandh);object-fit:contain;padding:7px;border:1px solid var(--line);border-radius:50%}
-.brand.c-feller .brandlogo{border-width:2px;border-color:rgba(41,130,150,.6)}
-.brand.c-fel .brandlogo{border-width:2px;border-color:var(--teal)}
+.brand.c-feller .brandlogo{border-width:2px;border-color:var(--accent-60)}
+.brand.c-fel .brandlogo{border-width:2px;border-color:var(--accent)}
 .brand .name{font-family:var(--serif);font-size:1.5rem;line-height:1;letter-spacing:.03em;font-stretch:85%;height:var(--brandh);display:flex;flex-direction:column;justify-content:space-between}
-.brand .name small{display:block;font-family:var(--sans);font-size:.55rem;line-height:1;letter-spacing:.16em;margin-right:-.16em;text-transform:uppercase;color:var(--terracotta);font-weight:400;text-align:justify;text-align-last:justify}
+.brand .name small{display:block;font-family:var(--sans);font-size:.55rem;line-height:1;letter-spacing:.16em;margin-right:-.16em;text-transform:uppercase;color:var(--accent2);font-weight:400;text-align:justify;text-align-last:justify}
 .top nav{display:flex;gap:30px;align-items:center}
 .top nav a{font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.top nav a:hover{color:var(--teal)}
-.top .cta{background:var(--teal);color:#fff;padding:11px 22px;border-radius:var(--r-pill);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;transition:.2s}
-.top .cta:hover{background:var(--teal-deep)}
-.burger{display:none;background:none;border:0;cursor:pointer;font-size:1.4rem;color:var(--teal)}
+.top nav a:hover{color:var(--accent)}
+.top .cta{background:var(--accent);color:#fff;padding:11px 22px;border-radius:var(--r-pill);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;transition:.2s}
+.top .cta:hover{background:var(--accent-deep)}
+.burger{display:none;background:none;border:0;cursor:pointer;font-size:1.4rem;color:var(--accent)}
 
 /* ---------- Video-hero (woningpagina) ---------- */
 .hero{position:relative;height:92vh;min-height:600px;color:#fff}
@@ -58,7 +88,7 @@ header.top{position:sticky;top:0;z-index:50;background:rgba(251,247,241,.9);back
 .hero-inner{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 30px}
 .heromark{font-family:var(--serif);font-size:clamp(4.5rem,13vw,10rem);line-height:.8;letter-spacing:.06em;color:#fff;margin-bottom:24px;font-stretch:62.5%}
 .heromark img{max-height:130px;width:auto;filter:brightness(0) invert(1)}
-.hero .eyebrow{color:#f0dccd;margin-bottom:14px}
+.hero .eyebrow{color:var(--sand-deep);margin-bottom:14px}
 .hero .vname{font-size:clamp(1.6rem,3.4vw,2.6rem);font-weight:400;letter-spacing:.02em}
 .hero .loc{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;opacity:.9;margin-top:10px}
 .caret{display:inline-block;width:2px;height:.9em;background:currentColor;margin-left:5px;vertical-align:-1px;animation:blink 1s step-end infinite}
@@ -67,7 +97,7 @@ header.top{position:sticky;top:0;z-index:50;background:rgba(251,247,241,.9);back
 .soundbtn:hover{background:rgba(19,51,60,.7)}
 .scrollcue{position:absolute;z-index:4;left:50%;transform:translateX(-50%);bottom:26px;color:#fff;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;opacity:.85;animation:bob 2s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(5px)}}
-.pricebar{background:var(--teal-ink);color:#fff;text-align:center;padding:15px;font-size:.82rem;letter-spacing:.05em}
+.pricebar{background:var(--accent-ink);color:#fff;text-align:center;padding:15px;font-size:.82rem;letter-spacing:.05em}
 .pricebar strong{color:#fff;font-weight:500}
 
 /* ---------- Facts ---------- */
@@ -75,7 +105,7 @@ header.top{position:sticky;top:0;z-index:50;background:rgba(251,247,241,.9);back
 .facts .wrap{display:grid;grid-template-columns:repeat(5,1fr)}
 .facts .f{padding:34px 12px;text-align:center;border-right:1px solid var(--line)}
 .facts .f:first-child{border-left:1px solid var(--line)}
-.facts .n{font-family:var(--serif);font-size:2.1rem;color:var(--teal-deep);line-height:1;font-stretch:80%}
+.facts .n{font-family:var(--serif);font-size:2.1rem;color:var(--accent-deep);line-height:1;font-stretch:80%}
 .facts .l{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:10px}
 
 /* ---------- Secties ---------- */
@@ -87,46 +117,46 @@ section.pad{padding:104px 0}
 
 /* Masonry-fotogalerij (woningpagina) */
 .masonry{column-count:3;column-gap:14px}
-.masonry .item{break-inside:avoid;margin:0 0 14px;border-radius:var(--r-soft);overflow:hidden;position:relative;background:linear-gradient(135deg,#E7D3BF,#cdb79f);aspect-ratio:3/4}
+.masonry .item{break-inside:avoid;margin:0 0 14px;border-radius:var(--r-soft);overflow:hidden;position:relative;background:linear-gradient(135deg,var(--sand-deep),var(--sand-deeper));aspect-ratio:3/4}
 .masonry .item:nth-child(3n+1){aspect-ratio:4/5}
 .masonry .item:nth-child(4n){aspect-ratio:1/1}
 .masonry .item:nth-child(5n){aspect-ratio:5/4}
 .masonry .item img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s}
 .masonry .item:hover img{transform:scale(1.05)}
-.masonry .item .tag{position:absolute;left:12px;bottom:12px;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:#fff;background:rgba(19,51,60,.55);padding:6px 12px;border-radius:var(--r-pill)}
+.masonry .item .tag{position:absolute;left:12px;bottom:12px;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:#fff;background:var(--ink-a55);padding:6px 12px;border-radius:var(--r-pill)}
 
 .feat{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--sand)}
 .feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px}
 .feat .col{background:#fff;border-radius:var(--r-soft);padding:34px;box-shadow:var(--soft2)}
-.feat h3{font-size:1.5rem;margin-bottom:16px;color:var(--teal-deep)}
+.feat h3{font-size:1.5rem;margin-bottom:16px;color:var(--accent-deep)}
 .feat ul{list-style:none}
 .feat li{padding:11px 0;border-bottom:1px solid var(--line);font-size:.96rem;display:flex;gap:12px}
 .feat li:last-child{border-bottom:0}
-.feat li:before{content:"—";color:var(--terracotta)}
+.feat li:before{content:"—";color:var(--accent2)}
 
 .loc-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:52px;align-items:center}
 .loc-grid .ph{min-height:380px;box-shadow:var(--soft2)}
 .dist{margin-top:26px;display:grid;grid-template-columns:1fr 1fr;gap:10px 24px}
 .dist .d{display:flex;justify-content:space-between;background:#fff;border-radius:12px;padding:11px 16px;box-shadow:var(--soft2);font-size:.9rem}
 .dist .d span:first-child{color:var(--muted)}
-.dist .d span:last-child{color:var(--teal-deep);font-weight:500}
+.dist .d span:last-child{color:var(--accent-deep);font-weight:500}
 
-.contact{background:var(--teal);color:#fff}
+.contact{background:var(--accent);color:#fff}
 .contact .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:center}
 .agent-card{display:flex;gap:22px;align-items:center}
 .agent-photo{width:118px;height:118px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid rgba(255,255,255,.35);background:#fff;display:grid;place-items:center}
 .agent-photo img{width:62%;height:62%;object-fit:contain}
 .agent-card h3{font-size:1.7rem}
-.agent-card .role{opacity:.8;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:#f3ddce}
+.agent-card .role{opacity:.8;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sand-deep)}
 .contact h2{font-size:clamp(2rem,3.4vw,2.9rem);margin-bottom:.4em}
 .contact p{opacity:.9;margin-bottom:26px;max-width:460px}
 .btns{display:flex;gap:14px;flex-wrap:wrap}
 .btn{padding:14px 26px;border-radius:var(--r-pill);font-size:.9rem;transition:transform .15s;display:inline-flex;gap:8px;align-items:center}
 .btn:hover{transform:translateY(-2px)}
-.btn-primary{background:#fff;color:var(--teal-deep);font-weight:600}
+.btn-primary{background:#fff;color:var(--accent-deep);font-weight:600}
 .btn-ghost{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.4)}
 
-footer.site{background:var(--teal-ink);color:#a9c4cc;padding:44px 0;font-size:.82rem;letter-spacing:.03em}
+footer.site{background:var(--accent-ink);color:rgba(255,255,255,.72);padding:44px 0;font-size:.82rem;letter-spacing:.03em}
 footer.site .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
 footer.site .fname{color:#fff;font-family:var(--serif);font-size:1.4rem;letter-spacing:.04em;font-stretch:80%}
 footer.site a:hover{color:#fff}
@@ -146,12 +176,12 @@ footer.site a:hover{color:#fff}
 
 /* Uitgelicht pand (spotlight) */
 .spotlight{margin-bottom:56px}
-.spotlight .img{display:block;position:relative;height:44vh;min-height:340px;border-radius:var(--r-soft);overflow:hidden;background:linear-gradient(120deg,#2A7385,#EBC79C)}
+.spotlight .img{display:block;position:relative;height:44vh;min-height:340px;border-radius:var(--r-soft);overflow:hidden;background:linear-gradient(120deg,var(--accent-soft),var(--sand-deeper))}
 /* object-position hoger dan het midden: de uitsnede toont de woning i.p.v.
    vooral de ondergrond. Wil Caro nog hoger/lager: alleen dit percentage wijzigen. */
 .spotlight .img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
-.spotlight .badge{position:absolute;top:16px;left:16px;background:var(--terracotta);color:#fff;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;padding:6px 13px;border-radius:var(--r-pill)}
-.spotlight .kick{position:absolute;top:16px;right:16px;background:rgba(19,51,60,.5);color:#fff;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;padding:6px 13px;border-radius:var(--r-pill);backdrop-filter:blur(4px)}
+.spotlight .badge{position:absolute;top:16px;left:16px;background:var(--accent2);color:#fff;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;padding:6px 13px;border-radius:var(--r-pill)}
+.spotlight .kick{position:absolute;top:16px;right:16px;background:var(--ink-a55);color:#fff;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;padding:6px 13px;border-radius:var(--r-pill);backdrop-filter:blur(4px)}
 /* Spotlight-info als raster van 2 kolommen × 3 rijen, op basislijn uitgelijnd:
    rij 1 = titel + prijs op dezelfde hoogte, rij 3 = kenmerken + knop op
    dezelfde hoogte. De rechterkolom is zo breed als de knop en begint links,
@@ -160,27 +190,27 @@ footer.site a:hover{color:#fff}
 .spotlight .info h3{grid-column:1;grid-row:1;font-size:clamp(1.9rem,3.4vw,2.8rem);font-weight:400}
 .spotlight .info .plaats{grid-column:1;grid-row:2;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px}
 .spotlight .info .meta{grid-column:1;grid-row:3;display:flex;gap:16px;margin-top:12px;font-size:.85rem;color:var(--muted)}
-.spotlight .info .prijs{grid-column:2;grid-row:1;justify-self:start;font-family:var(--serif);font-size:1.9rem;color:var(--teal-deep);font-stretch:80%}
-.spotlight .info .go{grid-column:2;grid-row:3;justify-self:start;margin-top:12px;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);border-bottom:1px solid var(--teal);padding-bottom:3px}
+.spotlight .info .prijs{grid-column:2;grid-row:1;justify-self:start;font-family:var(--serif);font-size:1.9rem;color:var(--accent-deep);font-stretch:80%}
+.spotlight .info .go{grid-column:2;grid-row:3;justify-self:start;margin-top:12px;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--accent);padding-bottom:3px}
 
 .woningen-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:30px;max-width:980px;margin:0 auto}
 .card{background:#fff;border-radius:var(--r-soft);overflow:hidden;box-shadow:var(--soft2);transition:transform .2s, box-shadow .2s;display:flex;flex-direction:column}
 .card:hover{transform:translateY(-5px);box-shadow:var(--soft)}
-.card .img{position:relative;aspect-ratio:16/10;overflow:hidden;background:linear-gradient(135deg,#E7D3BF,#cdb79f)}
+.card .img{position:relative;aspect-ratio:16/10;overflow:hidden;background:linear-gradient(135deg,var(--sand-deep),var(--sand-deeper))}
 .card .img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.card .status{position:absolute;top:12px;left:12px;background:var(--terracotta);color:#fff;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;padding:5px 11px;border-radius:var(--r-pill)}
+.card .status{position:absolute;top:12px;left:12px;background:var(--accent2);color:#fff;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;padding:5px 11px;border-radius:var(--r-pill)}
 .card .body{padding:22px 24px 26px;display:flex;flex-direction:column;flex:1}
 .card h3{font-size:1.6rem;line-height:1.05}
 .card .plaats{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px}
 .card .meta{display:flex;gap:16px;margin-top:16px;font-size:.82rem;color:var(--muted)}
-.card .prijs{margin-top:16px;font-family:var(--serif);font-size:1.6rem;color:var(--teal-deep);font-stretch:80%}
-.card .link{margin-top:16px;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+.card .prijs{margin-top:16px;font-family:var(--serif);font-size:1.6rem;color:var(--accent-deep);font-stretch:80%}
+.card .link{margin-top:16px;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
 
 /* Fotografie-sectie */
-.foto{background:var(--teal-ink);color:#fff}
+.foto{background:var(--accent-ink);color:#fff}
 .foto .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
 .foto .ph{aspect-ratio:4/3;border-radius:var(--r-soft);box-shadow:var(--soft)}
-.foto .eyebrow{color:#f0dccd}
+.foto .eyebrow{color:var(--sand-deep)}
 .foto h2{font-size:clamp(2rem,3.4vw,2.9rem);color:#fff;margin:.2em 0 .5em;font-weight:400}
 .foto p{opacity:.9;margin-bottom:26px;max-width:470px}
 
@@ -192,7 +222,7 @@ footer.site a:hover{color:#fff}
 
 /* ---------- 404 ---------- */
 .err{min-height:70vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 30px}
-.err .big{font-family:var(--serif);font-size:clamp(5rem,14vw,9rem);color:var(--teal);line-height:.9;font-stretch:62.5%}
+.err .big{font-family:var(--serif);font-size:clamp(5rem,14vw,9rem);color:var(--accent);line-height:.9;font-stretch:62.5%}
 .err h1{font-size:2.2rem;font-weight:400;margin:.4em 0 .3em}
 .err p{color:var(--muted);margin-bottom:26px}
 
@@ -223,87 +253,87 @@ footer.site a:hover{color:#fff}
 @media(max-width:560px){ .masonry{column-count:1} .facts .wrap{grid-template-columns:repeat(2,1fr)} }
 
 /* ================= Donkere onepager (woningpagina) ================= */
-/* Achtergrond = Caro's kleurstaal van 17 aug (#1D3841). Alle donkere
-   vlakken hieronder zijn daarop afgestemd. Eén plek om te wijzigen: --wp-bg. */
-body.theme-dark{--wp-bg:#1D3841;--wp-panel:#16303a;--wp-line:rgba(241,232,219,.16);background:var(--wp-bg);color:var(--cream)}
-.theme-dark header.top{background:rgba(29,56,65,.88);border-bottom:1px solid var(--wp-line)}
+/* Achtergrond en panelen komen uit het gekozen palet (--wp-bg / --wp-panel).
+   --wp-line is alleen een handige naam voor de lijntjes op donker. */
+body.theme-dark{--wp-line:var(--cream-15);background:var(--wp-bg);color:var(--cream)}
+.theme-dark header.top{background:var(--wp-bg-88);border-bottom:1px solid var(--wp-line)}
 .theme-dark .brand .name{color:var(--cream)}
-.theme-dark .brand.circled .brandlogo{border-color:rgba(241,232,219,.45)}
-.theme-dark .brand.c-feller .brandlogo{border-color:rgba(241,232,219,.75)}
+.theme-dark .brand.circled .brandlogo{border-color:var(--cream-50)}
+.theme-dark .brand.c-feller .brandlogo{border-color:var(--cream-70)}
 .theme-dark .brand.c-fel .brandlogo{border-color:var(--cream)}
-.theme-dark .eyebrow{color:#c97a55}
+.theme-dark .eyebrow{color:var(--accent2-soft)}
 
 /* Menukleuren op de donkere achtergrond (keuze 17 aug):
    "REAL ESTATE SPAIN" in zand, WhatsApp-knop petrolblauw met witte letters.
    De knop erft de teal van de hoofdsite; alleen de tekst iets steviger,
    zodat de kleine hoofdletters op teal ook in zonlicht leesbaar blijven. */
 .theme-dark .brand .name small{color:var(--sand)}
-.theme-dark .top .cta{font-weight:500}
+.theme-dark .top .cta{background:var(--accent-op-donker);font-weight:500}
 
 /* Framed video-hero */
 .wp-hero{padding:60px 0 44px;text-align:center}
-.wp-hero .frame{max-width:820px;margin:0 auto;border:1px solid rgba(241,232,219,.5);border-radius:6px;padding:12px;background:rgba(255,255,255,.02)}
-.wp-hero .stage{position:relative;aspect-ratio:16/9;border-radius:3px;overflow:hidden;background:radial-gradient(120% 120% at 30% 20%,rgba(63,151,169,.30),transparent 60%),linear-gradient(160deg,#24505c,#16303a 70%)}
+.wp-hero .frame{max-width:820px;margin:0 auto;border:1px solid var(--cream-50);border-radius:6px;padding:12px;background:rgba(255,255,255,.02)}
+.wp-hero .stage{position:relative;aspect-ratio:16/9;border-radius:3px;overflow:hidden;background:radial-gradient(120% 120% at 30% 20%,var(--accent-soft-30),transparent 60%),linear-gradient(160deg,var(--wp-glow),var(--wp-panel) 70%)}
 .wp-hero .stage img,.wp-hero .stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .wp-hero .naam{font-family:var(--serif);font-size:clamp(2rem,4vw,3rem);font-weight:400;margin-top:30px;letter-spacing:.03em;font-stretch:62.5%;min-height:1.1em}
 .wp-hero .prijs{font-family:var(--serif);font-size:1.5rem;color:var(--sand);margin-top:6px;font-stretch:70%}
-.wp-hero .sub{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(241,232,219,.7);margin-top:8px}
-.wp-hero .soundbtn{position:static;margin-top:18px;display:inline-block;background:transparent;border:1px solid rgba(241,232,219,.3);color:var(--cream);border-radius:999px;padding:8px 16px;font-size:.7rem;letter-spacing:.1em;cursor:pointer}
+.wp-hero .sub{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-70);margin-top:8px}
+.wp-hero .soundbtn{position:static;margin-top:18px;display:inline-block;background:transparent;border:1px solid var(--cream-30);color:var(--cream);border-radius:999px;padding:8px 16px;font-size:.7rem;letter-spacing:.1em;cursor:pointer}
 
 /* Facts dark */
-.theme-dark .facts{border-color:rgba(241,232,219,.16)}
-.theme-dark .facts .f{border-right-color:rgba(241,232,219,.16)}
-.theme-dark .facts .f:first-child{border-left-color:rgba(241,232,219,.16)}
+.theme-dark .facts{border-color:var(--cream-15)}
+.theme-dark .facts .f{border-right-color:var(--cream-15)}
+.theme-dark .facts .f:first-child{border-left-color:var(--cream-15)}
 .theme-dark .facts .n{color:var(--cream)}
-.theme-dark .facts .l{color:rgba(241,232,219,.55)}
+.theme-dark .facts .l{color:var(--cream-50)}
 
 /* Verhaal dark */
 .theme-dark .lead h2{color:var(--cream)}
-.theme-dark .lead p{color:rgba(241,232,219,.8)}
-.theme-dark .section-head p{color:rgba(241,232,219,.7)}
+.theme-dark .lead p{color:var(--cream-85)}
+.theme-dark .section-head p{color:var(--cream-70)}
 
 /* Galerij: kolommen (masonry). Elke foto houdt zijn eigen verhouding, dus
    er wordt niets afgesneden, en de marge tussen de beelden is overal exact
    --gal-gap — horizontaal én verticaal. */
 .wp-gal{--gal-gap:8px;max-width:1200px;margin:0 auto;padding:0 24px;column-count:3;column-gap:var(--gal-gap)}
-.wp-tile{position:relative;display:block;width:100%;margin:0 0 var(--gal-gap);break-inside:avoid;-webkit-column-break-inside:avoid;border-radius:3px;overflow:hidden;background:var(--wp-panel,#16303a);cursor:zoom-in;border:0;padding:0}
+.wp-tile{position:relative;display:block;width:100%;margin:0 0 var(--gal-gap);break-inside:avoid;-webkit-column-break-inside:avoid;border-radius:3px;overflow:hidden;background:var(--wp-panel,var(--wp-panel));cursor:zoom-in;border:0;padding:0}
 .wp-tile img{width:100%;height:auto;display:block;transition:opacity .3s}
 .wp-tile:hover img{opacity:.86}
 .wp-tile span{position:absolute;left:12px;bottom:10px;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.9);text-shadow:0 1px 4px rgba(0,0,0,.5)}
 
 /* Vergroot beeld (lightbox) met vorige/volgende */
-.lb{position:fixed;inset:0;z-index:200;display:none;background:rgba(14,30,36,.96);backdrop-filter:blur(3px)}
+.lb{position:fixed;inset:0;z-index:200;display:none;background:var(--wp-panel-96);backdrop-filter:blur(3px)}
 .lb.open{display:block}
 .lb figure{position:absolute;inset:56px 84px 72px;display:flex;align-items:center;justify-content:center;margin:0}
 .lb img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;border-radius:2px}
-.lb figcaption{position:absolute;left:0;right:0;bottom:26px;text-align:center;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(241,232,219,.75)}
-.lb .lb-btn{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:1px solid rgba(241,232,219,.3);background:transparent;color:var(--cream);font-size:1.1rem;cursor:pointer;display:grid;place-items:center;transition:.2s}
-.lb .lb-btn:hover{background:rgba(241,232,219,.12)}
+.lb figcaption{position:absolute;left:0;right:0;bottom:26px;text-align:center;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-70)}
+.lb .lb-btn{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:1px solid var(--cream-30);background:transparent;color:var(--cream);font-size:1.1rem;cursor:pointer;display:grid;place-items:center;transition:.2s}
+.lb .lb-btn:hover{background:var(--cream-15)}
 .lb .lb-prev{left:20px}
 .lb .lb-next{right:20px}
 .lb .lb-close{position:absolute;top:18px;right:20px;transform:none;width:42px;height:42px;font-size:1rem}
-.lb .lb-tel{position:absolute;top:26px;left:24px;font-size:.62rem;letter-spacing:.2em;color:rgba(241,232,219,.6)}
+.lb .lb-tel{position:absolute;top:26px;left:24px;font-size:.62rem;letter-spacing:.2em;color:var(--cream-70)}
 @media(max-width:720px){ .lb figure{inset:52px 12px 64px} .lb .lb-btn{width:40px;height:40px} .lb .lb-prev{left:6px} .lb .lb-next{right:6px} }
 
 /* Kenmerken dark */
 .theme-dark .feat{background:var(--wp-panel);border-color:var(--wp-line)}
-.theme-dark .feat .col{background:rgba(255,255,255,.03);box-shadow:none;border:1px solid rgba(241,232,219,.1)}
+.theme-dark .feat .col{background:rgba(255,255,255,.03);box-shadow:none;border:1px solid var(--cream-15)}
 .theme-dark .feat h3{color:var(--sand)}
-.theme-dark .feat li{border-bottom-color:rgba(241,232,219,.12)}
+.theme-dark .feat li{border-bottom-color:var(--cream-15)}
 
 /* Locatie dark */
-.theme-dark .loc-grid .ph{box-shadow:none;border:1px solid rgba(241,232,219,.14)}
+.theme-dark .loc-grid .ph{box-shadow:none;border:1px solid var(--cream-15)}
 .theme-dark .dist .d{background:rgba(255,255,255,.04);box-shadow:none}
-.theme-dark .dist .d span:first-child{color:rgba(241,232,219,.6)}
+.theme-dark .dist .d span:first-child{color:var(--cream-70)}
 .theme-dark .dist .d span:last-child{color:var(--sand)}
 .theme-dark .loc-grid h2{color:var(--cream)}
-.theme-dark .loc-grid p{color:rgba(241,232,219,.7)}
+.theme-dark .loc-grid p{color:var(--cream-70)}
 
 @media(max-width:900px){ .wp-gal{column-count:2} }
 @media(max-width:560px){ .wp-gal{column-count:1} }
 
 /* Persoonlijk bandje (footer woningpagina) */
-.wp-personal{padding:66px 0;text-align:center;border-top:1px solid rgba(241,232,219,.14)}
-.wp-personal .portret{width:96px;height:96px;border-radius:50%;object-fit:cover;object-position:center 22%;margin:0 auto 22px;border:2px solid rgba(241,232,219,.35)}
+.wp-personal{padding:66px 0;text-align:center;border-top:1px solid var(--cream-15)}
+.wp-personal .portret{width:96px;height:96px;border-radius:50%;object-fit:cover;object-position:center 22%;margin:0 auto 22px;border:2px solid var(--cream-30)}
 .wp-personal blockquote{font-family:var(--serif);font-size:clamp(1.4rem,2.6vw,2rem);font-style:italic;font-weight:400;color:var(--cream);max-width:620px;margin:0 auto;line-height:1.35;font-stretch:82%}
-.wp-personal .ondertekening{font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:#c97a55;margin-top:18px}
+.wp-personal .ondertekening{font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent2-soft);margin-top:18px}

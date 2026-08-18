@@ -1,153 +1,32 @@
 ---
 import Base from '../layouts/Base.astro';
 import { getWoningen } from '../lib/supabase';
+import { getInstellingen } from '../lib/instellingen';
+
+import Hero from '../components/secties/Hero.astro';
+import Woningen from '../components/secties/Woningen.astro';
+import Fotografie from '../components/secties/Fotografie.astro';
+import Over from '../components/secties/Over.astro';
+import Contact from '../components/secties/Contact.astro';
 
 const alle = await getWoningen();
+const { secties } = await getInstellingen();
 
-const uitgelicht = alle.find((w) => w.uitgelicht) || alle[0];
-const overige = alle.filter((w) => !uitgelicht || w.slug !== uitgelicht.slug);
+// Welke sectie hoort bij welk component. Staat een id hier niet in, dan wordt
+// hij overgeslagen — zo kan een oude instelling de pagina nooit slopen.
+const componenten = {
+  hero: Hero,
+  woningen: Woningen,
+  fotografie: Fotografie,
+  over: Over,
+  contact: Contact,
+};
 
-const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
-const homeHero = 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1900&q=70';
+const zichtbaar = secties.filter((s) => s.aan && componenten[s.id]);
 ---
 <Base>
-  <!-- HOME HERO -->
-  <section class="home-hero">
-    <div class="ph kenburns" style="background:linear-gradient(120deg,#2A7385,#EBC79C)">
-      <img class="photo" src={homeHero} alt="Spanje" onerror="this.remove()" />
-    </div>
-    <div class="wrap">
-      <div class="inner">
-        <div class="eyebrow" style="color:#f0dccd">Real Estate Spain</div>
-        <h1 style="font-size:clamp(2.2rem,4.6vw,3.5rem)">Meer dan een makelaar.</h1>
-        <p style="font-size:1rem;max-width:430px;opacity:.92">Persoonlijk, met oog voor beeld, sfeer en verhaal — van de eerste kennismaking tot ver na de sleutel.</p>
-        <div class="btns">
-          <a class="btn btn-primary" href="#contact">Neem contact op</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- WONINGEN: uitgelicht + overzicht -->
-  <section class="pad" id="woningen">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <div class="eyebrow">In de spotlight</div>
-        <h2>Woning in de kijker</h2>
-      </div>
-
-      {uitgelicht && (
-        <div class="spotlight reveal">
-          <a href={`/woning/${uitgelicht.slug}/`} class="img">
-            <img src={uitgelicht.hero} alt={uitgelicht.titel} onerror="this.remove()" />
-            <span class="badge">{uitgelicht.status}</span>
-          </a>
-          <!-- Volgorde in de HTML = leesvolgorde op mobiel; op desktop plaatst
-               het raster in global.css prijs en knop in de rechterkolom. -->
-          <div class="info">
-            <h3>{uitgelicht.titel}</h3>
-            <div class="prijs">{euro(uitgelicht.prijs)}</div>
-            <div class="plaats">{uitgelicht.plaats}</div>
-            <div class="meta">
-              <span>{uitgelicht.slaapkamers} slaapkamers</span>
-              <span>{uitgelicht.badkamers} badkamers</span>
-              <span>{uitgelicht.woonoppervlak} m²</span>
-            </div>
-            <a class="go" href={`/woning/${uitgelicht.slug}/`}>Bekijk woning →</a>
-          </div>
-        </div>
-      )}
-
-      {overige.length > 0 && (
-        <div class="reveal">
-          <div style="text-align:center;margin:8px 0 30px">
-            <span class="eyebrow">Meer woningen</span>
-          </div>
-          <div class="woningen-grid">
-            {overige.map((w) => (
-              <a class="card" href={`/woning/${w.slug}/`}>
-                <div class="img">
-                  <img src={w.hero} alt={w.titel} loading="lazy" onerror="this.remove()" />
-                  <span class="status">{w.status}</span>
-                </div>
-                <div class="body">
-                  <h3>{w.titel}</h3>
-                  <div class="plaats">{w.plaats}</div>
-                  <div class="meta">
-                    <span>{w.slaapkamers} slk</span>
-                    <span>{w.badkamers} bad</span>
-                    <span>{w.woonoppervlak} m²</span>
-                  </div>
-                  <div class="prijs">{euro(w.prijs)}</div>
-                  <div class="link">Bekijk woning →</div>
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {alle.length === 0 && (
-        <p class="reveal" style="text-align:center;color:var(--muted)">
-          Nog geen woningen toegevoegd. Voeg de eerste toe via <a href="/beheer/">het beheer-dashboard</a>.
-        </p>
-      )}
-    </div>
-  </section>
-
-  <!-- FOTOGRAFIE -->
-  <section class="pad foto" id="fotografie">
-    <div class="wrap">
-      <div class="ph reveal" style="background:linear-gradient(135deg,#2A7385,#B15B3C)">
-        <img class="photo" src="/caro-fotografie.jpg" alt="Caro Leriche aan het fotograferen" onerror="this.remove()" />
-      </div>
-      <div class="reveal">
-        <div class="eyebrow">Ook fotografie</div>
-        <h2>Ik fotografeer en film de woningen zelf</h2>
-        <p>Geen snelle standaard ‘kiekjes’: elke woning krijgt de aandacht die ze verdient, met de focus op licht, sfeer en verhaal — in foto én video. Wil je jouw woning zo in beeld gebracht zien? Vraag gerust naar de mogelijkheden.</p>
-        <div class="btns">
-          <a class="btn btn-primary" href="mailto:caro.realestate.spain@gmail.com?subject=Fotografie">Vraag naar fotografie</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- OVER CARO -->
-  <section class="pad about" id="over">
-    <div class="wrap">
-      <div class="ph reveal" style="background:linear-gradient(135deg,#1E5A69,#7C8368)">
-        <img class="photo" src="/caro.jpg" alt="Caro Leriche" onerror="this.remove()" />
-      </div>
-      <div class="reveal">
-        <div class="eyebrow">Over Caro</div>
-        <h2>Eerst kennismaken, dan pas zoeken</h2>
-        <p>Ik kijk niet alleen naar waar je wil wonen, maar luister vooral naar hoe je wil leven. Daarbij begin ik niet met eindeloze lijstjes met bezichtigingen, maar is jou leren kennen de allereerste stap.</p>
-        <p>Op zoek naar een woning, of denk je aan bouwen in Spanje? Laten we kennismaken — dan zoek ik gericht met je mee.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section class="pad contact" id="contact">
-    <div class="wrap">
-      <div class="agent-card">
-        <div class="agent-photo"><img src="/logo-cl.png" alt="Caro Leriche" /></div>
-        <div>
-          <h3>Caro Leriche</h3>
-          <div style="opacity:.85;font-size:.9rem;margin-top:4px">Real Estate Spain</div>
-        </div>
-      </div>
-      <div>
-        <h2>Op zoek naar jouw woning in Spanje?</h2>
-        <p>Vertel me waar je naar zoekt — ik begeleid je persoonlijk, ook als de juiste woning nog gevonden moet worden.</p>
-        <p>Ik help je niet alleen bij aankoop, maar ook bij verkoop: van woningen tot gronden en projecten. En omdat kopen of bouwen in Spanje veel vragen oproept, leg ik je het hele proces uit en blijf ik naast je staan — tot en met een eventueel bouwtraject.</p>
-        <div class="btns">
-          <!-- ✎ VUL IN: echte gegevens -->
-          <a class="btn btn-primary" href="https://wa.me/34604272907">WhatsApp Caro</a>
-          <a class="btn btn-ghost" href="mailto:caro.realestate.spain@gmail.com">Stuur een e-mail</a>
-          <a class="btn btn-ghost" href="tel:+34604272907">+34 604 27 29 07</a>
-        </div>
-      </div>
-    </div>
-  </section>
+  {zichtbaar.map((s) => {
+    const Sectie = componenten[s.id];
+    return <Sectie alle={alle} />;
+  })}
 </Base>

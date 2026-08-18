@@ -1,12 +1,19 @@
 ---
 import '../styles/global.css';
+import { paletCss } from '../lib/palet.js';
+import { getInstellingen } from '../lib/instellingen';
+
+// Het kleurpalet dat Caro in het dashboard koos. Bij een onbereikbare database
+// valt dit terug op de huisstijl, dus de site ziet er altijd goed uit.
+const instellingen = await getInstellingen();
+
 const {
   title = 'Caro Leriche — Real Estate Spain',
   description = 'Persoonlijk en exclusief vastgoed in Spanje. Caro Leriche begeleidt kopers bij het vinden van hun plek in de zon — en fotografeert de woningen zelf.',
   nav = 'full',
   theme = 'light',
 } = Astro.props;
-const SITE_VERSION = 'v1.14';
+const SITE_VERSION = 'v1.15';
 
 // ⚙️ KEUZE CARO — cirkel rond het CL-logo in het menu.
 //    'geen' · 'fijn' (dun, zacht) · 'feller' (dikker, teal) · 'fel' (dik, vol teal)
@@ -28,6 +35,9 @@ const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Inter:wght@300;400;500;600&family=Noto+Serif+Display:wdth,wght@62.5..100,400..600&display=swap" rel="stylesheet" />
+  <!-- Gekozen kleurpalet. Staat bewust ná de stylesheet, zodat het de
+       standaardkleuren in global.css overschrijft. -->
+  <style is:inline set:html={paletCss(instellingen.palet)}></style>
 </head>
 <body class={theme === 'dark' ? 'theme-dark' : undefined}>
   <header class="top">

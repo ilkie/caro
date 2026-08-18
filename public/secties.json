@@ -1,0 +1,10 @@
+{
+  "toelichting": "De secties van de homepage, in de oorspronkelijke volgorde. Gelezen door de site (src/lib/instellingen.ts) en door het beheer-dashboard.",
+  "secties": [
+    { "id": "hero",       "naam": "Header met foto",  "uitleg": "De grote foto bovenaan met je zin en de contactknop." },
+    { "id": "woningen",   "naam": "Woningen",         "uitleg": "De woning in de kijker en het overzicht daaronder." },
+    { "id": "fotografie", "naam": "Fotografie",       "uitleg": "Het blok over dat je zelf fotografeert en filmt." },
+    { "id": "over",       "naam": "Over Caro",        "uitleg": "Je portret met het verhaal over je aanpak." },
+    { "id": "contact",    "naam": "Contact",          "uitleg": "Het gekleurde blok onderaan met WhatsApp, e-mail en telefoon." }
+  ]
+}

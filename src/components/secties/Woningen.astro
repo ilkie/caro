@@ -1,0 +1,73 @@
+---
+// Spotlight + overzicht. Krijgt de woningen mee van de homepage.
+const { alle = [] } = Astro.props;
+const uitgelicht = alle.find((w) => w.uitgelicht) || alle[0];
+const overige = alle.filter((w) => !uitgelicht || w.slug !== uitgelicht.slug);
+const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
+---
+<!-- WONINGEN: uitgelicht + overzicht -->
+<section class="pad" id="woningen" data-sectie="woningen">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">In de spotlight</div>
+      <h2>Woning in de kijker</h2>
+    </div>
+
+    {uitgelicht && (
+      <div class="spotlight reveal">
+        <a href={`/woning/${uitgelicht.slug}/`} class="img">
+          <img src={uitgelicht.hero} alt={uitgelicht.titel} onerror="this.remove()" />
+          <span class="badge">{uitgelicht.status}</span>
+        </a>
+        <!-- Volgorde in de HTML = leesvolgorde op mobiel; op desktop plaatst
+             het raster in global.css prijs en knop in de rechterkolom. -->
+        <div class="info">
+          <h3>{uitgelicht.titel}</h3>
+          <div class="prijs">{euro(uitgelicht.prijs)}</div>
+          <div class="plaats">{uitgelicht.plaats}</div>
+          <div class="meta">
+            <span>{uitgelicht.slaapkamers} slaapkamers</span>
+            <span>{uitgelicht.badkamers} badkamers</span>
+            <span>{uitgelicht.woonoppervlak} m²</span>
+          </div>
+          <a class="go" href={`/woning/${uitgelicht.slug}/`}>Bekijk woning →</a>
+        </div>
+      </div>
+    )}
+
+    {overige.length > 0 && (
+      <div class="reveal">
+        <div style="text-align:center;margin:8px 0 30px">
+          <span class="eyebrow">Meer woningen</span>
+        </div>
+        <div class="woningen-grid">
+          {overige.map((w) => (
+            <a class="card" href={`/woning/${w.slug}/`}>
+              <div class="img">
+                <img src={w.hero} alt={w.titel} loading="lazy" onerror="this.remove()" />
+                <span class="status">{w.status}</span>
+              </div>
+              <div class="body">
+                <h3>{w.titel}</h3>
+                <div class="plaats">{w.plaats}</div>
+                <div class="meta">
+                  <span>{w.slaapkamers} slk</span>
+                  <span>{w.badkamers} bad</span>
+                  <span>{w.woonoppervlak} m²</span>
+                </div>
+                <div class="prijs">{euro(w.prijs)}</div>
+                <div class="link">Bekijk woning →</div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {alle.length === 0 && (
+      <p class="reveal" style="text-align:center;color:var(--muted)">
+        Nog geen woningen toegevoegd. Voeg de eerste toe via <a href="/beheer/">het beheer-dashboard</a>.
+      </p>
+    )}
+  </div>
+</section>
