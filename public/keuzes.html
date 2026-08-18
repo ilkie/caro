@@ -4,75 +4,78 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex, nofollow" />
-<title>Caro — even kiezen</title>
+<title>Caro — nog één ding</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+Display:wdth,wght@62.5..100,400..600&display=swap" rel="stylesheet" />
 <style>
-  :root{--cream:#FBF7F1;--ink:#221E1A;--muted:#8A7C70;--teal:#298296;--teal-deep:#1E6675;--line:#DAC9B6;--terracotta:#B15B3C}
+  :root{--cream:#FBF7F1;--ink:#221E1A;--muted:#8A7C70;--teal:#298296;--line:#DAC9B6;--terracotta:#B15B3C}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'Inter',-apple-system,'Segoe UI',sans-serif;background:#F3EADF;color:var(--ink);line-height:1.65;font-weight:300;-webkit-font-smoothing:antialiased}
-  .page{max-width:1080px;margin:0 auto;padding:44px 24px 130px}
+  .page{max-width:1080px;margin:0 auto;padding:44px 24px 140px}
   h1.t{font-family:'Noto Serif Display',Georgia,serif;font-stretch:62.5%;font-size:2.6rem;font-weight:500;line-height:1.05}
-  .intro{color:var(--muted);max-width:620px;margin-top:12px}
-  .blok{background:var(--cream);border:1px solid var(--line);border-radius:16px;padding:26px;margin-top:34px}
+  .intro{color:var(--muted);max-width:640px;margin-top:12px}
+  .vast{background:rgba(41,130,150,.08);border:1px solid rgba(41,130,150,.25);border-radius:14px;padding:18px 22px;margin-top:26px;font-size:.92rem}
+  .vast b{font-weight:600}
+  .vast .kop{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
+  .vast ul{margin:0;padding-left:18px}
+  .vast li{margin:3px 0}
+  .blok{background:var(--cream);border:1px solid var(--line);border-radius:16px;padding:26px;margin-top:26px}
   .blok h2{font-family:'Noto Serif Display',Georgia,serif;font-stretch:62.5%;font-size:1.8rem;font-weight:500}
-  .blok .uitleg{color:var(--muted);font-size:.92rem;margin-top:6px;max-width:640px}
+  .blok .uitleg{color:var(--muted);font-size:.92rem;margin-top:6px;max-width:660px}
   .chips{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 16px}
-  .groep .chips{margin-top:0}
   .chip{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:10px 18px;font:inherit;font-size:.88rem;cursor:pointer;transition:.15s}
   .chip:hover{border-color:var(--teal)}
   .chip[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
-  .chip small{display:block;font-size:.7rem;opacity:.7;letter-spacing:.04em}
-  .rij{display:flex;gap:34px;flex-wrap:wrap;align-items:flex-start;margin-top:20px}
-  .groep{min-width:200px}
-  .groep .kop{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .chip small{display:block;font-size:.7rem;opacity:.75;letter-spacing:.04em}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .kader .kop{font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
   iframe{width:100%;border:1px solid var(--line);border-radius:10px;background:#fff;display:block}
-  .keuze{position:sticky;bottom:0;margin-top:34px;background:var(--ink);color:var(--cream);border-radius:16px;padding:20px 24px;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-  .keuze .lijst{font-size:.95rem}
+  .keuze{position:sticky;bottom:0;margin-top:30px;background:var(--ink);color:var(--cream);border-radius:16px;padding:20px 24px;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap}
   .keuze b{font-weight:600;color:#fff}
   .kopieer{background:var(--cream);color:var(--ink);border:0;border-radius:999px;padding:11px 22px;font:inherit;font-size:.88rem;cursor:pointer}
   .kopieer:hover{background:#fff}
   .voet{color:var(--muted);font-size:.82rem;margin-top:26px}
-  @media(max-width:640px){ .page{padding:28px 14px 150px} h1.t{font-size:2rem} .blok{padding:18px}
-    .chip{width:100%;text-align:left} .groep{min-width:100%} .keuze{flex-direction:column;align-items:flex-start} }
+  @media(max-width:640px){ .page{padding:28px 14px 160px} h1.t{font-size:2rem} .blok{padding:18px}
+    .duo{grid-template-columns:1fr} .chip{width:100%;text-align:left}
+    .keuze{flex-direction:column;align-items:flex-start} }
 </style>
 </head>
 <body>
 <div class="page">
-  <h1 class="t">Even kiezen, Caro</h1>
-  <p class="intro">Alles uit je feedback van 17 augustus is verwerkt. Op twee punten was je er nog niet uit — die staan hieronder. Klik op een optie en je ziet hem meteen. Onderaan staat wat je gekozen hebt; stuur dat door en ik zet het vast.</p>
+  <h1 class="t">Nog één ding, Caro</h1>
+  <p class="intro">Je keuzes staan genoteerd. Alleen over het cirkeltje rond de CL zijn jij en Ilka het nog niet eens: jij zei liever geen, Ilka vindt het mét mooier, en jij zei dan moet hij feller. Hieronder kun je dat zelf afstellen — klik en kijk.</p>
 
-  <div class="blok">
-    <h2>1 · De zin bovenaan de site</h2>
-    <p class="uitleg">Je wilde het woord 'makelaar' eruit, en dat het meer over verbinding gaat. Hier zijn drie voorstellen — en je eigen huidige zin, voor het geval die toch het beste blijft.</p>
-    <div class="chips" id="kopChips"></div>
-    <iframe id="lichtFrame" height="580" title="Voorbeeld hoofdsite"></iframe>
+  <div class="vast">
+    <div class="kop">Al vastgelegd</div>
+    <ul>
+      <li>De zin bovenaan blijft <b>“Meer dan een makelaar.”</b></li>
+      <li>Menu woningpagina: <b>zand</b> voor REAL ESTATE SPAIN.</li>
+    </ul>
   </div>
 
   <div class="blok">
-    <h2>2 · Het menu op de woningpagina</h2>
-    <p class="uitleg">Op de nieuwe donkere achtergrond. Twee dingen: of er een fijn cirkeltje rond de CL komt, en welke kleuren "REAL ESTATE SPAIN" en de knop krijgen.</p>
-    <div class="rij">
-      <div class="groep">
-        <div class="kop">Cirkel rond CL</div>
-        <div class="chips" id="cirkelChips"></div>
-      </div>
-      <div class="groep">
-        <div class="kop">Kleuren</div>
-        <div class="chips" id="kleurChips"></div>
-      </div>
+    <h2>Hoe fel mag het cirkeltje?</h2>
+    <p class="uitleg">Links de woningpagina, rechts de hoofdsite — het cirkeltje geldt voor allebei, dus je ziet ze samen veranderen.</p>
+    <div class="chips" id="cirkelChips"></div>
+    <div class="duo">
+      <div class="kader"><div class="kop">Woningpagina (donker)</div><iframe id="donkerFrame" height="330" title="Menu woningpagina"></iframe></div>
+      <div class="kader"><div class="kop">Hoofdsite (licht)</div><iframe id="lichtFrame" height="330" title="Menu hoofdsite"></iframe></div>
     </div>
-    <iframe id="donkerFrame" height="470" title="Voorbeeld woningpagina"></iframe>
-    <p class="uitleg" style="margin-top:12px">Het cirkeltje geldt voor allebei de pagina's — je ziet het hierboven bij punt 1 dus meteen mee veranderen.</p>
+  </div>
+
+  <div class="blok">
+    <h2>En de WhatsApp-knop?</h2>
+    <p class="uitleg">Jij vroeg om terracotta letters, Ilka stelde de petrolblauwe knop voor. Die staat nu ingesteld — je ziet hem links meteen mee veranderen. Klik gerust je eigen idee ernaast.</p>
+    <div class="chips" id="letterChips"></div>
   </div>
 
   <div class="keuze">
-    <div class="lijst" id="samenvatting"></div>
+    <div id="samenvatting"></div>
     <button class="kopieer" id="kopieerBtn" type="button">Kopieer mijn keuze</button>
   </div>
 
-  <p class="voet">De rest — de uitlijning van het menu, de foto in de kijker, je nieuwe teksten, de galerij zonder afgesneden foto's en het vergrote beeld met pijlen — staat klaar en gaat mee zodra Ilka publiceert.</p>
+  <p class="voet">Alles uit je feedback van 17 augustus is verder al verwerkt: de uitlijning van het menu, de foto in de kijker, je nieuwe teksten, de galerij waarin niets meer wordt afgesneden, en het vergrote beeld met pijlen. Dat gaat mee zodra Ilka publiceert.</p>
 </div>
 
 <script type="text/plain" id="siteCss">/* =========================================================
@@ -111,7 +114,11 @@ header.top{position:sticky;top:0;z-index:50;background:rgba(251,247,241,.9);back
 .brand{--brandh:44px;display:flex;align-items:center;gap:13px}
 .monogram{width:40px;height:40px;border-radius:10px;background:var(--teal);color:#fff;display:grid;place-items:center;font-family:var(--serif);font-size:1.15rem;font-stretch:70%}
 .brand .brandlogo{height:var(--brandh);width:auto;display:block}
+/* Cirkel rond het CL-logo — sterkte via de klasse c-fijn/c-feller/c-fel,
+   gezet met CL_CIRKEL in Base.astro. */
 .brand.circled .brandlogo{width:var(--brandh);height:var(--brandh);object-fit:contain;padding:7px;border:1px solid var(--line);border-radius:50%}
+.brand.c-feller .brandlogo{border-width:2px;border-color:rgba(41,130,150,.6)}
+.brand.c-fel .brandlogo{border-width:2px;border-color:var(--teal)}
 .brand .name{font-family:var(--serif);font-size:1.5rem;line-height:1;letter-spacing:.03em;font-stretch:85%;height:var(--brandh);display:flex;flex-direction:column;justify-content:space-between}
 .brand .name small{display:block;font-family:var(--sans);font-size:.55rem;line-height:1;letter-spacing:.16em;margin-right:-.16em;text-transform:uppercase;color:var(--terracotta);font-weight:400;text-align:justify;text-align-last:justify}
 .top nav{display:flex;gap:30px;align-items:center}
@@ -302,14 +309,16 @@ body.theme-dark{--wp-bg:#1D3841;--wp-panel:#16303a;--wp-line:rgba(241,232,219,.1
 .theme-dark header.top{background:rgba(29,56,65,.88);border-bottom:1px solid var(--wp-line)}
 .theme-dark .brand .name{color:var(--cream)}
 .theme-dark .brand.circled .brandlogo{border-color:rgba(241,232,219,.45)}
+.theme-dark .brand.c-feller .brandlogo{border-color:rgba(241,232,219,.75)}
+.theme-dark .brand.c-fel .brandlogo{border-color:var(--cream)}
 .theme-dark .eyebrow{color:#c97a55}
 
-/* ⚙️ KEUZE CARO — kleuren van "REAL ESTATE SPAIN" en de menuknop op de
-   nieuwe achtergrond. Nu: zand + crème knop. Wil Caro het teal/terracotta
-   van de hoofdsite terug, dan deze twee regels weghalen. */
+/* Menukleuren op de donkere achtergrond (keuze 17 aug):
+   "REAL ESTATE SPAIN" in zand, WhatsApp-knop petrolblauw met witte letters.
+   De knop erft de teal van de hoofdsite; alleen de tekst iets steviger,
+   zodat de kleine hoofdletters op teal ook in zonlicht leesbaar blijven. */
 .theme-dark .brand .name small{color:var(--sand)}
-.theme-dark .top .cta{background:var(--cream);color:var(--teal-ink)}
-.theme-dark .top .cta:hover{background:#fff}
+.theme-dark .top .cta{font-weight:500}
 
 /* Framed video-hero */
 .wp-hero{padding:60px 0 44px;text-align:center}
@@ -384,19 +393,18 @@ const LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJ8AAADwCAYAAAAeubZv
 const SITE = "https://cre01.netlify.app";
 const css = document.getElementById('siteCss').textContent;
 
-const KOPPEN = [
-  { id:'nu', label:'Zoals nu',  sub:'Meer dan een makelaar.',        tekst:'Meer dan een makelaar.' },
-  { id:'A',  label:'Voorstel A', sub:'Meer dan een adres.',           tekst:'Meer dan een adres.' },
-  { id:'B',  label:'Voorstel B', sub:'Eerst jou leren kennen.',       tekst:'Eerst jou leren kennen.' },
-  { id:'C',  label:'Voorstel C', sub:'Wonen begint met een gesprek.', tekst:'Wonen begint met een gesprek.' },
+const CIRKELS = [
+  { id:'geen',   label:'Geen cirkel',  sub:'zoals het nu live staat' },
+  { id:'fijn',   label:'Fijn',         sub:'dun en zacht' },
+  { id:'feller', label:'Feller',       sub:'dikker, teal — nu ingesteld' },
+  { id:'fel',    label:'Fel',          sub:'dik en vol teal' },
 ];
-const CIRKELS = [ { id:'uit', label:'Geen cirkel' }, { id:'aan', label:'Wel een cirkel' } ];
-const KLEUREN = [
-  { id:'zand', label:'Zand + crème knop', sub:'rustig' },
-  { id:'oud',  label:'Terracotta + teal', sub:'zoals de hoofdsite' },
+const LETTERS = [
+  { id:'petrol',     label:'Petrolblauwe knop',  sub:'wit — nu ingesteld' },
+  { id:'terracotta', label:'Crème met terracotta', sub:'jouw eerste idee' },
 ];
 
-let staat = { kop:'nu', cirkel:'uit', kleur:'zand' };
+let staat = { cirkel:'feller', letters:'petrol' };
 
 function chips(el, opties, veld) {
   el.innerHTML = '';
@@ -412,70 +420,59 @@ function chips(el, opties, veld) {
 }
 
 function merk() {
-  return '<a class="brand' + (staat.cirkel === 'aan' ? ' circled' : '') + '" href="#">' +
+  const k = staat.cirkel === 'geen' ? 'brand' : 'brand circled c-' + staat.cirkel;
+  return '<a class="' + k + '" href="#">' +
     '<img class="brandlogo" src="' + LOGO + '" alt="Caro Leriche" />' +
     '<span class="name">Caro Leriche<small>Real Estate Spain</small></span></a>';
 }
 
-function lichtePagina() {
-  const kop = KOPPEN.find(function (k) { return k.id === staat.kop; }).tekst;
+function omhulsel(bodyClass, extraCss, inhoud) {
   return '<!doctype html><html lang="nl"><head><meta charset="utf-8">' +
     '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+Display:wdth,wght@62.5..100,400..600&display=swap" rel="stylesheet">' +
-    '<style>' + css + ' body{overflow:hidden}</style></head><body>' +
-    '<header class="top"><div class="wrap">' + merk() +
-      '<nav><a href="#">Woningen</a><a href="#">Fotografie</a><a href="#">Over Caro</a><a href="#">Contact</a>' +
-      '<a class="cta" href="#">Plan bezichtiging</a></nav></div></header>' +
-    '<section class="home-hero" style="height:500px;min-height:0">' +
-      '<div class="ph" style="background:linear-gradient(120deg,#2A7385,#EBC79C)">' +
-        '<img class="photo" src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1900&q=70" alt="" onerror="this.remove()"></div>' +
-      '<div class="wrap"><div class="inner">' +
-        '<div class="eyebrow" style="color:#f0dccd">Real Estate Spain</div>' +
-        '<h1 style="font-size:clamp(2.2rem,4.6vw,3.5rem)">' + kop + '</h1>' +
-        '<p style="font-size:1rem;max-width:430px;opacity:.92">Persoonlijk, met oog voor beeld, sfeer en verhaal — van de eerste kennismaking tot ver na de sleutel.</p>' +
-        '<div class="btns"><a class="btn btn-primary" href="#">Neem contact op</a></div>' +
-      '</div></div></section></body></html>';
+    '<style>' + css + ' body{overflow:hidden}' + extraCss + '</style></head>' +
+    '<body' + (bodyClass ? ' class="' + bodyClass + '"' : '') + '>' + inhoud + '</body></html>';
 }
 
 function donkerePagina() {
-  const oud = staat.kleur === 'oud'
-    ? '.theme-dark .brand .name small{color:var(--terracotta)!important}' +
-      '.theme-dark .top .cta{background:var(--teal)!important;color:#fff!important}'
-    : '';
-  return '<!doctype html><html lang="nl"><head><meta charset="utf-8">' +
-    '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+Display:wdth,wght@62.5..100,400..600&display=swap" rel="stylesheet">' +
-    '<style>' + css + oud + ' body{overflow:hidden}</style></head><body class="theme-dark">' +
+  const letters = staat.letters === 'terracotta'
+    ? '.theme-dark .top .cta{background:var(--cream)!important;color:#A04E30!important}' : '';
+  return omhulsel('theme-dark', letters,
     '<header class="top"><div class="wrap">' + merk() +
       '<nav><a class="cta" href="#">WhatsApp Caro</a></nav></div></header>' +
-    '<section class="wp-hero" style="padding:34px 0 20px"><div class="wrap">' +
-      '<div class="frame" style="max-width:560px"><div class="stage">' +
+    '<section class="wp-hero" style="padding:22px 0 0"><div class="wrap">' +
+      '<div class="frame" style="max-width:420px"><div class="stage">' +
         '<img src="' + SITE + '/media/paz/hero.jpg" alt="" onerror="this.remove()"></div></div>' +
-      '<h1 class="naam" style="margin-top:22px">Casa Paz</h1>' +
-      '<div class="prijs">€ 828.000</div>' +
-      '<div class="sub">Te koop · Elche - Valverde, Costa Blanca</div>' +
-    '</div></section></body></html>';
+    '</div></section>');
+}
+
+function lichtePagina() {
+  return omhulsel('', '',
+    '<header class="top"><div class="wrap">' + merk() +
+      '<nav><a href="#">Woningen</a><a href="#">Over Caro</a>' +
+      '<a class="cta" href="#">Plan bezichtiging</a></nav></div></header>' +
+    '<section class="pad" style="padding:26px 0"><div class="wrap">' +
+      '<div class="eyebrow">In de spotlight</div>' +
+      '<h2 style="font-size:2rem;font-weight:400;margin-top:8px">Woning in de kijker</h2>' +
+    '</div></section>');
 }
 
 function teken() {
-  chips(document.getElementById('kopChips'), KOPPEN, 'kop');
   chips(document.getElementById('cirkelChips'), CIRKELS, 'cirkel');
-  chips(document.getElementById('kleurChips'), KLEUREN, 'kleur');
-  document.getElementById('lichtFrame').srcdoc = lichtePagina();
+  chips(document.getElementById('letterChips'), LETTERS, 'letters');
   document.getElementById('donkerFrame').srcdoc = donkerePagina();
+  document.getElementById('lichtFrame').srcdoc = lichtePagina();
+  const c = CIRKELS.find(function (o) { return o.id === staat.cirkel; }).label;
+  const l = LETTERS.find(function (o) { return o.id === staat.letters; }).label;
   document.getElementById('samenvatting').innerHTML =
-    'Mijn keuze — zin bovenaan: <b>“' + KOPPEN.find(function (k) { return k.id === staat.kop; }).tekst + '”</b>' +
-    ' · cirkel rond CL: <b>' + (staat.cirkel === 'aan' ? 'ja' : 'nee') + '</b>' +
-    ' · kleuren menu woningpagina: <b>' + (staat.kleur === 'zand' ? 'zand + crème knop' : 'terracotta + teal') + '</b>';
+    'Mijn keuze — cirkel rond CL: <b>' + c.toLowerCase() + '</b> · WhatsApp-knop: <b>' + l.toLowerCase() + '</b>';
 }
 
 document.getElementById('kopieerBtn').addEventListener('click', function () {
-  const t = document.getElementById('samenvatting').textContent;
   const knop = this;
-  navigator.clipboard.writeText(t).then(function () {
+  navigator.clipboard.writeText(document.getElementById('samenvatting').textContent).then(function () {
     knop.textContent = 'Gekopieerd ✓';
     setTimeout(function () { knop.textContent = 'Kopieer mijn keuze'; }, 1800);
-  }).catch(function () {
-    knop.textContent = 'Selecteer de tekst links';
-  });
+  }).catch(function () { knop.textContent = 'Selecteer de tekst links'; });
 });
 
 teken();
