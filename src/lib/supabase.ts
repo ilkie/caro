@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
 
 // Publieke sleutels (anon) — veilig openbaar, beschermd door RLS.
-const SUPABASE_URL = 'https://kgudzqwwoulynhmfqusf.supabase.co'
-const SUPABASE_ANON_KEY =
+export const SUPABASE_URL = 'https://kgudzqwwoulynhmfqusf.supabase.co'
+export const SUPABASE_ANON_KEY =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtndWR6cXd3b3VseW5obWZxdXNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzNzMyODEsImV4cCI6MjEwMTk0OTI4MX0.B0DtPJLTpJhXSgz4aB8hZCdmzMN2fqyrGqRMakPrgBo'
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)

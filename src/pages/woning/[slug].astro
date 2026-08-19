@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { getAlleWoningen } from '../../lib/supabase';
+import { getAlleWoningen, SUPABASE_URL, SUPABASE_ANON_KEY } from '../../lib/supabase';
 
 export async function getStaticPaths() {
   const woningen = await getAlleWoningen();
@@ -215,4 +215,37 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
       <div class="ondertekening">Caro Leriche</div>
     </div>
   </section>
+
+  <!-- TELLEN: hoe vaak deze woning bekeken en aangeklikt wordt.
+       Er gaat niets persoonlijks mee — alleen de woning, het soort en het moment.
+       Geen cookie, geen bezoeker-id, geen externe dienst. -->
+  <script is:inline define:vars={{ slug: d.slug, sbUrl: SUPABASE_URL, sbKey: SUPABASE_ANON_KEY }}>
+    (function () {
+      if (window.top !== window.self) return; // niet meetellen in een voorbeeldvenster
+      function tel(soort) {
+        try {
+          fetch(sbUrl + '/rest/v1/gebeurtenissen', {
+            method: 'POST',
+            keepalive: true,
+            headers: {
+              'apikey': sbKey,
+              'Authorization': 'Bearer ' + sbKey,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal',
+            },
+            body: JSON.stringify({ slug: slug, soort: soort }),
+          }).catch(function () {});
+        } catch (e) { /* tellen mag nooit de pagina storen */ }
+      }
+      tel('bezoek');
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('a[href]');
+        if (!a) return;
+        var h = a.getAttribute('href') || '';
+        if (h.indexOf('wa.me') > -1 || h.indexOf('whatsapp') > -1) tel('whatsapp');
+        else if (h.indexOf('mailto:') === 0) tel('email');
+        else if (h.indexOf('tel:') === 0) tel('telefoon');
+      });
+    })();
+  </script>
 </Base>
