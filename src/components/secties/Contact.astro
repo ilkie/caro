@@ -1,24 +1,28 @@
 ---
+// Teksten komen uit het dashboard (met de standaard uit public/teksten.json
+// als vangnet). Beeld en opmaak liggen vast.
+import { tekst, mailLink, whatsappLink, telLink } from '../../lib/teksten.js';
+const { teksten = {} } = Astro.props;
+const t = (id) => tekst(teksten, id);
 ---
 <!-- CONTACT -->
 <section class="pad contact" id="contact" data-sectie="contact">
   <div class="wrap">
     <div class="agent-card">
-      <div class="agent-photo"><img src="/logo-cl.png" alt="Caro Leriche" /></div>
+      <div class="agent-photo"><img src="/logo-cl.png" alt={t('footer_naam')} /></div>
       <div>
-        <h3>Caro Leriche</h3>
-        <div style="opacity:.85;font-size:.9rem;margin-top:4px">Real Estate Spain</div>
+        <h3>{t('footer_naam')}</h3>
+        <div style="opacity:.85;font-size:.9rem;margin-top:4px">{t('footer_regel')}</div>
       </div>
     </div>
     <div>
-      <h2>Op zoek naar jouw woning in Spanje?</h2>
-      <p>Vertel me waar je naar zoekt — ik begeleid je persoonlijk, ook als de juiste woning nog gevonden moet worden.</p>
-      <p>Ik help je niet alleen bij aankoop, maar ook bij verkoop: van woningen tot gronden en projecten. En omdat kopen of bouwen in Spanje veel vragen oproept, leg ik je het hele proces uit en blijf ik naast je staan — tot en met een eventueel bouwtraject.</p>
+      <h2>{t('contact_kop')}</h2>
+      <p>{t('contact_tekst1')}</p>
+      {t('contact_tekst2') && <p>{t('contact_tekst2')}</p>}
       <div class="btns">
-        <!-- ✎ VUL IN: echte gegevens -->
-        <a class="btn btn-primary" href="https://wa.me/34604272907">WhatsApp Caro</a>
-        <a class="btn btn-ghost" href="mailto:caro.realestate.spain@gmail.com">Stuur een e-mail</a>
-        <a class="btn btn-ghost" href="tel:+34604272907">+34 604 27 29 07</a>
+        <a class="btn btn-primary" href={whatsappLink(teksten)}>{t('contact_knop_whatsapp')}</a>
+        <a class="btn btn-ghost" href={mailLink(teksten)}>{t('contact_knop_mail')}</a>
+        <a class="btn btn-ghost" href={telLink(teksten)}>{t('tel_weergave')}</a>
       </div>
     </div>
   </div>

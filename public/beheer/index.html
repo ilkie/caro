@@ -173,6 +173,21 @@ textarea{min-height:90px;resize:vertical}
 .hl-voet{color:var(--muted);font-size:.84rem;margin-top:28px;border-top:1px solid var(--line);padding-top:18px}
 .hl code{background:rgba(0,0,0,.05);padding:2px 7px;border-radius:5px;font-size:.88em}
 @media(max-width:640px){ .hl-inhoud ol{columns:1} .hl-blok{padding:18px} }
+
+/* ---------- Teksten ---------- */
+.tk-groep{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:16px}
+.tk-groep > h3{font-size:1.05rem;font-weight:600}
+.tk-groep > .uit{color:var(--muted);font-size:.84rem;margin:2px 0 14px}
+.tk-veld{margin-bottom:16px}
+.tk-veld:last-child{margin-bottom:0}
+.tk-kop{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:5px}
+.tk-kop label{margin:0;font-size:.86rem;font-weight:500}
+.tk-kop .rechts{display:flex;align-items:center;gap:10px;font-size:.75rem;color:var(--muted)}
+.tk-herstel{background:none;border:0;color:var(--teal);font:inherit;font-size:.75rem;cursor:pointer;padding:0;text-decoration:underline}
+.tk-herstel[disabled]{color:var(--muted);opacity:.45;cursor:default;text-decoration:none}
+.tk-lang{color:var(--terracotta)}
+.tk-veld .hint{margin-top:4px}
+.tk-gewijzigd input,.tk-gewijzigd textarea{border-color:var(--teal);background:rgba(41,130,150,.04)}
 </style>
 </head>
 <body>
@@ -208,6 +223,7 @@ textarea{min-height:90px;resize:vertical}
     <div class="tabs">
       <button class="tab actief" type="button" data-tab="woningen">Woningen</button>
       <button class="tab" type="button" data-tab="vormgeving">Vormgeving</button>
+      <button class="tab" type="button" data-tab="teksten">Teksten</button>
       <button class="tab" type="button" data-tab="hulp">Hulp</button>
     </div>
 
@@ -217,6 +233,18 @@ textarea{min-height:90px;resize:vertical}
         <button class="btn btn-primary" id="newBtn">+ Nieuwe woning</button>
       </div>
       <div class="list" id="list"></div>
+    </div>
+
+    <div id="tab-teksten" class="hidden">
+      <div class="page-head">
+        <h2>Teksten</h2>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-ghost" id="tkHerstelAlles" type="button">Alles terug naar de standaardtekst</button>
+          <button class="btn btn-primary" id="tkOpslaan" type="button" disabled>Opslaan</button>
+        </div>
+      </div>
+      <div class="vg-let" style="margin:0 0 18px">Dit zijn de vaste teksten van de site — dus niet de teksten bij een woning, die staan bij de woning zelf. Wat je hier leeg laat of terugzet, valt terug op de oorspronkelijke tekst.</div>
+      <div id="tekstLijst" style="max-width:760px"></div>
     </div>
 
     <div id="tab-hulp" class="hidden">
@@ -237,6 +265,7 @@ textarea{min-height:90px;resize:vertical}
         <li><a href="#hl-plek">Spotlight, volgorde en verbergen</a></li>
         <li><a href="#hl-cijfers">De cijfers onder elke woning</a></li>
         <li><a href="#hl-vormgeving">Kleuren, letters en blokken</a></li>
+        <li><a href="#hl-teksten">De vaste teksten en je gegevens</a></li>
         <li><a href="#hl-publiceren">Opslaan en publiceren</a></li>
         <li><a href="#hl-mislukt">Als er iets niet lukt</a></li>
         <li><a href="#hl-ilka">Waarvoor je Ilka nodig hebt</a></li>
@@ -351,6 +380,18 @@ textarea{min-height:90px;resize:vertical}
     <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
   </div>
 
+  <div class="hl-blok" id="hl-teksten">
+    <h2>De vaste teksten en je gegevens <span>TABBLAD TEKSTEN</span></h2>
+    <p>Alles wat er vast op de site staat — buiten de woningen om — pas je aan bij <b>Teksten</b>. Denk aan de zin bovenaan de homepage, de koppen en alinea's van de blokken, de tekst op de knoppen, de namen in het menu en de regels onderaan.</p>
+    <ul>
+      <li><b>Je gegevens</b> — je telefoonnummer, WhatsApp-nummer en e-mailadres staan hier ook. Pas je ze aan, dan veranderen alle knoppen en links op de site mee. Verhuist je nummer? Dan hoef je niemand te bellen.</li>
+      <li><b>Terug naar de standaardtekst</b> — naast elk veld staat een knopje. Overgeschreven en spijt? Eén klik en de oorspronkelijke tekst staat er weer.</li>
+      <li><b>Tellertje bij koppen</b> — bij korte koppen zie je hoeveel tekens je gebruikt. Ga je eroverheen, dan kleurt het rood: de kop past dan niet mooi meer in de opmaak. Het mag wel, het is een tip, geen verbod.</li>
+    </ul>
+    <div class="hl-tip"><b>Blauw omrand veld?</b> Dat betekent dat je die tekst hebt aangepast ten opzichte van de oorspronkelijke. Handig om te zien wat van jou is.</div>
+    <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
+  </div>
+
   <div class="hl-blok" id="hl-publiceren">
     <h2>Opslaan en publiceren <span>DE SITE DOET DE REST</span></h2>
     <p>Je klikt op <b>Woning opslaan</b> (of, bij vormgeving, op <b>Opslaan</b>) en dat is het. De site bouwt zichzelf opnieuw op met jouw wijziging — dat duurt ongeveer één tot twee minuten. Ververs daarna de pagina en het staat er.</p>
@@ -371,12 +412,12 @@ textarea{min-height:90px;resize:vertical}
 
   <div class="hl-blok" id="hl-ilka">
     <h2>Waarvoor je Ilka nodig hebt <span>DE REST</span></h2>
-    <p>De vaste teksten op de homepage, het menu, het logo, nieuwe soorten blokken en alles wat er nu niet in zit. En natuurlijk: alles wat je niet vertrouwt of wat er raar uitziet.</p>
-    <p>De kleuren, de letters, de volgorde van de blokken en alles rond woningen doe je dus zelf.</p>
+    <p>Nog maar weinig: het logo, de foto's die vast bij de blokken horen (jouw portret en de fotografiefoto), nieuwe soorten blokken, en alles wat er nu niet in zit. En natuurlijk: als er iets raars gebeurt of je iets niet vertrouwt — dat is per definitie onvoorspelbaar, dus daar bel je gewoon voor.</p>
+    <p>De rest doe je zelf: alle woningen, de kleuren, de letters, de volgorde van de blokken, alle vaste teksten en je eigen contactgegevens.</p>
     <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
   </div>
 
-  <p class="hl-voet">Handleiding bijgewerkt op 19 augustus 2026 · site v1.18 · ook te vinden op <code>cre01.netlify.app/wat-kan-ik-zelf.html</code></p>
+  <p class="hl-voet">Handleiding bijgewerkt op 19 augustus 2026 · site v1.19 · ook te vinden op <code>cre01.netlify.app/wat-kan-ik-zelf.html</code></p>
 </div>
       <!-- HANDLEIDING-EINDE -->
     </div>
@@ -554,6 +595,7 @@ async function refresh(){
     $('whoEmail').textContent = session.user.email;
     loadWoningen();
     laadVormgeving();
+    laadTeksten();
   } else {
     $('app').classList.add('hidden');
     $('login').classList.remove('hidden');
@@ -1026,6 +1068,7 @@ document.querySelectorAll('.tab').forEach(t => {
     $('tab-woningen').classList.toggle('hidden', t.dataset.tab !== 'woningen');
     $('tab-vormgeving').classList.toggle('hidden', t.dataset.tab !== 'vormgeving');
     $('tab-hulp').classList.toggle('hidden', t.dataset.tab !== 'hulp');
+    $('tab-teksten').classList.toggle('hidden', t.dataset.tab !== 'teksten');
     if (t.dataset.tab === 'vormgeving') ververVoorbeeld();
   });
 });
@@ -1242,6 +1285,123 @@ $('zoekAdres').addEventListener('click', async () => {
     toonKaartVoorbeeld();
   } catch (e) {
     status.textContent = 'Zoeken lukte niet: ' + (e.message || e);
+  }
+});
+
+
+/* ================= Teksten =================
+   De oorspronkelijke teksten staan in /teksten.json — dezelfde bron als de
+   site gebruikt. Wat Caro aanpast gaat naar instellingen.teksten; alleen wat
+   afwijkt van de standaard wordt bewaard, zodat een latere tekstverbetering
+   in teksten.json vanzelf doorkomt bij alles wat zij niet heeft aangeraakt. */
+let TEKST_GROEPEN = [], TEKST_STANDAARD = {}, tk = {}, tkOpgeslagen = '';
+
+async function laadTeksten(){
+  try {
+    const r = await fetch('/teksten.json');
+    TEKST_GROEPEN = (await r.json()).groepen || [];
+  } catch (e) {
+    $('tekstLijst').innerHTML = '<div class="empty">Kon de teksten niet laden.</div>';
+    return;
+  }
+  TEKST_STANDAARD = {};
+  TEKST_GROEPEN.forEach(g => g.velden.forEach(v => { TEKST_STANDAARD[v.id] = v.standaard; }));
+
+  const { data, error } = await sb.from('instellingen').select('teksten').eq('id','site').maybeSingle();
+  if (error){
+    $('tekstLijst').innerHTML = '<div class="empty">Kon de teksten niet laden: ' + error.message +
+      '<br><br>Draait <b>instellingen-tabel.sql</b> al in Supabase?</div>';
+    return;
+  }
+  const bewaard = (data && data.teksten) || {};
+  tk = {};
+  Object.keys(TEKST_STANDAARD).forEach(id => {
+    tk[id] = typeof bewaard[id] === 'string' && bewaard[id].trim() ? bewaard[id] : TEKST_STANDAARD[id];
+  });
+  tkOpgeslagen = JSON.stringify(tk);
+  tekenTeksten();
+}
+
+/** Alleen bewaren wat afwijkt van de standaard. */
+function tkAfwijkend(){
+  const uit = {};
+  Object.keys(tk).forEach(id => { if (tk[id] !== TEKST_STANDAARD[id]) uit[id] = tk[id]; });
+  return uit;
+}
+
+function tekenTeksten(){
+  const lijst = $('tekstLijst');
+  if (!TEKST_GROEPEN.length) return;
+  lijst.innerHTML = '';
+  TEKST_GROEPEN.forEach(groep => {
+    const vak = document.createElement('div');
+    vak.className = 'tk-groep';
+    vak.innerHTML = '<h3>' + groep.naam + '</h3><p class="uit">' + (groep.uitleg || '') + '</p>';
+    groep.velden.forEach(veld => {
+      const gewijzigd = tk[veld.id] !== TEKST_STANDAARD[veld.id];
+      const lang = veld.type === 'lang';
+      const rij = document.createElement('div');
+      rij.className = 'tk-veld' + (gewijzigd ? ' tk-gewijzigd' : '');
+      rij.innerHTML =
+        '<div class="tk-kop"><label>' + veld.naam + '</label><span class="rechts">' +
+          '<span class="teller"></span>' +
+          '<button type="button" class="tk-herstel"' + (gewijzigd ? '' : ' disabled') + '>terug naar de standaardtekst</button>' +
+        '</span></div>' +
+        (lang ? '<textarea rows="3"></textarea>' : '<input />') +
+        (veld.hint ? '<div class="hint">' + veld.hint + '</div>' : '');
+      const invoer = rij.querySelector(lang ? 'textarea' : 'input');
+      const teller = rij.querySelector('.teller');
+      invoer.value = tk[veld.id];
+
+      function meet(){
+        if (!veld.max) { teller.textContent = ''; return; }
+        const n = invoer.value.length;
+        teller.textContent = n + '/' + veld.max;
+        teller.className = 'teller' + (n > veld.max ? ' tk-lang' : '');
+      }
+      meet();
+      invoer.addEventListener('input', () => {
+        tk[veld.id] = invoer.value;
+        meet();
+        rij.classList.toggle('tk-gewijzigd', invoer.value !== TEKST_STANDAARD[veld.id]);
+        rij.querySelector('.tk-herstel').disabled = invoer.value === TEKST_STANDAARD[veld.id];
+        $('tkOpslaan').disabled = JSON.stringify(tk) === tkOpgeslagen;
+      });
+      rij.querySelector('.tk-herstel').addEventListener('click', () => {
+        tk[veld.id] = TEKST_STANDAARD[veld.id];
+        tekenTeksten();
+        $('tkOpslaan').disabled = JSON.stringify(tk) === tkOpgeslagen;
+      });
+      vak.appendChild(rij);
+    });
+    lijst.appendChild(vak);
+  });
+  $('tkOpslaan').disabled = JSON.stringify(tk) === tkOpgeslagen;
+}
+
+$('tkHerstelAlles').addEventListener('click', () => {
+  tk = { ...TEKST_STANDAARD };
+  tekenTeksten();
+  toast('Alle teksten terug naar de standaard — klik op Opslaan om het door te voeren');
+});
+
+$('tkOpslaan').addEventListener('click', async () => {
+  busy(true);
+  try {
+    const { data, error } = await sb.from('instellingen')
+      .update({ teksten: tkAfwijkend() })
+      .eq('id', 'site')
+      .select();
+    if (error) throw error;
+    if (!data || !data.length) throw new Error('De rij met instellingen bestaat niet. Draai instellingen-tabel.sql in Supabase.');
+    await triggerRebuild();
+    tkOpgeslagen = JSON.stringify(tk);
+    $('tkOpslaan').disabled = true;
+    busy(false);
+    toast('Teksten opgeslagen — de site wordt bijgewerkt (1 à 2 minuten)');
+  } catch (err) {
+    busy(false);
+    alert('Opslaan mislukt: ' + (err.message || err));
   }
 });
 

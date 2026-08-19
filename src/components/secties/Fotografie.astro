@@ -1,4 +1,9 @@
 ---
+// Teksten komen uit het dashboard (met de standaard uit public/teksten.json
+// als vangnet). Beeld en opmaak liggen vast.
+import { tekst, mailLink, whatsappLink, telLink } from '../../lib/teksten.js';
+const { teksten = {} } = Astro.props;
+const t = (id) => tekst(teksten, id);
 ---
 <!-- FOTOGRAFIE -->
 <section class="pad foto" id="fotografie" data-sectie="fotografie">
@@ -7,11 +12,11 @@
       <img class="photo" src="/caro-fotografie.jpg" alt="Caro Leriche aan het fotograferen" onerror="this.remove()" />
     </div>
     <div class="reveal">
-      <div class="eyebrow">Ook fotografie</div>
-      <h2>Ik fotografeer en film de woningen zelf</h2>
-      <p>Geen snelle standaard ‘kiekjes’: elke woning krijgt de aandacht die ze verdient, met de focus op licht, sfeer en verhaal — in foto én video. Wil je jouw woning zo in beeld gebracht zien? Vraag gerust naar de mogelijkheden.</p>
+      <div class="eyebrow">{t('fotografie_eyebrow')}</div>
+      <h2>{t('fotografie_kop')}</h2>
+      <p>{t('fotografie_tekst')}</p>
       <div class="btns">
-        <a class="btn btn-primary" href="mailto:caro.realestate.spain@gmail.com?subject=Fotografie">Vraag naar fotografie</a>
+        <a class="btn btn-primary" href={mailLink(teksten, 'Fotografie')}>{t('fotografie_knop')}</a>
       </div>
     </div>
   </div>

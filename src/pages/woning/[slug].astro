@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import { getAlleWoningen, SUPABASE_URL, SUPABASE_ANON_KEY } from '../../lib/supabase';
 import { getInstellingen } from '../../lib/instellingen';
 import { kaartUrl, kaartBron } from '../../lib/kaart.js';
+import { tekst, mailLink, whatsappLink, telLink } from '../../lib/teksten.js';
 
 export async function getStaticPaths() {
   const woningen = await getAlleWoningen();
@@ -20,7 +21,8 @@ const heeftVideo = !!(d.video && d.video.length > 0);
 
 // Kaart: bewust onnauwkeurig. Het adres en de exacte coördinaten blijven in de
 // database — hier komt alleen een afgerond punt (~1 km) de pagina op.
-const { mapsSleutel } = await getInstellingen();
+const { mapsSleutel, teksten } = await getInstellingen();
+const t = (id) => tekst(teksten, id);
 const kaart = kaartUrl(d.lat, d.lon, mapsSleutel);
 const heeftLocatie = !!kaart;
 const pageTitle = `${d.titel}, ${d.plaats} — ${d.status} | Caro Leriche`;
@@ -209,19 +211,19 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
   <section class="pad contact">
     <div class="wrap">
       <div class="agent-card">
-        <div class="agent-photo"><img src="/logo-cl.png" alt="Caro Leriche" /></div>
+        <div class="agent-photo"><img src="/logo-cl.png" alt={t('footer_naam')} /></div>
         <div>
-          <h3>Caro Leriche</h3>
-          <div style="opacity:.85;font-size:.9rem;margin-top:4px">Real Estate Spain</div>
+          <h3>{t('footer_naam')}</h3>
+          <div style="opacity:.85;font-size:.9rem;margin-top:4px">{t('footer_regel')}</div>
         </div>
       </div>
       <div>
-        <h2>Deze woning met eigen ogen zien?</h2>
-        <p>Ik begeleid je persoonlijk — plan een vrijblijvende bezichtiging, ter plaatse of via een videorondleiding.</p>
+        <h2>{t('contact_woning_kop')}</h2>
+        <p>{t('contact_woning_tekst')}</p>
         <div class="btns">
-          <a class="btn btn-primary" href="https://wa.me/34604272907">WhatsApp Caro</a>
-          <a class="btn btn-ghost" href="mailto:caro.realestate.spain@gmail.com">Stuur een e-mail</a>
-          <a class="btn btn-ghost" href="tel:+34604272907">+34 604 27 29 07</a>
+          <a class="btn btn-primary" href={whatsappLink(teksten)}>{t('contact_knop_whatsapp')}</a>
+          <a class="btn btn-ghost" href={mailLink(teksten)}>{t('contact_knop_mail')}</a>
+          <a class="btn btn-ghost" href={telLink(teksten)}>{t('tel_weergave')}</a>
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@ import Over from '../components/secties/Over.astro';
 import Contact from '../components/secties/Contact.astro';
 
 const alle = await getWoningen();
-const { secties } = await getInstellingen();
+const { secties, teksten } = await getInstellingen();
 
 // Welke sectie hoort bij welk component. Staat een id hier niet in, dan wordt
 // hij overgeslagen — zo kan een oude instelling de pagina nooit slopen.
@@ -27,6 +27,6 @@ const zichtbaar = secties.filter((s) => s.aan && componenten[s.id]);
 <Base>
   {zichtbaar.map((s) => {
     const Sectie = componenten[s.id];
-    return <Sectie alle={alle} />;
+    return <Sectie alle={alle} teksten={teksten} />;
   })}
 </Base>

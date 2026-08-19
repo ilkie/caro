@@ -1,6 +1,8 @@
 ---
-// Spotlight + overzicht. Krijgt de woningen mee van de homepage.
-const { alle = [] } = Astro.props;
+// Spotlight + overzicht. Krijgt de woningen en de teksten mee van de homepage.
+import { tekst } from '../../lib/teksten.js';
+const { alle = [], teksten = {} } = Astro.props;
+const t = (id) => tekst(teksten, id);
 const uitgelicht = alle.find((w) => w.uitgelicht) || alle[0];
 const overige = alle.filter((w) => !uitgelicht || w.slug !== uitgelicht.slug);
 const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
@@ -9,8 +11,8 @@ const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
 <section class="pad" id="woningen" data-sectie="woningen">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="eyebrow">In de spotlight</div>
-      <h2>Woning in de kijker</h2>
+      <div class="eyebrow">{t('woningen_eyebrow')}</div>
+      <h2>{t('woningen_kop')}</h2>
     </div>
 
     {uitgelicht && (
@@ -30,7 +32,7 @@ const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
             <span>{uitgelicht.badkamers} badkamers</span>
             <span>{uitgelicht.woonoppervlak} m²</span>
           </div>
-          <a class="go" href={`/woning/${uitgelicht.slug}/`}>Bekijk woning →</a>
+          <a class="go" href={`/woning/${uitgelicht.slug}/`}>{t('woningen_link')}</a>
         </div>
       </div>
     )}
@@ -38,7 +40,7 @@ const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
     {overige.length > 0 && (
       <div class="reveal">
         <div style="text-align:center;margin:8px 0 30px">
-          <span class="eyebrow">Meer woningen</span>
+          <span class="eyebrow">{t('woningen_meer')}</span>
         </div>
         <div class="woningen-grid">
           {overige.map((w) => (
@@ -56,7 +58,7 @@ const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
                   <span>{w.woonoppervlak} m²</span>
                 </div>
                 <div class="prijs">{euro(w.prijs)}</div>
-                <div class="link">Bekijk woning →</div>
+                <div class="link">{t('woningen_link')}</div>
               </div>
             </a>
           ))}

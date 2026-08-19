@@ -2,10 +2,12 @@
 import '../styles/global.css';
 import { paletCss, lettertypeUrl } from '../lib/palet.js';
 import { getInstellingen } from '../lib/instellingen';
+import { tekst, whatsappLink } from '../lib/teksten.js';
 
 // Het kleurpalet dat Caro in het dashboard koos. Bij een onbereikbare database
 // valt dit terug op de huisstijl, dus de site ziet er altijd goed uit.
 const instellingen = await getInstellingen();
+const t = (id) => tekst(instellingen.teksten, id);
 
 const {
   title = 'Caro Leriche — Real Estate Spain',
@@ -13,7 +15,7 @@ const {
   nav = 'full',
   theme = 'light',
 } = Astro.props;
-const SITE_VERSION = 'v1.18';
+const SITE_VERSION = 'v1.19';
 
 // Jaartal komt uit de bouwdatum, zodat het na de jaarwisseling vanzelf klopt.
 const JAAR = new Date().getFullYear();
@@ -46,22 +48,22 @@ const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%
   <header class="top">
     <div class="wrap">
       <a class={CL_CIRKEL === 'geen' ? 'brand' : `brand circled c-${CL_CIRKEL}`} href="/">
-        <img class="brandlogo" src="/logo-cl.png" alt="Caro Leriche" />
-        <span class="name">Caro Leriche<small>Real Estate Spain</small></span>
+        <img class="brandlogo" src="/logo-cl.png" alt={t('footer_naam')} />
+        <span class="name">{t('footer_naam')}<small>{t('footer_regel')}</small></span>
       </a>
       {nav === 'full' ? (
         <Fragment>
           <nav>
-            <a href="/#woningen">Woningen</a>
-            <a href="/#fotografie">Fotografie</a>
-            <a href="/#over">Over Caro</a>
-            <a href="/#contact">Contact</a>
-            <a class="cta" href="/#contact">Plan bezichtiging</a>
+            <a href="/#woningen">{t('menu_woningen')}</a>
+            <a href="/#fotografie">{t('menu_fotografie')}</a>
+            <a href="/#over">{t('menu_over')}</a>
+            <a href="/#contact">{t('menu_contact')}</a>
+            <a class="cta" href="/#contact">{t('menu_knop')}</a>
           </nav>
           <button class="burger" aria-label="menu" type="button" onclick="var n=document.querySelector('.top nav');n.style.display=(getComputedStyle(n).display==='none'?'flex':'none')">☰</button>
         </Fragment>
       ) : (
-        <nav><a class="cta" href="https://wa.me/34604272907">WhatsApp Caro</a></nav>
+        <nav><a class="cta" href={whatsappLink(instellingen.teksten)}>{t('menu_knop_woning')}</a></nav>
       )}
     </div>
   </header>
@@ -70,9 +72,9 @@ const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%
 
   <footer class="site">
     <div class="wrap">
-      <div class="fname">Caro Leriche</div>
-      <div>Real Estate Spain</div>
-      <div>RAICV 3994 · © {JAAR} Caro Leriche</div>
+      <div class="fname">{t('footer_naam')}</div>
+      <div>{t('footer_regel')}</div>
+      <div>{t('footer_raicv')} · © {JAAR} {t('footer_naam')}</div>
       <div class="bouwer">© {JAAR} Mephio Webtools · {SITE_VERSION}</div>
       <a href="/beheer/" class="beheer-link" aria-label="Inloggen (beheer)" title="Beheer">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10" rx="2"></rect><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"></path></svg>

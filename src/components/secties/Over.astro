@@ -1,4 +1,9 @@
 ---
+// Teksten komen uit het dashboard (met de standaard uit public/teksten.json
+// als vangnet). Beeld en opmaak liggen vast.
+import { tekst, mailLink, whatsappLink, telLink } from '../../lib/teksten.js';
+const { teksten = {} } = Astro.props;
+const t = (id) => tekst(teksten, id);
 ---
 <!-- OVER CARO -->
 <section class="pad about" id="over" data-sectie="over">
@@ -7,10 +12,10 @@
       <img class="photo" src="/caro.jpg" alt="Caro Leriche" onerror="this.remove()" />
     </div>
     <div class="reveal">
-      <div class="eyebrow">Over Caro</div>
-      <h2>Eerst kennismaken, dan pas zoeken</h2>
-      <p>Ik kijk niet alleen naar waar je wil wonen, maar luister vooral naar hoe je wil leven. Daarbij begin ik niet met eindeloze lijstjes met bezichtigingen, maar is jou leren kennen de allereerste stap.</p>
-      <p>Op zoek naar een woning, of denk je aan bouwen in Spanje? Laten we kennismaken — dan zoek ik gericht met je mee.</p>
+      <div class="eyebrow">{t('over_eyebrow')}</div>
+      <h2>{t('over_kop')}</h2>
+      <p>{t('over_tekst1')}</p>
+      {t('over_tekst2') && <p>{t('over_tekst2')}</p>}
     </div>
   </div>
 </section>
