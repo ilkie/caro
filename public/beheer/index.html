@@ -145,6 +145,34 @@ textarea{min-height:90px;resize:vertical}
 .kaartvoorbeeld iframe{width:100%;height:230px;border:0;display:block}
 .kaartvoorbeeld .onder{padding:9px 13px;font-size:.8rem;color:var(--muted);border-top:1px solid var(--line)}
 .kaartvoorbeeld .onder b{color:var(--ink);font-weight:600}
+
+/* ---------- Handleiding (tabblad Hulp én losse pagina) ---------- */
+.hl{max-width:820px}
+.hl h1{font-family:'Noto Serif Display',Georgia,serif;font-stretch:62.5%;font-size:2.4rem;font-weight:500;line-height:1.05}
+.hl .hl-intro{color:var(--muted);margin-top:12px;max-width:660px}
+.hl-inhoud{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 24px;margin-top:22px}
+.hl-inhoud p{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.hl-inhoud ol{margin:0;padding-left:20px;columns:2;column-gap:32px}
+.hl-inhoud li{margin:5px 0;break-inside:avoid}
+.hl-inhoud a{color:var(--teal);text-decoration:none}
+.hl-inhoud a:hover{text-decoration:underline}
+.hl-blok{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px 26px;margin-top:18px;scroll-margin-top:16px}
+.hl-blok h2{font-family:'Noto Serif Display',Georgia,serif;font-stretch:62.5%;font-size:1.5rem;font-weight:500;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.hl-blok h2 span{font-family:inherit;font-size:.66rem;letter-spacing:.18em;color:var(--teal);font-weight:600;font-stretch:100%}
+.hl-blok p{margin-top:10px}
+.hl-blok ul,.hl-blok ol{margin:12px 0 0;padding-left:20px}
+.hl-blok li{margin:6px 0}
+.hl-blok b{font-weight:600}
+.hl-tip{background:rgba(41,130,150,.08);border-left:3px solid var(--teal);border-radius:0 10px 10px 0;padding:13px 17px;margin-top:14px;font-size:.92rem}
+.hl-let{background:rgba(177,91,60,.09);border-left:3px solid var(--terracotta);border-radius:0 10px 10px 0;padding:13px 17px;margin-top:14px;font-size:.92rem}
+.hl-vraag{border-top:1px solid var(--line);padding-top:13px;margin-top:13px}
+.hl-vraag:first-of-type{border-top:0;padding-top:0}
+.hl-vraag b{display:block;margin-bottom:2px}
+.hl-omhoog{display:inline-block;margin-top:12px;font-size:.78rem;color:var(--muted);text-decoration:none}
+.hl-omhoog:hover{color:var(--teal)}
+.hl-voet{color:var(--muted);font-size:.84rem;margin-top:28px;border-top:1px solid var(--line);padding-top:18px}
+.hl code{background:rgba(0,0,0,.05);padding:2px 7px;border-radius:5px;font-size:.88em}
+@media(max-width:640px){ .hl-inhoud ol{columns:1} .hl-blok{padding:18px} }
 </style>
 </head>
 <body>
@@ -180,6 +208,7 @@ textarea{min-height:90px;resize:vertical}
     <div class="tabs">
       <button class="tab actief" type="button" data-tab="woningen">Woningen</button>
       <button class="tab" type="button" data-tab="vormgeving">Vormgeving</button>
+      <button class="tab" type="button" data-tab="hulp">Hulp</button>
     </div>
 
     <div id="tab-woningen">
@@ -188,6 +217,168 @@ textarea{min-height:90px;resize:vertical}
         <button class="btn btn-primary" id="newBtn">+ Nieuwe woning</button>
       </div>
       <div class="list" id="list"></div>
+    </div>
+
+    <div id="tab-hulp" class="hidden">
+      <!-- HANDLEIDING-START — gegenereerd door bouw_handleiding.py, niet met de hand wijzigen -->
+<div class="hl" id="hl-top">
+  <h1>Hoe werkt mijn website?</h1>
+  <p class="hl-intro">Alles wat met woningen te maken heeft doe je zelf: toevoegen, foto's vervangen, prijzen aanpassen, van de site halen. En ook de kleuren, de letters en de volgorde van de blokken. Hieronder staat per onderwerp hoe. Je hoeft het niet te onthouden — kom gewoon terug als je iets kwijt bent.</p>
+
+  <div class="hl-inhoud">
+    <p>Waar zoek je naar?</p>
+    <ol>
+        <li><a href="#hl-inloggen">Inloggen</a></li>
+        <li><a href="#hl-woning">Een woning toevoegen</a></li>
+        <li><a href="#hl-fotos">De foto's</a></li>
+        <li><a href="#hl-tekst">De tekst en de cijfers</a></li>
+        <li><a href="#hl-kaart">De kaart en het adres</a></li>
+        <li><a href="#hl-bezichtigingen">Bezichtigingen en notities</a></li>
+        <li><a href="#hl-plek">Spotlight, volgorde en verbergen</a></li>
+        <li><a href="#hl-cijfers">De cijfers onder elke woning</a></li>
+        <li><a href="#hl-vormgeving">Kleuren, letters en blokken</a></li>
+        <li><a href="#hl-publiceren">Opslaan en publiceren</a></li>
+        <li><a href="#hl-mislukt">Als er iets niet lukt</a></li>
+        <li><a href="#hl-ilka">Waarvoor je Ilka nodig hebt</a></li>
+    </ol>
+  </div>
+
+  <div class="hl-blok" id="hl-inloggen">
+    <h2>Inloggen <span>ELKE KEER HETZELFDE</span></h2>
+    <p>Ga naar <code>cre01.netlify.app/beheer</code> en log in met je e-mailadres en wachtwoord. Onderaan élke pagina van je site staat een klein slotje — dat brengt je naar dezelfde plek. Handig als je de link kwijt bent.</p>
+    <p>Je blijft ingelogd, ook als je het venster sluit. Werk je op een computer die niet van jou is? Klik dan rechtsboven op <b>Uitloggen</b>.</p>
+    <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
+  </div>
+
+  <div class="hl-blok" id="hl-woning">
+    <h2>Een woning toevoegen <span>VAN BEGIN TOT EIND</span></h2>
+    <ol>
+      <li>Klik rechtsboven op <b>+ Nieuwe woning</b>.</li>
+      <li>Vul de <b>titel</b> in — de naam die bovenaan de pagina komt, bijvoorbeeld "Casa Paz". De URL-naam eronder vult zichzelf in.</li>
+      <li>Vul <b>plaats</b>, <b>regio</b>, <b>status</b> en <b>prijs</b> in, en de cijfers: slaapkamers, badkamers, oppervlakte, perceel, bouwjaar.</li>
+      <li>Schrijf de <b>omschrijving</b>. Een lege regel maakt een nieuwe alinea.</li>
+      <li>Kies de <b>hoofdfoto</b> en zet er foto's bij in de galerij.</li>
+      <li>Klik onderaan op <b>Woning opslaan</b>. Na een minuut of twee staat hij op de site.</li>
+    </ol>
+    <div class="hl-tip"><b>Je hoeft niet alles in één keer af te maken.</b> Zet de woning op "niet tonen" (zie <a href="#hl-plek">Spotlight, volgorde en verbergen</a>), sla op, en werk hem later af. Niemand ziet hem tot jij dat wil.</div>
+    <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
+  </div>
+
+  <div class="hl-blok" id="hl-fotos">
+    <h2>De foto's <span>JA, HELEMAAL ZELF</span></h2>
+    <p>Per woning zet je twee soorten beeld klaar:</p>
+    <ul>
+      <li><b>De hoofdfoto</b> — de grote foto bovenaan de woningpagina, en meteen ook het beeld dat in het overzicht op de homepage verschijnt.</li>
+      <li><b>De fotogalerij</b> — zoveel foto's als je wil. Je kunt er meerdere tegelijk kiezen, en per foto een bijschrift geven (bijvoorbeeld "ochtendlicht in de keuken"). Laat je het leeg, dan staat er gewoon niets.</li>
+    </ul>
+    <p>Op de site wordt niets meer bijgesneden: elke foto blijft in zijn eigen verhouding staan, staand of liggend. Klikt een bezoeker erop, dan gaat de foto groot open en kan diegene met de pijltjes door je hele reeks — op de telefoon door te vegen.</p>
+    <div class="hl-tip"><b>Over de grootte:</b> je hoeft niets voor te bereiden. Sleep je originelen erin — het dashboard verkleint ze zelf voor het web, zodat de pagina snel blijft laden. Gaat er onverhoopt één mis, dan blijven de andere gewoon staan.</div>
+    <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
+  </div>
+
+  <div class="hl-blok" id="hl-tekst">
+    <h2>De tekst en de cijfers <span>PER WONING</span></h2>
+    <ul>
+      <li><b>Titel</b>, <b>plaats</b> en <b>regio</b></li>
+      <li><b>Status</b>: te koop, onder optie of verkocht</li>
+      <li><b>Prijs</b>, <b>slaapkamers</b>, <b>badkamers</b>, <b>woonoppervlak</b>, <b>perceel</b> en <b>bouwjaar</b></li>
+      <li><b>Omschrijving</b> — het verhaal bij de woning. Een lege regel maakt een nieuwe alinea.</li>
+      <li><b>Kenmerken binnen en buiten</b> — één per regel, bijvoorbeeld "open keuken" of "privézwembad"</li>
+      <li><b>Afstanden</b> — "strand · 5 min", "luchthaven · 25 min". Zoveel als je wil.</li>
+      <li><b>Video</b> — heb je een filmpje online staan, plak die link erbij en hij speelt bovenaan af.</li>
+    </ul>
+    <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
+  </div>
+
+  <div class="hl-blok" id="hl-kaart">
+    <h2>De kaart en het adres <span>ADRES BLIJFT PRIVÉ</span></h2>
+    <p>In het formulier staat een veld <b>Adres</b>. Typ het volledige adres in en klik op <b>Zoek op de kaart</b>. Je ziet meteen welke plek gevonden is, en een voorbeeld van het kaartje zoals een bezoeker het straks krijgt. Klopt het niet? Zet er meer bij — bijvoorbeeld de provincie — en zoek opnieuw.</p>
+    <div class="hl-let"><b>Wat een bezoeker ziet:</b> alleen de buurt. De kaart wordt bewust afgerond op ongeveer een kilometer. Iemand ziet dus wél of het bij het dorp, het strand of de snelweg ligt, maar kan het huis niet aanwijzen. Het adres zelf staat nergens op de site — ook niet verstopt in de code.</div>
+    <p>Onder de kaart staan de plaats en de regio, plus jouw afstanden. Wil je geen kaart bij een woning? Laat het adres dan leeg; er staat dan "Locatie op aanvraag".</p>
+    <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
+  </div>
+
+  <div class="hl-blok" id="hl-bezichtigingen">
+    <h2>Bezichtigingen en notities <span>ALLEEN VOOR JOU</span></h2>
+    <ul>
+      <li><b>Bezichtigingen</b> — klik op <b>+ Bezichtiging toevoegen</b> en noteer datum en tijd, wie er komt, en of het gepland, geweest of afgezegd is. De eerstvolgende verschijnt meteen in je woningenlijst.</li>
+      <li><b>Referentie</b> — je eigen nummer bij de woning, bijvoorbeeld CL-2026-004.</li>
+      <li><b>Contactpersoon of eigenaar</b> — wie je moet bellen over deze woning.</li>
+      <li><b>Exclusief tot</b> — vul de einddatum in; je krijgt een seintje in de lijst als die datum nadert of verlopen is.</li>
+      <li><b>Notitie</b> — alles wat je wil onthouden.</li>
+    </ul>
+    <div class="hl-let"><b>Dit blijft van jou:</b> bezichtigingen, notities, adres, contactpersonen en referenties staan alleen in je dashboard. Ze komen nooit op de site.</div>
+    <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
+  </div>
+
+  <div class="hl-blok" id="hl-plek">
+    <h2>Spotlight, volgorde en verbergen <span>WAT WAAR STAAT</span></h2>
+    <ul>
+      <li><b>In de spotlight</b> — één woning krijgt de grote plek op de homepage. Vink hem aan bij de woning die je vooruit wil schuiven.</li>
+      <li><b>Tonen op de site</b> — zet dit uit en de woning verdwijnt van de site zonder dat je iets kwijtraakt. Ideaal voor iets dat nog niet naar buiten mag, of net verkocht is.</li>
+      <li><b>Volgorde</b> — een getal. Lager betekent hoger in de lijst.</li>
+      <li><b>Verwijderen</b> — kan ook, maar dat is definitief. Wil je hem alleen even weg? Gebruik dan "tonen op de site".</li>
+    </ul>
+    <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
+  </div>
+
+  <div class="hl-blok" id="hl-cijfers">
+    <h2>De cijfers onder elke woning <span>WAT SPEELT ER</span></h2>
+    <p>In je woningenlijst staat onder elke woning een grijze regel. Daarin lees je:</p>
+    <ul>
+      <li><b>Hoe lang hij online staat</b> en wanneer je hem voor het laatst bijwerkte.</li>
+      <li><b>Hoeveel foto's</b> erin zitten.</li>
+      <li><b>Hoeveel bezoeken</b> de woningpagina kreeg, en hoeveel deze week.</li>
+      <li><b>Hoe vaak er contact gezocht is</b> — het aantal kliks op WhatsApp, e-mail of telefoon vanaf die pagina. Dit is het cijfer dat er echt toe doet: bezoek zegt dat mensen kijken, een klik zegt dat ze willen praten.</li>
+      <li><b>De eerstvolgende bezichtiging</b>, of hoe lang de laatste geleden is.</li>
+    </ul>
+    <p>In terracotta verschijnt wat aandacht vraagt: een ontbrekende hoofdfoto, geen omschrijving, geen afstanden — of een woning die al maanden online staat zonder dat iemand ooit contact zocht.</p>
+    <div class="hl-tip"><b>Over de bezoekcijfers:</b> er wordt niets over de bezoeker bewaard. Geen naam, geen cookie, geen apparaat. Alleen dat er iemand keek, bij welke woning, en wanneer.</div>
+    <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
+  </div>
+
+  <div class="hl-blok" id="hl-vormgeving">
+    <h2>Kleuren, letters en blokken <span>TABBLAD VORMGEVING</span></h2>
+    <p>Boven staat naast <b>Woningen</b> het tabblad <b>Vormgeving</b>. Daar bepaal je hoe de site eruitziet. Rechts staat je eigen site in een venster — dat is geen plaatje maar de echte pagina, dus je ziet elke keuze meteen.</p>
+    <ul>
+      <li><b>Stijl</b> — vijf kant-en-klare kleurstijlen: <i>Huisstijl</i> (zoals nu), <i>Zand &amp; klei</i>, <i>Olijf &amp; linnen</i>, <i>Diep petrol</i> en <i>Inkt &amp; wit</i>.</li>
+      <li><b>Lettertype</b> — vier combinaties: <i>Huisstijl</i>, <i>Klassiek</i>, <i>Warm</i> en <i>Modern</i>.</li>
+      <li><b>Zelf bijstellen</b> — wil je binnen zo'n stijl iets anders? Kies dan los de <i>accentkleur</i> (knoppen en links), de <i>achtergrond</i>, de <i>tekstkleur</i> en de kleur van de <i>donkere woningpagina</i>. Kies je niets, dan volgt alles de stijl.</li>
+      <li><b>Blokken op de homepage</b> — de header, de woningen, het fotografieblok, Over Caro en Contact. Verbergen kan, en met de pijltjes wissel je ze van plek.</li>
+    </ul>
+    <div class="hl-tip"><b>Niets is definitief tot je op Opslaan klikt.</b> En bevalt het toch niet? Met <b>Terug naar het hoofddesign</b> staat alles — kleuren, letters én blokken — in één klik weer zoals het hoort. Daarna nog even Opslaan.</div>
+    <div class="hl-let"><b>Let op:</b> een stijl geldt voor de héle site, ook voor de donkere woningpagina's. Dat is expres: zo blijft alles bij elkaar horen. Je kunt niets kiezen wat onleesbaar wordt — kleuren die elkaar zouden bijten, worden automatisch een tint bijgeschoven.</div>
+    <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
+  </div>
+
+  <div class="hl-blok" id="hl-publiceren">
+    <h2>Opslaan en publiceren <span>DE SITE DOET DE REST</span></h2>
+    <p>Je klikt op <b>Woning opslaan</b> (of, bij vormgeving, op <b>Opslaan</b>) en dat is het. De site bouwt zichzelf opnieuw op met jouw wijziging — dat duurt ongeveer één tot twee minuten. Ververs daarna de pagina en het staat er.</p>
+    <div class="hl-let"><b>Even geduld dus:</b> zie je het na het opslaan nog niet meteen, wacht een minuutje en ververs. Dat is normaal, er is niets misgegaan.</div>
+    <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
+  </div>
+
+  <div class="hl-blok" id="hl-mislukt">
+    <h2>Als er iets niet lukt <span>EERST DIT PROBEREN</span></h2>
+    <div class="hl-vraag"><b>Ik heb opgeslagen maar zie niets veranderen</b>Wacht twee minuten en ververs de pagina met <code>Cmd + R</code>. De site wordt na elke wijziging opnieuw opgebouwd; dat duurt even.</div>
+    <div class="hl-vraag"><b>Eén foto is niet geüpload</b>Dat kan gebeuren bij een slechte verbinding. De andere foto's zijn wél opgeslagen — voeg die ene opnieuw toe en sla nog eens op.</div>
+    <div class="hl-vraag"><b>De kaart wijst de verkeerde plek aan</b>Zet er meer bij in het adresveld: straat, nummer, postcode, plaats én provincie. Klik dan opnieuw op "Zoek op de kaart".</div>
+    <div class="hl-vraag"><b>Ik heb per ongeluk een woning verwijderd</b>Verwijderen is definitief. Laat het Ilka weten — als het kort geleden is, valt er soms nog iets terug te halen.</div>
+    <div class="hl-vraag"><b>Ik kan niet inloggen</b>Controleer je e-mailadres en of Caps Lock uit staat. Blijft het misgaan, dan zet Ilka je wachtwoord opnieuw.</div>
+    <div class="hl-vraag"><b>Er staat iets raars op de site</b>Maak een schermafbeelding, noteer wát je deed en wát je zag, en stuur het door. Met die twee dingen is het meestal zo gevonden.</div>
+    <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
+  </div>
+
+  <div class="hl-blok" id="hl-ilka">
+    <h2>Waarvoor je Ilka nodig hebt <span>DE REST</span></h2>
+    <p>De vaste teksten op de homepage, het menu, het logo, nieuwe soorten blokken en alles wat er nu niet in zit. En natuurlijk: alles wat je niet vertrouwt of wat er raar uitziet.</p>
+    <p>De kleuren, de letters, de volgorde van de blokken en alles rond woningen doe je dus zelf.</p>
+    <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
+  </div>
+
+  <p class="hl-voet">Handleiding bijgewerkt op 19 augustus 2026 · site v1.18 · ook te vinden op <code>cre01.netlify.app/wat-kan-ik-zelf.html</code></p>
+</div>
+      <!-- HANDLEIDING-EINDE -->
     </div>
 
     <div id="tab-vormgeving" class="hidden">
@@ -834,6 +1025,7 @@ document.querySelectorAll('.tab').forEach(t => {
     document.querySelectorAll('.tab').forEach(x => x.classList.toggle('actief', x === t));
     $('tab-woningen').classList.toggle('hidden', t.dataset.tab !== 'woningen');
     $('tab-vormgeving').classList.toggle('hidden', t.dataset.tab !== 'vormgeving');
+    $('tab-hulp').classList.toggle('hidden', t.dataset.tab !== 'hulp');
     if (t.dataset.tab === 'vormgeving') ververVoorbeeld();
   });
 });
