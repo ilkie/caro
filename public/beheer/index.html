@@ -104,6 +104,14 @@ textarea{min-height:90px;resize:vertical}
 .palet .stalen i:last-child{border-radius:0 6px 6px 0}
 .palet .naam{display:block;font-weight:600;font-size:.94rem}
 .palet .oms{display:block;color:var(--muted);font-size:.8rem;line-height:1.35;margin-top:2px}
+.keuzegroep{margin-bottom:16px}
+.keuzegroep .kop{font-size:.86rem;font-weight:600;margin-bottom:2px}
+.keuzegroep .uit{color:var(--muted);font-size:.78rem;margin-bottom:8px}
+.keuzerij{display:flex;flex-wrap:wrap;gap:6px}
+.keuze{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 13px 6px 8px;font:inherit;font-size:.82rem;cursor:pointer;transition:.15s}
+.keuze:hover{border-color:var(--teal)}
+.keuze.actief{border-color:var(--teal);background:rgba(41,130,150,.09);font-weight:600}
+.keuze i{width:15px;height:15px;border-radius:50%;border:1px solid rgba(0,0,0,.12);display:block}
 .sectie-lijst{display:grid;gap:8px}
 .sectie{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 12px}
 .sectie.uit{opacity:.55}
@@ -170,7 +178,7 @@ textarea{min-height:90px;resize:vertical}
       <div class="page-head">
         <h2>Vormgeving</h2>
         <div style="display:flex;gap:10px">
-          <button class="btn btn-ghost" id="vgHerstel" type="button">Terug naar de huisstijl</button>
+          <button class="btn btn-ghost" id="vgHerstel" type="button" title="Zet kleuren, lettertype en blokken terug zoals ze horen">Terug naar het hoofddesign</button>
           <button class="btn btn-primary" id="vgOpslaan" type="button" disabled>Opslaan</button>
         </div>
       </div>
@@ -178,8 +186,17 @@ textarea{min-height:90px;resize:vertical}
       <div class="vg-grid">
         <div>
           <div class="vg-blok">
-            <p class="vg-kop">Kleuren</p>
+            <p class="vg-kop">Stijl</p>
             <div class="palet-lijst" id="paletLijst"></div>
+          </div>
+          <div class="vg-blok">
+            <p class="vg-kop">Lettertype</p>
+            <div class="palet-lijst" id="letterLijst"></div>
+          </div>
+          <div class="vg-blok">
+            <p class="vg-kop">Zelf bijstellen</p>
+            <div id="keuzeLijst"></div>
+            <div class="vg-let" style="border-left-color:var(--terracotta);background:rgba(177,91,60,.08)">Kies je hier niets, dan volgt alles de stijl hierboven. Combinaties die slecht leesbaar zouden worden, worden automatisch een tint bijgeschoven.</div>
           </div>
           <div class="vg-blok">
             <p class="vg-kop">Blokken op de homepage</p>
@@ -498,7 +515,7 @@ refresh();
    bestanden die de site zelf gebruikt. De doorzichtige tinten worden hier op
    dezelfde manier berekend als in src/lib/palet.js; wijzig je daar iets, pas
    het dan ook hier aan. */
-let PALETTEN = [], SECTIE_INFO = [], vg = null, vgOpgeslagen = '';
+let PALETTEN = [], KEUZE_GROEPEN = {}, LETTERTYPES = [], HOOFDDESIGN = null, SECTIE_INFO = [], vg = null, vgOpgeslagen = '';
 
 function vgTint(hex, alpha){
   const h = String(hex).replace('#','');
@@ -508,7 +525,8 @@ function vgTint(hex, alpha){
 function vgVariabelen(k){
   return {
     '--accent':k.accent, '--accent-deep':k['accent-deep'], '--accent-ink':k['accent-ink'],
-    '--accent-soft':k['accent-soft'], '--accent-op-donker':k['accent-op-donker']||k.accent, '--accent2':k.accent2, '--accent2-soft':k['accent2-soft'],
+    '--accent-soft':k['accent-soft'], '--accent-op-donker':k['accent-op-donker']||k.accent,
+    '--knop-tekst-donker':k['knop-tekst-donker']||'#FFFFFF', '--accent2':k.accent2, '--accent2-soft':k['accent2-soft'],
     '--cream':k.cream, '--sand':k.sand, '--sand-deep':k['sand-deep'], '--sand-deeper':k['sand-deeper'],
     '--line':k.line, '--ink':k.ink, '--muted':k.muted,
     '--wp-bg':k['wp-bg'], '--wp-panel':k['wp-panel'], '--wp-glow':k['wp-glow'],
@@ -519,8 +537,59 @@ function vgVariabelen(k){
     '--accent-soft-30':vgTint(k['accent-soft'],0.3), '--ink-a55':vgTint(k['accent-ink'],0.55),
   };
 }
+/* Het hoofddesign komt uit public/hoofddesign.json — dezelfde bron als de site. */
 function vgStandaard(){
-  return { palet:'huisstijl', secties: SECTIE_INFO.map(s => ({ id:s.id, aan:true })) };
+  const h = HOOFDDESIGN || {};
+  return {
+    palet: h.palet || 'huisstijl',
+    lettertype: h.lettertype || 'huisstijl',
+    keuzes: vgNormaliseerKeuzes(h.keuzes),
+    secties: vgNormaliseer(h.secties),
+  };
+}
+function vgNormaliseerKeuzes(ruw){
+  const uit = {};
+  Object.keys(KEUZE_GROEPEN).forEach(g => {
+    const gekozen = ruw && ruw[g];
+    const bestaat = KEUZE_GROEPEN[g].opties.some(o => o.id === gekozen);
+    uit[g] = bestaat ? gekozen : 'stijl';
+  });
+  return uit;
+}
+
+/* Dezelfde bijstelling als op de site (src/lib/palet.js). Wijzig je daar iets,
+   pas het dan ook hier aan. */
+function vgOntleed(h){ h=String(h).replace('#',''); return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16)); }
+function vgHex(a){ return '#'+a.map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join('').toUpperCase(); }
+function vgHelder(h){ const c=vgOntleed(h).map(v=>v/255).map(x=>x<=0.03928?x/12.92:Math.pow((x+0.055)/1.055,2.4)); return 0.2126*c[0]+0.7152*c[1]+0.0722*c[2]; }
+function vgVerhouding(a,b){ const x=vgHelder(a), y=vgHelder(b); return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05); }
+function vgSchuif(kleur, achtergronden, minimum, naarWit){
+  const doel = naarWit ? [255,255,255] : [0,0,0];
+  let huidig = kleur;
+  for (let stap=0; stap<=25; stap++){
+    if (achtergronden.every(ag => vgVerhouding(huidig, ag) >= minimum)) return huidig;
+    const t = (stap+1)*0.04;
+    huidig = vgHex(vgOntleed(kleur).map((v,i)=> v + (doel[i]-v)*t));
+  }
+  return huidig;
+}
+const VG_MERK = ['#298296','#B15B3C'];
+function vgKleuren(paletId, keuzes){
+  const palet = PALETTEN.find(p => p.id === paletId) || PALETTEN[0];
+  const k = Object.assign({}, palet.kleuren);
+  Object.keys(KEUZE_GROEPEN).forEach(groep => {
+    const gekozen = keuzes && keuzes[groep];
+    if (!gekozen || gekozen === 'stijl') return;
+    const optie = KEUZE_GROEPEN[groep].opties.find(o => o.id === gekozen);
+    if (optie && optie.kleuren) Object.assign(k, optie.kleuren);
+  });
+  k.muted = vgSchuif(k.muted, [k.cream, k.sand], 4.5, false);
+  if (VG_MERK.indexOf(String(k.accent2).toUpperCase()) === -1)
+    k.accent2 = vgSchuif(k.accent2, [k.cream, k.sand], 4.5, false);
+  k['accent2-soft'] = vgSchuif(k['accent2-soft'], [k['wp-bg']], 4.5, true);
+  k['accent-op-donker'] = vgSchuif(k['accent-op-donker'] || k.accent, [k['wp-bg']], 2.6, true);
+  k['knop-tekst-donker'] = vgVerhouding('#FFFFFF', k['accent-op-donker']) >= vgVerhouding('#111111', k['accent-op-donker']) ? '#FFFFFF' : '#111111';
+  return k;
 }
 function vgNormaliseer(ruw){
   const bekend = new Set(SECTIE_INFO.map(s => s.id));
@@ -537,19 +606,30 @@ function vgNormaliseer(ruw){
 async function laadVormgeving(){
   try {
     const [pr, sr] = await Promise.all([fetch('/paletten.json'), fetch('/secties.json')]);
-    PALETTEN = (await pr.json()).paletten;
+    const paletData = await pr.json();
+    PALETTEN = paletData.paletten;
+    KEUZE_GROEPEN = paletData.keuzes || {};
     SECTIE_INFO = (await sr.json()).secties;
+    const [lr, hr] = await Promise.all([fetch('/lettertypes.json'), fetch('/hoofddesign.json')]);
+    LETTERTYPES = (await lr.json()).lettertypes;
+    HOOFDDESIGN = await hr.json();
   } catch(e){
     $('paletLijst').innerHTML = '<div class="empty">Kon de kleurenbestanden niet laden.</div>';
     return;
   }
-  const { data, error } = await sb.from('instellingen').select('palet,secties').eq('id','site').maybeSingle();
+  const { data, error } = await sb.from('instellingen').select('palet,lettertype,keuzes,secties').eq('id','site').maybeSingle();
   if (error){
     $('paletLijst').innerHTML = '<div class="empty">Kon de instellingen niet laden: ' + error.message +
-      '<br><br>Draait <b>instellingen.sql</b> al in Supabase?</div>';
+      '<br><br>Draait <b>instellingen-tabel.sql</b> al in Supabase?</div>';
     return;
   }
-  vg = { palet: (data && data.palet) || 'huisstijl', secties: vgNormaliseer(data && data.secties) };
+  vg = {
+    palet: (data && data.palet) || 'huisstijl',
+    lettertype: (data && data.lettertype) || 'huisstijl',
+    keuzes: vgNormaliseerKeuzes(data && data.keuzes),
+    secties: vgNormaliseer(data && data.secties),
+  };
+  if (!LETTERTYPES.some(l => l.id === vg.lettertype)) vg.lettertype = 'huisstijl';
   if (!PALETTEN.some(p => p.id === vg.palet)) vg.palet = 'huisstijl';
   vgOpgeslagen = JSON.stringify(vg);
   tekenVormgeving();
@@ -570,6 +650,44 @@ function tekenVormgeving(){
       '</span><span><span class="naam">' + p.naam + '</span><span class="oms">' + p.omschrijving + '</span></span>';
     b.addEventListener('click', () => { vg.palet = p.id; tekenVormgeving(); });
     pl.appendChild(b);
+  });
+
+  /* lettertypes */
+  const ll = $('letterLijst'); ll.innerHTML = '';
+  LETTERTYPES.forEach(l => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'palet' + (l.id === vg.lettertype ? ' actief' : '');
+    b.innerHTML =
+      '<span style="font-family:' + l.koppen + ';font-stretch:' + l.stretch +
+      ';font-size:1.6rem;line-height:1;width:74px;flex-shrink:0;text-align:center">Aa</span>' +
+      '<span><span class="naam">' + l.naam + '</span><span class="oms">' + l.omschrijving + '</span></span>';
+    b.addEventListener('click', () => { vg.lettertype = l.id; tekenVormgeving(); });
+    ll.appendChild(b);
+  });
+
+  /* zelf bijstellen */
+  const kl = $('keuzeLijst'); kl.innerHTML = '';
+  Object.keys(KEUZE_GROEPEN).forEach(groep => {
+    const g = KEUZE_GROEPEN[groep];
+    const blok = document.createElement('div');
+    blok.className = 'keuzegroep';
+    blok.innerHTML = '<div class="kop">' + g.naam + '</div><div class="uit">' + (g.uitleg || '') + '</div>';
+    const rij = document.createElement('div');
+    rij.className = 'keuzerij';
+    g.opties.forEach(o => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'keuze' + (vg.keuzes[groep] === o.id ? ' actief' : '');
+      const staal = o.kleuren
+        ? '<i style="background:' + (o.kleuren.accent || o.kleuren.cream || o.kleuren.ink || o.kleuren['wp-bg']) + '"></i>'
+        : '';
+      b.innerHTML = staal + o.naam;
+      b.addEventListener('click', () => { vg.keuzes[groep] = o.id; tekenVormgeving(); });
+      rij.appendChild(b);
+    });
+    blok.appendChild(rij);
+    kl.appendChild(blok);
   });
 
   /* blokken */
@@ -601,12 +719,21 @@ function ververVoorbeeld(){
   const f = $('vbFrame');
   const doc = f && f.contentDocument;
   if (!doc || !doc.body || !vg) return;
-  const palet = PALETTEN.find(p => p.id === vg.palet);
-  if (!palet) return;
-
   let st = doc.getElementById('vg-voorbeeld');
   if (!st){ st = doc.createElement('style'); st.id = 'vg-voorbeeld'; doc.head.appendChild(st); }
-  const vars = vgVariabelen(palet.kleuren);
+  const letter = LETTERTYPES.find(l => l.id === vg.lettertype) || LETTERTYPES[0];
+  if (letter){
+    let fl = doc.getElementById('vg-lettertype');
+    if (!fl){ fl = doc.createElement('link'); fl.id = 'vg-lettertype'; fl.rel = 'stylesheet'; doc.head.appendChild(fl); }
+    const url = 'https://fonts.googleapis.com/css2?' + letter.google + '&display=swap';
+    if (fl.href !== url) fl.href = url;
+  }
+  const vars = vgVariabelen(vgKleuren(vg.palet, vg.keuzes));
+  if (letter){
+    vars['--serif'] = letter.koppen;
+    vars['--sans'] = letter.body;
+    vars['--kop-stretch'] = letter.stretch;
+  }
   st.textContent = ':root:root{' + Object.keys(vars).map(n => n + ':' + vars[n] + ';').join('') + '}';
 
   const voet = doc.querySelector('footer.site');
@@ -634,7 +761,7 @@ $('vbFrame').addEventListener('load', ververVoorbeeld);
 $('vgHerstel').addEventListener('click', () => {
   vg = vgStandaard();
   tekenVormgeving();
-  toast('Terug naar de huisstijl — klik op Opslaan om het door te voeren');
+  toast('Terug naar het hoofddesign — klik op Opslaan om het door te voeren');
 });
 
 $('vgOpslaan').addEventListener('click', async () => {
@@ -642,11 +769,11 @@ $('vgOpslaan').addEventListener('click', async () => {
   busy(true);
   try {
     const { data, error } = await sb.from('instellingen')
-      .update({ palet: vg.palet, secties: vg.secties })
+      .update({ palet: vg.palet, lettertype: vg.lettertype, keuzes: vg.keuzes, secties: vg.secties })
       .eq('id', 'site')
       .select();
     if (error) throw error;
-    if (!data || !data.length) throw new Error('De rij met instellingen bestaat nog niet. Draai instellingen.sql in Supabase.');
+    if (!data || !data.length) throw new Error('De rij met instellingen bestaat nog niet. Draai instellingen-tabel.sql in Supabase.');
     await triggerRebuild();
     vgOpgeslagen = JSON.stringify(vg);
     $('vgOpslaan').disabled = true;

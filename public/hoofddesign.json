@@ -1,0 +1,13 @@
+{
+  "toelichting": "Het hoofddesign: waar 'Terug naar het hoofddesign' in het dashboard naartoe zet, en waar de site op terugvalt als de database onbereikbaar is. Wil je een nieuwe look tot standaard maken? Pas dit bestand aan, dan volgt de rest.",
+  "palet": "huisstijl",
+  "lettertype": "huisstijl",
+  "keuzes": { "accent": "stijl", "achtergrond": "stijl", "tekst": "stijl", "donker": "stijl" },
+  "secties": [
+    { "id": "hero", "aan": true },
+    { "id": "woningen", "aan": true },
+    { "id": "fotografie", "aan": true },
+    { "id": "over", "aan": true },
+    { "id": "contact", "aan": true }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "versie": 1,
-  "toelichting": "Kleurpaletten voor de site. De namen zijn rollen, geen kleuren: 'accent' is de hoofdkleur (knoppen, links), 'accent2' de tweede kleur (kleine kapitalen, badges). Dit bestand wordt gelezen door de site bij het bouwen en door het beheer-dashboard. Alle paletten zijn getest op leesbaarheid. 'accent-op-donker' is de knopkleur op de donkere woningpagina; die is alleen anders als de gewone accentkleur daar te veel wegvalt.",
+  "toelichting": "Kleurpaletten voor de site. De namen zijn rollen, geen kleuren: 'accent' is de hoofdkleur (knoppen, links), 'accent2' de tweede kleur (kleine kapitalen, badges). Dit bestand wordt gelezen door de site bij het bouwen en door het beheer-dashboard. Alle paletten zijn getest op leesbaarheid. 'accent-op-donker' is de knopkleur op de donkere woningpagina; die is alleen anders als de gewone accentkleur daar te veel wegvalt. Naast de paletten zijn er losse 'keuzes': accentkleur, achtergrond, tekstkleur en de donkere woningpagina. Elke keuze overschrijft alleen zijn eigen variabelen; 'bij de stijl' laat het palet beslissen. Alle combinaties worden getest door scripts/check-paletten.mjs.",
   "paletten": [
     {
       "id": "huisstijl",
@@ -129,5 +129,206 @@
         "wp-glow": "#2E2E2E"
       }
     }
-  ]
+  ],
+  "keuzes": {
+    "accent": {
+      "naam": "Accentkleur",
+      "uitleg": "Knoppen, links en de voettekst.",
+      "opties": [
+        {
+          "id": "stijl",
+          "naam": "Bij de stijl"
+        },
+        {
+          "id": "petrol",
+          "naam": "Petrolblauw",
+          "kleuren": {
+            "accent": "#298296",
+            "accent-deep": "#1E6675",
+            "accent-ink": "#123842",
+            "accent-soft": "#2A7385",
+            "accent-op-donker": "#3E9AA8"
+          }
+        },
+        {
+          "id": "terracotta",
+          "naam": "Terracotta",
+          "kleuren": {
+            "accent": "#9C4E31",
+            "accent-deep": "#7F3D24",
+            "accent-ink": "#3E2519",
+            "accent-soft": "#B0603F",
+            "accent-op-donker": "#C06B45"
+          }
+        },
+        {
+          "id": "olijf",
+          "naam": "Olijfgroen",
+          "kleuren": {
+            "accent": "#55663F",
+            "accent-deep": "#41502F",
+            "accent-ink": "#26301C",
+            "accent-soft": "#6B7D52",
+            "accent-op-donker": "#7A8F5C"
+          }
+        },
+        {
+          "id": "oker",
+          "naam": "Oker",
+          "kleuren": {
+            "accent": "#8A6A1F",
+            "accent-deep": "#6E5417",
+            "accent-ink": "#33280C",
+            "accent-soft": "#A8842F",
+            "accent-op-donker": "#BE9838"
+          }
+        },
+        {
+          "id": "zee",
+          "naam": "Diep zeeblauw",
+          "kleuren": {
+            "accent": "#256C78",
+            "accent-deep": "#1B5560",
+            "accent-ink": "#0F2A31",
+            "accent-soft": "#3E9AA8",
+            "accent-op-donker": "#4AA6B4"
+          }
+        },
+        {
+          "id": "inkt",
+          "naam": "Inktzwart",
+          "kleuren": {
+            "accent": "#2B2B2B",
+            "accent-deep": "#141414",
+            "accent-ink": "#111111",
+            "accent-soft": "#454545",
+            "accent-op-donker": "#6E6E6E"
+          }
+        }
+      ]
+    },
+    "achtergrond": {
+      "naam": "Achtergrond",
+      "uitleg": "Het papier waar alles op staat.",
+      "opties": [
+        {
+          "id": "stijl",
+          "naam": "Bij de stijl"
+        },
+        {
+          "id": "creme",
+          "naam": "Crème",
+          "kleuren": {
+            "cream": "#FBF7F1",
+            "sand": "#F3EADF",
+            "sand-deep": "#E7D3BF",
+            "sand-deeper": "#CDB79F",
+            "line": "#DAC9B6"
+          }
+        },
+        {
+          "id": "zand",
+          "naam": "Warm zand",
+          "kleuren": {
+            "cream": "#FDF9F4",
+            "sand": "#F2E7DA",
+            "sand-deep": "#E6D2BC",
+            "sand-deeper": "#CBB49B",
+            "line": "#DFC9B2"
+          }
+        },
+        {
+          "id": "wit",
+          "naam": "Helder wit",
+          "kleuren": {
+            "cream": "#FFFFFF",
+            "sand": "#F4F4F2",
+            "sand-deep": "#E6E5E1",
+            "sand-deeper": "#C9C7C1",
+            "line": "#E0DEDA"
+          }
+        }
+      ]
+    },
+    "tekst": {
+      "naam": "Tekstkleur",
+      "uitleg": "De letters op de lichte pagina's.",
+      "opties": [
+        {
+          "id": "stijl",
+          "naam": "Bij de stijl"
+        },
+        {
+          "id": "warm",
+          "naam": "Warm zwart",
+          "kleuren": {
+            "ink": "#221E1A",
+            "muted": "#736457"
+          }
+        },
+        {
+          "id": "koel",
+          "naam": "Koel grijszwart",
+          "kleuren": {
+            "ink": "#1B1F20",
+            "muted": "#5C6264"
+          }
+        },
+        {
+          "id": "bruin",
+          "naam": "Donkerbruin",
+          "kleuren": {
+            "ink": "#2C221A",
+            "muted": "#6E5B4B"
+          }
+        }
+      ]
+    },
+    "donker": {
+      "naam": "Woningpagina",
+      "uitleg": "De donkere achtergrond van een woning.",
+      "opties": [
+        {
+          "id": "stijl",
+          "naam": "Bij de stijl"
+        },
+        {
+          "id": "petrol",
+          "naam": "Petrol",
+          "kleuren": {
+            "wp-bg": "#1D3841",
+            "wp-panel": "#16303A",
+            "wp-glow": "#24505C"
+          }
+        },
+        {
+          "id": "zwart",
+          "naam": "Bijna zwart",
+          "kleuren": {
+            "wp-bg": "#171717",
+            "wp-panel": "#101010",
+            "wp-glow": "#2E2E2E"
+          }
+        },
+        {
+          "id": "bruin",
+          "naam": "Warm bruin",
+          "kleuren": {
+            "wp-bg": "#33251D",
+            "wp-panel": "#2A1E17",
+            "wp-glow": "#4A3327"
+          }
+        },
+        {
+          "id": "groen",
+          "naam": "Diep groen",
+          "kleuren": {
+            "wp-bg": "#2B3327",
+            "wp-panel": "#222A1F",
+            "wp-glow": "#3D4936"
+          }
+        }
+      ]
+    }
+  }
 }

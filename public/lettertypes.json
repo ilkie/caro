@@ -1,0 +1,42 @@
+{
+  "toelichting": "Lettertypecombinaties. 'koppen' en 'body' zijn CSS-stacks, 'stretch' is de breedte van de koppen (alleen Noto Serif Display kan smal), 'google' is het querydeel van de Google Fonts-link. Gelezen door de site (Base.astro) en het beheer-dashboard.",
+  "standaard": "huisstijl",
+  "lettertypes": [
+    {
+      "id": "huisstijl",
+      "naam": "Huisstijl",
+      "omschrijving": "Noto Serif Display smal + Inter — zoals de site nu is.",
+      "koppen": "'Noto Serif Display','Cormorant Garamond',Georgia,serif",
+      "body": "'Inter',-apple-system,'Segoe UI',sans-serif",
+      "stretch": "62.5%",
+      "google": "family=Cormorant+Garamond:wght@500&family=Inter:wght@300;400;500;600&family=Noto+Serif+Display:wdth,wght@62.5..100,400..600"
+    },
+    {
+      "id": "klassiek",
+      "naam": "Klassiek",
+      "omschrijving": "Cormorant Garamond + Inter. Ruimer en eleganter, meer boekletter.",
+      "koppen": "'Cormorant Garamond',Georgia,serif",
+      "body": "'Inter',-apple-system,'Segoe UI',sans-serif",
+      "stretch": "100%",
+      "google": "family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600"
+    },
+    {
+      "id": "warm",
+      "naam": "Warm",
+      "omschrijving": "Lora + Inter. Zachte serif met ronde vormen.",
+      "koppen": "'Lora',Georgia,serif",
+      "body": "'Inter',-apple-system,'Segoe UI',sans-serif",
+      "stretch": "100%",
+      "google": "family=Lora:wght@400;500;600&family=Inter:wght@300;400;500;600"
+    },
+    {
+      "id": "modern",
+      "naam": "Modern",
+      "omschrijving": "Alles in Inter. Strak en grafisch, geen serif.",
+      "koppen": "'Inter',-apple-system,'Segoe UI',sans-serif",
+      "body": "'Inter',-apple-system,'Segoe UI',sans-serif",
+      "stretch": "100%",
+      "google": "family=Inter:wght@300;400;500;600;700"
+    }
+  ]
+}

@@ -2,7 +2,8 @@
 --  Caro Leriche — vormgeving & secties
 --
 --  Eén rij met wat Caro zelf mag instellen vanuit het dashboard:
---    · welk kleurpalet de site gebruikt
+--    · welk kleurpalet en lettertype de site gebruikt
+--    · de losse keuzes daarbinnen (accent, achtergrond, tekst, donkere pagina)
 --    · welke secties op de homepage staan, in welke volgorde
 --
 --  Gebruik: Supabase → SQL Editor → plakken → Run.
@@ -20,6 +21,8 @@ create extension if not exists pgcrypto;
 create table if not exists public.instellingen (
   id          text primary key default 'site',
   palet       text not null default 'huisstijl',
+  lettertype  text not null default 'huisstijl',
+  keuzes      jsonb not null default '{"accent":"stijl","achtergrond":"stijl","tekst":"stijl","donker":"stijl"}'::jsonb,
   secties     jsonb not null default '[
                 {"id":"hero","aan":true},
                 {"id":"woningen","aan":true},
@@ -32,6 +35,8 @@ create table if not exists public.instellingen (
 );
 
 alter table public.instellingen add column if not exists palet      text not null default 'huisstijl';
+alter table public.instellingen add column if not exists lettertype text not null default 'huisstijl';
+alter table public.instellingen add column if not exists keuzes     jsonb not null default '{"accent":"stijl","achtergrond":"stijl","tekst":"stijl","donker":"stijl"}'::jsonb;
 alter table public.instellingen add column if not exists secties    jsonb not null default '[]'::jsonb;
 alter table public.instellingen add column if not exists updated_at timestamptz default now();
 
@@ -86,5 +91,5 @@ create policy "ingelogd wijzigt instellingen"
 -- ------------------------------------------------------------
 -- 3. Controle
 -- ------------------------------------------------------------
-select id, palet, jsonb_array_length(secties) as aantal_secties, updated_at
+select id, palet, lettertype, keuzes, jsonb_array_length(secties) as aantal_secties, updated_at
 from public.instellingen;

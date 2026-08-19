@@ -11,6 +11,7 @@
   --accent-ink:#123842;
   --accent-soft:#2A7385;
   --accent-op-donker:#298296;
+  --knop-tekst-donker:#FFFFFF;
   --accent2:#B15B3C;
   --accent2-soft:#D68C67;
   --cream:#FBF7F1;
@@ -40,13 +41,14 @@
   --soft:0 22px 55px -26px rgba(30,90,105,.4);--soft2:0 14px 34px -18px rgba(30,90,105,.32);
   --serif:'Noto Serif Display','Cormorant Garamond',Georgia,serif;
   --sans:'Inter',-apple-system,'Segoe UI',sans-serif;
+  --kop-stretch:62.5%;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:var(--sans);color:var(--ink);background:var(--cream);line-height:1.7;font-weight:300;-webkit-font-smoothing:antialiased}
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
-h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.05;font-stretch:62.5%}
+h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.05;font-stretch:var(--kop-stretch)}
 .wrap{max-width:1200px;margin:0 auto;padding:0 40px}
 .eyebrow{text-transform:uppercase;letter-spacing:.32em;font-size:.68rem;font-weight:400;color:var(--accent2)}
 
@@ -268,7 +270,7 @@ body.theme-dark{--wp-line:var(--cream-15);background:var(--wp-bg);color:var(--cr
    De knop erft de teal van de hoofdsite; alleen de tekst iets steviger,
    zodat de kleine hoofdletters op teal ook in zonlicht leesbaar blijven. */
 .theme-dark .brand .name small{color:var(--sand)}
-.theme-dark .top .cta{background:var(--accent-op-donker);font-weight:500}
+.theme-dark .top .cta{background:var(--accent-op-donker);color:var(--knop-tekst-donker);font-weight:500}
 
 /* Framed video-hero */
 .wp-hero{padding:60px 0 44px;text-align:center}

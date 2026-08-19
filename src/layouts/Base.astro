@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { paletCss } from '../lib/palet.js';
+import { paletCss, lettertypeUrl } from '../lib/palet.js';
 import { getInstellingen } from '../lib/instellingen';
 
 // Het kleurpalet dat Caro in het dashboard koos. Bij een onbereikbare database
@@ -34,10 +34,10 @@ const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Inter:wght@300;400;500;600&family=Noto+Serif+Display:wdth,wght@62.5..100,400..600&display=swap" rel="stylesheet" />
+  <link href={lettertypeUrl(instellingen.lettertype)} rel="stylesheet" />
   <!-- Gekozen kleurpalet. Staat bewust ná de stylesheet, zodat het de
        standaardkleuren in global.css overschrijft. -->
-  <style is:inline set:html={paletCss(instellingen.palet)}></style>
+  <style is:inline set:html={paletCss(instellingen.palet, instellingen.keuzes, instellingen.lettertype)}></style>
 </head>
 <body class={theme === 'dark' ? 'theme-dark' : undefined}>
   <header class="top">

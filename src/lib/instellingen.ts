@@ -1,18 +1,35 @@
 import { supabase } from './supabase'
-import { STANDAARD_PALET, vindPalet } from './palet.js'
+import { STANDAARD_PALET, STANDAARD_KEUZES, STANDAARD_LETTERTYPE, KEUZES, HOOFDDESIGN, vindPalet, vindLettertype } from './palet.js'
 import sectieData from '../../public/secties.json' with { type: 'json' }
 
 export type Sectie = { id: string; aan: boolean }
-export type Instellingen = { palet: string; secties: Sectie[] }
+export type Keuzes = Record<string, string>
+export type Instellingen = { palet: string; lettertype: string; keuzes: Keuzes; secties: Sectie[] }
 
 // De secties van de homepage, in de volgorde zoals de site oorspronkelijk was.
 // Staat een sectie hier niet bij, dan bestaat hij niet — onbekende id's uit de
 // database worden genegeerd, ontbrekende worden achteraan toegevoegd.
 export const SECTIES: { id: string; naam: string; uitleg?: string }[] = sectieData.secties
 
+// Het hoofddesign uit public/hoofddesign.json: waar alles op terugvalt.
 export const STANDAARD_INSTELLINGEN: Instellingen = {
   palet: STANDAARD_PALET,
-  secties: SECTIES.map((s) => ({ id: s.id, aan: true })),
+  lettertype: STANDAARD_LETTERTYPE,
+  keuzes: { ...STANDAARD_KEUZES },
+  secties: normaliseerSecties(HOOFDDESIGN.secties),
+}
+
+/** Alleen bestaande groepen en bestaande opties; de rest wordt 'stijl'. */
+export function normaliseerKeuzes(ruw: unknown): Keuzes {
+  const uit: Keuzes = { ...STANDAARD_KEUZES }
+  const bron = ruw && typeof ruw === 'object' ? (ruw as Record<string, unknown>) : {}
+  for (const groep of Object.keys(KEUZES)) {
+    const gekozen = bron[groep]
+    const bestaat = typeof gekozen === 'string' &&
+      (KEUZES as any)[groep].opties.some((o: any) => o.id === gekozen)
+    uit[groep] = bestaat ? (gekozen as string) : 'stijl'
+  }
+  return uit
 }
 
 /** Maakt er hoe dan ook een bruikbare lijst van, wat er ook in de database staat. */
@@ -43,7 +60,7 @@ export async function getInstellingen(): Promise<Instellingen> {
   try {
     const { data, error } = await supabase
       .from('instellingen')
-      .select('palet, secties')
+      .select('palet, lettertype, keuzes, secties')
       .eq('id', 'site')
       .maybeSingle()
     if (error) {
@@ -53,6 +70,8 @@ export async function getInstellingen(): Promise<Instellingen> {
     }
     cache = {
       palet: vindPalet(data?.palet).id,
+      lettertype: vindLettertype(data?.lettertype).id,
+      keuzes: normaliseerKeuzes(data?.keuzes),
       secties: normaliseerSecties(data?.secties),
     }
     return cache
