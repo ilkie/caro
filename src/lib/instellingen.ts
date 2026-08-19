@@ -62,7 +62,7 @@ export async function getInstellingen(): Promise<Instellingen> {
   if (cache) return cache
   try {
     const { data, error } = await supabase
-      .from('instellingen')
+      .from('instellingen_publiek')
       .select('palet, lettertype, keuzes, secties, maps_sleutel, teksten')
       .eq('id', 'site')
       .maybeSingle()

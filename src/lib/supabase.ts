@@ -33,13 +33,14 @@ export type Woning = {
 }
 
 // Alle zichtbare woningen (op volgorde) voor de homepage.
+// Leest de etalage-view: die bevat alleen publieke kolommen en alleen
+// zichtbare woningen — adres, notities en bezichtigingen komen er niet in voor.
 // Faalt nooit de build: bij een fout (lege/onbereikbare db) → lege lijst.
 export async function getWoningen(): Promise<Woning[]> {
   try {
     const { data, error } = await supabase
-      .from('woningen')
+      .from('woningen_publiek')
       .select('*')
-      .eq('beschikbaar', true)
       .order('volgorde', { ascending: true })
     if (error) { console.warn('[supabase] woningen:', error.message); return [] }
     return data || []
@@ -53,7 +54,7 @@ export async function getWoningen(): Promise<Woning[]> {
 export async function getAlleWoningen(): Promise<Woning[]> {
   try {
     const { data, error } = await supabase
-      .from('woningen')
+      .from('woningen_publiek')
       .select('*')
       .order('volgorde', { ascending: true })
     if (error) { console.warn('[supabase] alle woningen:', error.message); return [] }
