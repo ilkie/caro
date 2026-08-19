@@ -5,6 +5,7 @@ import { getInstellingen } from '../../lib/instellingen';
 import { kaartUrl, kaartBron } from '../../lib/kaart.js';
 import { tekst, mailLink, whatsappLink, telLink } from '../../lib/teksten.js';
 import { fotolayoutVan, galerijAttributen } from '../../lib/fotolayout.js';
+import { logoAttributen } from '../../lib/logo.js';
 
 export async function getStaticPaths() {
   const woningen = await getAlleWoningen();
@@ -22,7 +23,9 @@ const heeftVideo = !!(d.video && d.video.length > 0);
 
 // Kaart: bewust onnauwkeurig. Het adres en de exacte coördinaten blijven in de
 // database — hier komt alleen een afgerond punt (~1 km) de pagina op.
-const { mapsSleutel, teksten, fotolayout } = await getInstellingen();
+const instellingen = await getInstellingen();
+const { mapsSleutel, teksten, fotolayout } = instellingen;
+const merkUrl = logoAttributen(instellingen.logo).url;
 // Opmaak van de galerij: de standaard van de site, tenzij deze woning een eigen keuze heeft.
 const layout = fotolayoutVan(d, fotolayout);
 const gal = galerijAttributen(layout);
@@ -215,7 +218,7 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
   <section class="pad contact">
     <div class="wrap">
       <div class="agent-card">
-        <div class="agent-photo"><img src="/logo-cl.png" alt={t('footer_naam')} /></div>
+        <div class="agent-photo"><img src={merkUrl} alt={t('footer_naam')} /></div>
         <div>
           <h3>{t('footer_naam')}</h3>
           <div style="opacity:.85;font-size:.9rem;margin-top:4px">{t('footer_regel')}</div>

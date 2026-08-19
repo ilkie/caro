@@ -1,0 +1,33 @@
+{
+  "toelichting": "Alles wat Caro aan het logo in het menu kan veranderen. Gelezen door de site (src/lib/logo.js) én door het beheer-dashboard, zodat er maar één bron is.",
+  "standaard": {
+    "bron": "standaard",
+    "url": "",
+    "vorm": "cirkel-feller",
+    "formaat": "normaal",
+    "naam": "naam-ondertitel",
+    "op_donker": "zoals-hij-is"
+  },
+  "standaardLogo": "/logo-cl.png",
+  "vormen": [
+    { "id": "geen",          "naam": "Geen rand",     "uitleg": "Het logo staat vrij, zonder omlijning." },
+    { "id": "cirkel",        "naam": "Cirkel fijn",   "uitleg": "Een dun lijntje in de randkleur." },
+    { "id": "cirkel-feller", "naam": "Cirkel feller", "uitleg": "Iets dikker en petrolblauw — zoals nu." },
+    { "id": "cirkel-fel",    "naam": "Cirkel fel",    "uitleg": "Dik en vol petrolblauw." },
+    { "id": "vierkant",      "naam": "Vierkant",      "uitleg": "Afgeronde hoeken in plaats van een cirkel." }
+  ],
+  "formaten": [
+    { "id": "compact", "naam": "Compact", "hoogte": "36px" },
+    { "id": "normaal", "naam": "Normaal", "hoogte": "44px" },
+    { "id": "groot",   "naam": "Groot",   "hoogte": "56px" }
+  ],
+  "namen": [
+    { "id": "naam-ondertitel", "naam": "Naam met ondertitel", "uitleg": "Caro Leriche met REAL ESTATE SPAIN eronder." },
+    { "id": "alleen-naam",     "naam": "Alleen de naam",      "uitleg": "Zonder de regel eronder." },
+    { "id": "alleen-logo",     "naam": "Alleen het logo",     "uitleg": "Geen tekst naast het logo." }
+  ],
+  "donker": [
+    { "id": "zoals-hij-is", "naam": "Laten zoals hij is", "uitleg": "Voor een logo dat al licht genoeg is." },
+    { "id": "wit",          "naam": "Wit maken",          "uitleg": "Voor een donker logo dat anders wegvalt op de donkere woningpagina." }
+  ]
+}

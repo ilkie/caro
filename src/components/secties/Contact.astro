@@ -2,14 +2,14 @@
 // Teksten komen uit het dashboard (met de standaard uit public/teksten.json
 // als vangnet). Beeld en opmaak liggen vast.
 import { tekst, mailLink, whatsappLink, telLink } from '../../lib/teksten.js';
-const { teksten = {} } = Astro.props;
+const { teksten = {}, merkUrl = '/logo-cl.png' } = Astro.props;
 const t = (id) => tekst(teksten, id);
 ---
 <!-- CONTACT -->
 <section class="pad contact" id="contact" data-sectie="contact">
   <div class="wrap">
     <div class="agent-card">
-      <div class="agent-photo"><img src="/logo-cl.png" alt={t('footer_naam')} /></div>
+      <div class="agent-photo"><img src={merkUrl} alt={t('footer_naam')} /></div>
       <div>
         <h3>{t('footer_naam')}</h3>
         <div style="opacity:.85;font-size:.9rem;margin-top:4px">{t('footer_regel')}</div>

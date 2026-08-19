@@ -3,11 +3,13 @@ import { STANDAARD_PALET, STANDAARD_KEUZES, STANDAARD_LETTERTYPE, KEUZES, HOOFDD
 import sectieData from '../../public/secties.json' with { type: 'json' }
 import { STANDAARD_TEKSTEN, normaliseerTeksten } from './teksten.js'
 import { STANDAARD_FOTOLAYOUT, normaliseerFotolayout } from './fotolayout.js'
+import { STANDAARD_LOGO, normaliseerLogo } from './logo.js'
 
 export type Sectie = { id: string; aan: boolean }
 export type Keuzes = Record<string, string>
 export type Fotolayout = { stijl: string; kolommen: number; marge: string }
-export type Instellingen = { palet: string; lettertype: string; keuzes: Keuzes; secties: Sectie[]; mapsSleutel: string; teksten: Record<string, string>; fotolayout: Fotolayout }
+export type Logo = { bron: string; url: string; vorm: string; formaat: string; naam: string; op_donker: string }
+export type Instellingen = { palet: string; lettertype: string; keuzes: Keuzes; secties: Sectie[]; mapsSleutel: string; teksten: Record<string, string>; fotolayout: Fotolayout; logo: Logo }
 
 // De secties van de homepage, in de volgorde zoals de site oorspronkelijk was.
 // Staat een sectie hier niet bij, dan bestaat hij niet — onbekende id's uit de
@@ -23,6 +25,7 @@ export const STANDAARD_INSTELLINGEN: Instellingen = {
   mapsSleutel: '',
   teksten: { ...STANDAARD_TEKSTEN },
   fotolayout: normaliseerFotolayout(HOOFDDESIGN.fotolayout ?? STANDAARD_FOTOLAYOUT),
+  logo: normaliseerLogo((HOOFDDESIGN as any).logo ?? STANDAARD_LOGO),
 }
 
 /** Alleen bestaande groepen en bestaande opties; de rest wordt 'stijl'. */
@@ -66,7 +69,7 @@ export async function getInstellingen(): Promise<Instellingen> {
   try {
     const { data, error } = await supabase
       .from('instellingen_publiek')
-      .select('palet, lettertype, keuzes, secties, maps_sleutel, teksten, fotolayout')
+      .select('palet, lettertype, keuzes, secties, maps_sleutel, teksten, fotolayout, logo')
       .eq('id', 'site')
       .maybeSingle()
     if (error) {
@@ -82,6 +85,7 @@ export async function getInstellingen(): Promise<Instellingen> {
       mapsSleutel: typeof data?.maps_sleutel === 'string' ? data.maps_sleutel.trim() : '',
       teksten: normaliseerTeksten(data?.teksten),
       fotolayout: normaliseerFotolayout(data?.fotolayout),
+      logo: normaliseerLogo(data?.logo),
     }
     return cache
   } catch (e: any) {

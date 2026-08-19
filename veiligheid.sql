@@ -35,6 +35,10 @@ alter table public.instellingen
   add column if not exists fotolayout jsonb
   default '{"stijl":"kolommen","kolommen":3,"marge":"normaal"}'::jsonb;
 alter table public.woningen add column if not exists fotolayout jsonb;
+alter table public.instellingen
+  add column if not exists logo jsonb
+  default '{"bron":"standaard","url":"","vorm":"cirkel-feller","formaat":"normaal","naam":"naam-ondertitel","op_donker":"zoals-hij-is"}'::jsonb;
+
 
 drop view if exists public.woningen_publiek;
 create view public.woningen_publiek as
@@ -62,7 +66,7 @@ grant select on public.woningen_publiek to anon, authenticated;
 -- ------------------------------------------------------------
 drop view if exists public.instellingen_publiek;
 create view public.instellingen_publiek as
-select id, palet, lettertype, keuzes, secties, teksten, maps_sleutel, fotolayout
+select id, palet, lettertype, keuzes, secties, teksten, maps_sleutel, fotolayout, logo
 from public.instellingen
 where id = 'site';
 

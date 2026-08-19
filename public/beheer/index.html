@@ -245,6 +245,31 @@ textarea{min-height:90px;resize:vertical}
 .gitem .gknop button:disabled{opacity:.3;cursor:default}
 .gitem .ggroot{display:inline-flex;align-items:center;gap:5px;font-size:.76rem;color:var(--muted);white-space:nowrap;cursor:pointer;flex-shrink:0}
 .wfl-uit{color:var(--muted);font-size:.78rem;margin:2px 0 8px}
+
+/* ---------- Logo ---------- */
+.lg-bron{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.lg-upload{display:none}
+.lg-vb{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:12px}
+.lg-strip{display:flex;align-items:center;gap:13px;padding:14px 16px}
+.lg-strip.licht{background:var(--cream)}
+.lg-strip.donker{background:#1D3841;border-top:1px solid var(--line)}
+.lg-strip .lg-merk{--bh:44px;display:flex;align-items:center;gap:13px;min-height:56px}
+.lg-strip .lg-merk img{height:var(--bh);width:auto;display:block}
+.lg-merk.v-cirkel img,.lg-merk.v-cirkel-feller img,.lg-merk.v-cirkel-fel img,.lg-merk.v-vierkant img{
+  width:var(--bh);height:var(--bh);object-fit:contain;padding:7px;border:1px solid var(--line);border-radius:50%}
+.lg-merk.v-cirkel-feller img{border-width:2px;border-color:rgba(41,130,150,.6)}
+.lg-merk.v-cirkel-fel img{border-width:2px;border-color:var(--teal)}
+.lg-merk.v-vierkant img{border-radius:12px;border-width:2px;border-color:rgba(41,130,150,.6)}
+.lg-strip.donker .lg-merk.wit img{filter:brightness(0) invert(1)}
+.lg-strip.donker .lg-merk .naam{color:#fff}
+.lg-merk .naam{font-family:'Noto Serif Display',Georgia,serif;font-stretch:85%;font-size:1.5rem;line-height:1;
+  letter-spacing:.03em;height:var(--bh);display:flex;flex-direction:column;justify-content:space-between}
+.lg-merk .naam.een-regel{justify-content:center}
+.lg-merk .naam small{display:block;font-family:inherit;font-size:.55rem;line-height:1;letter-spacing:.16em;
+  margin-right:-.16em;text-transform:uppercase;color:var(--terra);font-weight:400;text-align:justify;text-align-last:justify}
+.lg-bij{color:var(--muted);font-size:.75rem;padding:8px 16px 12px}
+.lg-status{font-size:.78rem;color:var(--muted);margin-top:8px}
+.lg-status.fout{color:var(--terra)}
 </style>
 </head>
 <body>
@@ -324,6 +349,7 @@ textarea{min-height:90px;resize:vertical}
         <li><a href="#hl-plek">Spotlight, volgorde en verbergen</a></li>
         <li><a href="#hl-cijfers">De cijfers onder elke woning</a></li>
         <li><a href="#hl-vormgeving">Kleuren, letters en blokken</a></li>
+        <li><a href="#hl-logo">Je logo</a></li>
         <li><a href="#hl-teksten">De vaste teksten en je gegevens</a></li>
         <li><a href="#hl-publiceren">Opslaan en publiceren</a></li>
         <li><a href="#hl-mislukt">Als er iets niet lukt</a></li>
@@ -453,6 +479,7 @@ textarea{min-height:90px;resize:vertical}
     <p>Boven staat naast <b>Woningen</b> het tabblad <b>Vormgeving</b>. Daar bepaal je hoe de site eruitziet. Rechts staat je eigen site in een venster — dat is geen plaatje maar de echte pagina, dus je ziet elke keuze meteen.</p>
     <ul>
       <li><b>Stijl</b> — vijf kant-en-klare kleurstijlen: <i>Huisstijl</i> (zoals nu), <i>Zand &amp; klei</i>, <i>Olijf &amp; linnen</i>, <i>Diep petrol</i> en <i>Inkt &amp; wit</i>.</li>
+      <li><b>Logo</b> — zie hieronder; daar staat het hele verhaal.</li>
       <li><b>Lettertype</b> — vier combinaties: <i>Huisstijl</i>, <i>Klassiek</i>, <i>Warm</i> en <i>Modern</i>.</li>
       <li><b>Zelf bijstellen</b> — wil je binnen zo'n stijl iets anders? Kies dan los de <i>accentkleur</i> (knoppen en links), de <i>achtergrond</i>, de <i>tekstkleur</i> en de kleur van de <i>donkere woningpagina</i>. Kies je niets, dan volgt alles de stijl.</li>
       <li><b>Foto's bij een woning</b> — hoe de fotogalerij op een woningpagina eruitziet: de indeling (kolommen, raster of editorial), hoeveel foto's er naast elkaar staan en hoeveel ruimte ertussen zit. Dit geldt voor alle woningen; per woning kun je er alsnog van afwijken — zie <a href="#hl-fotos">De foto's</a>.</li>
@@ -460,6 +487,23 @@ textarea{min-height:90px;resize:vertical}
     </ul>
     <div class="hl-tip"><b>Niets is definitief tot je op Opslaan klikt.</b> En bevalt het toch niet? Met <b>Terug naar het hoofddesign</b> staat alles — kleuren, letters én blokken — in één klik weer zoals het hoort. Daarna nog even Opslaan.</div>
     <div class="hl-let"><b>Let op:</b> een stijl geldt voor de héle site, ook voor de donkere woningpagina's. Dat is expres: zo blijft alles bij elkaar horen. Je kunt niets kiezen wat onleesbaar wordt — kleuren die elkaar zouden bijten, worden automatisch een tint bijgeschoven.</div>
+    <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
+  </div>
+
+  <div class="hl-blok" id="hl-logo">
+    <h2>Je logo <span>TABBLAD VORMGEVING</span></h2>
+    <p>Onder <b>Vormgeving</b> staat het blok <b>Logo</b>. Daar bepaal je welk beeld links in het menu staat en hoe het eruitziet. Onderin het blok staan twee balkjes: het bovenste laat zien hoe het op de lichte homepage staat, het onderste hoe het op de donkere woningpagina staat. Beide veranderen meteen mee.</p>
+    <h3>Een eigen logo</h3>
+    <p>Klik op <b>Eigen logo kiezen…</b> en kies een bestand van je computer of telefoon. Een <b>PNG met een doorzichtige achtergrond</b> werkt het mooist — dan zie je geen wit blokje om je logo heen. Een SVG mag ook. Je hoeft niets te verkleinen; dat gebeurt vanzelf. Wil je terug? Klik op <b>Het CL-logo</b>, dan staat het oude monogram er weer.</p>
+    <h3>Wat je verder kunt kiezen</h3>
+    <ul>
+      <li><b>Vorm</b> — geen rand, een fijne cirkel, een fellere cirkel (zoals nu), een volle cirkel, of een vierkant met afgeronde hoeken.</li>
+      <li><b>Formaat</b> — compact, normaal of groot. Het naamblok ernaast groeit netjes mee.</li>
+      <li><b>Wat staat ernaast</b> — je naam met de regel <i>Real Estate Spain</i> eronder, alleen je naam, of alleen het logo zonder tekst.</li>
+      <li><b>Op de donkere woningpagina</b> — <i>Laten zoals hij is</i> voor een logo dat al licht genoeg is, of <i>Wit maken</i> voor een donker logo dat anders wegvalt tegen de donkere achtergrond.</li>
+    </ul>
+    <div class="hl-tip"><b>De naam en de regel eronder verander je niet hier</b>, maar op het tabblad <a href="#hl-teksten">Teksten</a>. Hier gaat het alleen over hoe het eruitziet.</div>
+    <div class="hl-let"><b>Het logo staat op drie plekken:</b> links in het menu, in het ronde vlakje bij Contact op de homepage, en in datzelfde ronde vlakje onderaan een woningpagina. Kies je een eigen logo, dan verandert het overal tegelijk.</div>
     <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
   </div>
 
@@ -500,7 +544,7 @@ textarea{min-height:90px;resize:vertical}
     <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
   </div>
 
-  <p class="hl-voet">Handleiding bijgewerkt op 19 augustus 2026 · site v1.23 · ook te vinden op <code>cre01.netlify.app/wat-kan-ik-zelf.html</code></p>
+  <p class="hl-voet">Handleiding bijgewerkt op 19 augustus 2026 · site v1.24 · ook te vinden op <code>cre01.netlify.app/wat-kan-ik-zelf.html</code></p>
 </div>
       <!-- HANDLEIDING-EINDE -->
     </div>
@@ -535,6 +579,18 @@ textarea{min-height:90px;resize:vertical}
               <input id="f_maps" placeholder="Leeg laten = OpenStreetMap" />
               <div class="hint">Eenmalig. Maak een sleutel in Google Cloud (Maps Embed API) en beperk hem tot je eigen domein.</div>
             </div>
+          </div>
+          <div class="vg-blok">
+            <p class="vg-kop">Logo</p>
+            <div class="lg-bron">
+              <button type="button" class="keuze" id="lgStandaard" style="padding-left:13px">Het CL-logo</button>
+              <button type="button" class="keuze" id="lgEigen" style="padding-left:13px">Eigen logo kiezen&hellip;</button>
+            </div>
+            <input type="file" id="lgBestand" class="lg-upload" accept="image/png,image/jpeg,image/webp,image/svg+xml" />
+            <div class="lg-status" id="lgStatus"></div>
+            <div id="lgKeuzes"></div>
+            <div class="lg-vb" id="lgVoorbeeld"></div>
+            <div class="vg-let">Een PNG met een doorzichtige achtergrond werkt het mooist. Onder het voorbeeld zie je meteen hoe het op de lichte homepage &eacute;n op de donkere woningpagina staat.</div>
           </div>
           <div class="vg-blok">
             <p class="vg-kop">Lettertype</p>
@@ -697,7 +753,7 @@ async function refresh(){
     $('app').classList.remove('hidden');
     $('whoEmail').textContent = session.user.email;
     loadWoningen();
-    laadFotolayout().then(laadVormgeving);
+    Promise.all([laadFotolayout(), laadLogoOpties()]).then(laadVormgeving);
     laadTeksten();
   } else {
     $('app').classList.add('hidden');
@@ -967,6 +1023,7 @@ function vgStandaard(){
     lettertype: h.lettertype || 'huisstijl',
     keuzes: vgNormaliseerKeuzes(h.keuzes),
     fotolayout: flNormaliseer(h.fotolayout),
+    logo: lgNormaliseer(h.logo),
     secties: vgNormaliseer(h.secties),
   };
 }
@@ -1040,7 +1097,7 @@ async function laadVormgeving(){
     $('paletLijst').innerHTML = '<div class="empty">Kon de kleurenbestanden niet laden.</div>';
     return;
   }
-  const { data, error } = await sb.from('instellingen').select('palet,lettertype,keuzes,secties,maps_sleutel,fotolayout').eq('id','site').maybeSingle();
+  const { data, error } = await sb.from('instellingen').select('palet,lettertype,keuzes,secties,maps_sleutel,fotolayout,logo').eq('id','site').maybeSingle();
   if (error){
     $('paletLijst').innerHTML = '<div class="empty">Kon de instellingen niet laden: ' + error.message +
       '<br><br>Draait <b>instellingen-tabel.sql</b> al in Supabase?</div>';
@@ -1051,6 +1108,7 @@ async function laadVormgeving(){
     lettertype: (data && data.lettertype) || 'huisstijl',
     keuzes: vgNormaliseerKeuzes(data && data.keuzes),
     fotolayout: flNormaliseer(data && data.fotolayout),
+    logo: lgNormaliseer(data && data.logo),
     secties: vgNormaliseer(data && data.secties),
   };
   FL_SITE = vg.fotolayout;
@@ -1145,6 +1203,7 @@ function tekenVormgeving(){
   });
 
   tekenFotolayout();
+  tekenLogo();
   $('vgOpslaan').disabled = JSON.stringify(vg) === vgOpgeslagen;
   ververVoorbeeld();
 }
@@ -1207,7 +1266,7 @@ $('vgOpslaan').addEventListener('click', async () => {
   busy(true);
   try {
     const { data, error } = await sb.from('instellingen')
-      .update({ palet: vg.palet, lettertype: vg.lettertype, keuzes: vg.keuzes, secties: vg.secties, fotolayout: vg.fotolayout, maps_sleutel: vg.maps_sleutel || null })
+      .update({ palet: vg.palet, lettertype: vg.lettertype, keuzes: vg.keuzes, secties: vg.secties, fotolayout: vg.fotolayout, logo: vg.logo, maps_sleutel: vg.maps_sleutel || null })
       .eq('id', 'site')
       .select();
     if (error) throw error;
@@ -1858,6 +1917,164 @@ function wflTeken(){
 $('f_fl_volgt').addEventListener('change', (e) => {
   wFotolayout = e.target.checked ? null : flNormaliseer(null, FL_SITE);
   wflTeken();
+});
+
+
+/* ================= Logo =================
+   De mogelijkheden staan in /logo.json — dezelfde bron als de site
+   (src/lib/logo.js). Een eigen logo gaat naar de bucket `media`, map `merk/`.
+   PNG blijft PNG, zodat een doorzichtige achtergrond doorzichtig blijft. */
+let LG = null;
+
+async function laadLogoOpties(){
+  try { LG = await (await fetch('/logo.json')).json(); }
+  catch(e){ LG = null; }
+}
+
+function lgBruikbareUrl(ruw){
+  const u = typeof ruw === 'string' ? ruw.trim() : '';
+  if (!u) return '';
+  if (u.charAt(0) === '/') return u;
+  if (/^https:\/\//i.test(u)) return u;
+  return '';
+}
+
+function lgNormaliseer(ruw){
+  const st = LG ? LG.standaard : { bron:'standaard', url:'', vorm:'cirkel-feller', formaat:'normaal', naam:'naam-ondertitel', op_donker:'zoals-hij-is' };
+  const b = (ruw && typeof ruw === 'object' && !Array.isArray(ruw)) ? ruw : {};
+  const url = lgBruikbareUrl(b.url);
+  const heeft = (lijst, w) => LG && LG[lijst].some(x => x.id === w);
+  return {
+    bron: (b.bron === 'eigen' && url) ? 'eigen' : 'standaard',
+    url: url,
+    vorm:      heeft('vormen', b.vorm)      ? b.vorm      : st.vorm,
+    formaat:   heeft('formaten', b.formaat) ? b.formaat   : st.formaat,
+    naam:      heeft('namen', b.naam)       ? b.naam      : st.naam,
+    op_donker: heeft('donker', b.op_donker) ? b.op_donker : st.op_donker,
+  };
+}
+
+function lgUrlVan(logo){
+  return logo.bron === 'eigen' && logo.url ? logo.url : (LG ? LG.standaardLogo : '/logo-cl.png');
+}
+
+function lgVeranderd(){
+  tekenLogo();
+  $('vgOpslaan').disabled = JSON.stringify(vg) === vgOpgeslagen;
+}
+
+function tekenLogo(){
+  if (!vg || !vg.logo || !LG) return;
+  const l = vg.logo;
+  $('lgStandaard').className = 'keuze' + (l.bron === 'standaard' ? ' actief' : '');
+  $('lgEigen').className     = 'keuze' + (l.bron === 'eigen' ? ' actief' : '');
+
+  /* keuzerijen */
+  const doel = $('lgKeuzes'); doel.innerHTML = '';
+  const groepen = [
+    { sleutel:'vorm',      lijst:'vormen',   naam:'Vorm' },
+    { sleutel:'formaat',   lijst:'formaten', naam:'Formaat' },
+    { sleutel:'naam',      lijst:'namen',    naam:'Wat staat ernaast' },
+    { sleutel:'op_donker', lijst:'donker',   naam:'Op de donkere woningpagina' },
+  ];
+  groepen.forEach(g => {
+    const blok = document.createElement('div');
+    blok.className = 'keuzegroep';
+    blok.innerHTML = '<div class="kop">' + g.naam + '</div>';
+    const rij = document.createElement('div');
+    rij.className = 'keuzerij';
+    LG[g.lijst].forEach(o => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'keuze' + (l[g.sleutel] === o.id ? ' actief' : '');
+      b.style.paddingLeft = '13px';
+      b.textContent = o.naam;
+      if (o.uitleg) b.title = o.uitleg;
+      b.addEventListener('click', () => { l[g.sleutel] = o.id; lgVeranderd(); });
+      rij.appendChild(b);
+    });
+    blok.appendChild(rij);
+    const gekozen = LG[g.lijst].find(o => o.id === l[g.sleutel]);
+    if (gekozen && gekozen.uitleg){
+      const u = document.createElement('div');
+      u.className = 'uit'; u.style.margin = '7px 0 0';
+      u.textContent = gekozen.uitleg;
+      blok.appendChild(u);
+    }
+    doel.appendChild(blok);
+  });
+
+  /* voorbeeld: licht én donker, want dat is precies waar het misgaat */
+  const hoogte = (LG.formaten.find(f => f.id === l.formaat) || LG.formaten[1]).hoogte;
+  const url = lgUrlVan(l);
+  // de echte naam en ondertitel komen uit het tabblad Teksten, als dat al geladen is
+  const naam  = (typeof tk === 'object' && tk && tk.footer_naam)  || 'Caro Leriche';
+  const regel = (typeof tk === 'object' && tk && tk.footer_regel) || 'Real Estate Spain';
+  function merk(donker){
+    const klas = ['lg-merk', 'v-' + l.vorm];
+    if (l.op_donker === 'wit') klas.push('wit');
+    let tekst = '';
+    if (l.naam !== 'alleen-logo'){
+      tekst = '<span class="naam' + (l.naam === 'alleen-naam' ? ' een-regel' : '') + '">' + naam +
+              (l.naam === 'naam-ondertitel' ? '<small>' + regel + '</small>' : '') + '</span>';
+    }
+    return '<div class="lg-strip ' + (donker ? 'donker' : 'licht') + '">' +
+             '<span class="' + klas.join(' ') + '" style="--bh:' + hoogte + '">' +
+               '<img src="' + url + '" alt="" />' + tekst +
+             '</span></div>';
+  }
+  $('lgVoorbeeld').innerHTML = merk(false) + merk(true) +
+    '<div class="lg-bij">Boven: de homepage. Onder: de woningpagina.</div>';
+}
+
+/* ---- eigen logo uploaden ---- */
+$('lgStandaard').addEventListener('click', () => {
+  if (!vg || !vg.logo) return;
+  vg.logo.bron = 'standaard';
+  lgVeranderd();
+});
+$('lgEigen').addEventListener('click', () => $('lgBestand').click());
+
+/** PNG blijft PNG (doorzichtig), SVG gaat ongewijzigd mee. */
+function lgNaarPng(file, max){
+  return new Promise((klaar, mis) => {
+    const img = new Image();
+    img.onload = () => {
+      const f = Math.min(1, max / Math.max(img.width, img.height));
+      const c = document.createElement('canvas');
+      c.width = Math.max(1, Math.round(img.width * f));
+      c.height = Math.max(1, Math.round(img.height * f));
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      c.toBlob(b => b ? klaar(b) : mis(new Error('omzetten lukte niet')), 'image/png');
+    };
+    img.onerror = () => mis(new Error('dit bestand kon niet gelezen worden'));
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+$('lgBestand').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  e.target.value = '';
+  if (!file || !vg || !vg.logo) return;
+  const status = $('lgStatus');
+  status.className = 'lg-status';
+  status.textContent = 'Bezig met uploaden…';
+  try {
+    const isSvg = file.type === 'image/svg+xml' || /\.svg$/i.test(file.name);
+    const data = isSvg ? file : await lgNaarPng(file, 600);
+    const ext  = isSvg ? 'svg' : 'png';
+    const pad  = 'merk/logo-' + Date.now() + '-' + Math.round(Math.random() * 1e6) + '.' + ext;
+    const { error } = await sb.storage.from('media')
+      .upload(pad, data, { cacheControl: '31536000', upsert: false, contentType: isSvg ? 'image/svg+xml' : 'image/png' });
+    if (error) throw error;
+    vg.logo.url = sb.storage.from('media').getPublicUrl(pad).data.publicUrl;
+    vg.logo.bron = 'eigen';
+    status.textContent = 'Geüpload — klik op Opslaan om het door te voeren.';
+    lgVeranderd();
+  } catch (err) {
+    status.className = 'lg-status fout';
+    status.textContent = 'Uploaden mislukt: ' + (err.message || err);
+  }
 });
 
 </script>

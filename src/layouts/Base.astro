@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { paletCss, lettertypeUrl } from '../lib/palet.js';
 import { getInstellingen } from '../lib/instellingen';
 import { tekst, whatsappLink } from '../lib/teksten.js';
+import { logoAttributen } from '../lib/logo.js';
 
 // Het kleurpalet dat Caro in het dashboard koos. Bij een onbereikbare database
 // valt dit terug op de huisstijl, dus de site ziet er altijd goed uit.
@@ -15,14 +16,14 @@ const {
   nav = 'full',
   theme = 'light',
 } = Astro.props;
-const SITE_VERSION = 'v1.23';
+const SITE_VERSION = 'v1.24';
 
 // Jaartal komt uit de bouwdatum, zodat het na de jaarwisseling vanzelf klopt.
 const JAAR = new Date().getFullYear();
 
-// ⚙️ KEUZE CARO — cirkel rond het CL-logo in het menu.
-//    'geen' · 'fijn' (dun, zacht) · 'feller' (dikker, teal) · 'fel' (dik, vol teal)
-const CL_CIRKEL = 'feller';
+// Het logo in het menu: bron, vorm, formaat en wat ernaast staat komen uit het
+// dashboard (Vormgeving → Logo). Zie src/lib/logo.js voor de terugvallen.
+const merk = logoAttributen(instellingen.logo);
 const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%232A7385'/%3E%3Ctext%20x='32'%20y='45'%20font-family='Georgia,serif'%20font-size='32'%20fill='white'%20text-anchor='middle'%3ECL%3C/text%3E%3C/svg%3E";
 ---
 <!doctype html>
@@ -47,9 +48,11 @@ const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%
 <body class={theme === 'dark' ? 'theme-dark' : undefined}>
   <header class="top">
     <div class="wrap">
-      <a class={CL_CIRKEL === 'geen' ? 'brand' : `brand circled c-${CL_CIRKEL}`} href="/">
-        <img class="brandlogo" src="/logo-cl.png" alt={t('footer_naam')} />
-        <span class="name">{t('footer_naam')}<small>{t('footer_regel')}</small></span>
+      <a class={merk.klasse} style={merk.stijl} href="/">
+        <img class="brandlogo" src={merk.url} alt={t('footer_naam')} />
+        {merk.toonNaam && (
+          <span class="name">{t('footer_naam')}{merk.toonOndertitel && <small>{t('footer_regel')}</small>}</span>
+        )}
       </a>
       {nav === 'full' ? (
         <Fragment>

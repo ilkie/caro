@@ -4,6 +4,7 @@
   "lettertype": "huisstijl",
   "keuzes": { "accent": "stijl", "achtergrond": "stijl", "tekst": "stijl", "donker": "stijl" },
   "fotolayout": { "stijl": "kolommen", "kolommen": 3, "marge": "normaal" },
+  "logo": { "bron": "standaard", "url": "", "vorm": "cirkel-feller", "formaat": "normaal", "naam": "naam-ondertitel", "op_donker": "zoals-hij-is" },
   "secties": [
     { "id": "hero", "aan": true },
     { "id": "woningen", "aan": true },
