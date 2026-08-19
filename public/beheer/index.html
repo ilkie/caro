@@ -188,6 +188,42 @@ textarea{min-height:90px;resize:vertical}
 .tk-lang{color:var(--terracotta)}
 .tk-veld .hint{margin-top:4px}
 .tk-gewijzigd input,.tk-gewijzigd textarea{border-color:var(--teal);background:rgba(41,130,150,.04)}
+
+/* ---------- Overzicht ----------
+   Twee markeerkleuren, gecontroleerd met de validator van de dataviz-richtlijn
+   (lichtheid, chroma, kleurenblind-scheiding, contrast): allemaal goed.
+   Elke grafiek heeft één reeks, dus kleur draagt hier geen betekenis —
+   de cijfers staan er zelf bij. */
+.ov{--mark:#1481A0;--mark2:#B15B3C;--raster:#E7DFD4}
+.ov-kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.ov-tegel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.ov-tegel .label{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.ov-tegel .groot{font-family:var(--serif,'Noto Serif Display',Georgia,serif);font-size:2.5rem;line-height:1.05;margin-top:8px;font-weight:500}
+.ov-tegel .onder{font-size:.82rem;color:var(--muted);margin-top:4px}
+.ov-tegel .op{color:#1D7A4F;font-weight:600}
+.ov-tegel .neer{color:var(--terracotta);font-weight:600}
+.ov-rij{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}
+.ov-kaart{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;position:relative}
+.ov-kaart h3{font-size:.98rem;font-weight:600}
+.ov-kaart .sub{font-size:.8rem;color:var(--muted);margin-top:2px;margin-bottom:12px}
+.ov-kaart svg{display:block;width:100%;height:auto;overflow:visible}
+.ov-as{font-size:9px;fill:var(--muted)}
+.ov-tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;border-radius:8px;padding:7px 11px;font-size:.78rem;line-height:1.35;white-space:nowrap;opacity:0;transition:opacity .12s;z-index:5}
+.ov-tip b{font-weight:600}
+.ov-schakel{background:none;border:0;color:var(--teal);font:inherit;font-size:.76rem;cursor:pointer;text-decoration:underline;padding:0;margin-top:10px}
+.ov-tabel{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:10px}
+.ov-tabel th,.ov-tabel td{text-align:left;padding:4px 10px 4px 0;border-bottom:1px solid var(--line)}
+.ov-tabel th{color:var(--muted);font-weight:500}
+.ov-balk{display:grid;grid-template-columns:1fr;gap:9px;margin-top:4px}
+.ov-balk .r{display:grid;grid-template-columns:150px 1fr auto;gap:10px;align-items:center;font-size:.84rem}
+.ov-balk .n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ov-balk .spoor{display:block;background:var(--sand);border-radius:4px;height:14px;position:relative;overflow:hidden}
+.ov-balk .vul{display:block;background:var(--mark);border-radius:4px;height:100%;min-width:3px}
+.ov-aandacht li{margin:8px 0;font-size:.86rem}
+.ov-aandacht .wie{font-weight:600}
+.ov-aandacht .wat{color:var(--terracotta)}
+.ov-leeg{color:var(--muted);font-size:.86rem;padding:8px 0}
+@media(max-width:1000px){ .ov-kpi{grid-template-columns:repeat(2,1fr)} .ov-rij{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
@@ -222,6 +258,7 @@ textarea{min-height:90px;resize:vertical}
   <div class="container">
     <div class="tabs">
       <button class="tab actief" type="button" data-tab="woningen">Woningen</button>
+      <button class="tab" type="button" data-tab="overzicht">Overzicht</button>
       <button class="tab" type="button" data-tab="vormgeving">Vormgeving</button>
       <button class="tab" type="button" data-tab="teksten">Teksten</button>
       <button class="tab" type="button" data-tab="hulp">Hulp</button>
@@ -257,6 +294,7 @@ textarea{min-height:90px;resize:vertical}
     <p>Waar zoek je naar?</p>
     <ol>
         <li><a href="#hl-inloggen">Inloggen</a></li>
+        <li><a href="#hl-overzicht">Het overzicht met cijfers</a></li>
         <li><a href="#hl-woning">Een woning toevoegen</a></li>
         <li><a href="#hl-fotos">De foto's</a></li>
         <li><a href="#hl-tekst">De tekst en de cijfers</a></li>
@@ -276,6 +314,18 @@ textarea{min-height:90px;resize:vertical}
     <h2>Inloggen <span>ELKE KEER HETZELFDE</span></h2>
     <p>Ga naar <code>cre01.netlify.app/beheer</code> en log in met je e-mailadres en wachtwoord. Onderaan élke pagina van je site staat een klein slotje — dat brengt je naar dezelfde plek. Handig als je de link kwijt bent.</p>
     <p>Je blijft ingelogd, ook als je het venster sluit. Werk je op een computer die niet van jou is? Klik dan rechtsboven op <b>Uitloggen</b>.</p>
+    <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
+  </div>
+
+  <div class="hl-blok" id="hl-overzicht">
+    <h2>Het overzicht met cijfers <span>TABBLAD OVERZICHT</span></h2>
+    <p>Wil je in één blik zien hoe het loopt? Klik op <b>Overzicht</b>. Bovenaan staan vier cijfers: hoeveel woningen online staan, hoeveel bezoeken je deze week had, hoe vaak er contact is gezocht, en hoeveel bezichtigingen er gepland staan. Bij bezoeken en contact staat erbij of het meer of minder is dan vorige week.</p>
+    <ul>
+      <li><b>De twee grafieken</b> tonen de laatste 30 dagen. Ga er met je muis overheen en je ziet per dag het precieze aantal. Liever cijfers dan een lijn? Klik op "Toon als tabel".</li>
+      <li><b>Interesse per woning</b> zet de woningen op volgorde van hoe vaak er contact is gezocht. Erachter staat hoeveel bezoeken daarvoor nodig waren — veel bezoek met weinig contact zegt vaak iets over de foto's of de prijs.</li>
+      <li><b>Vraagt aandacht</b> is je to-dolijstje: woningen zonder foto of omschrijving, woningen die lang online staan zonder dat iemand ooit contact zocht, en exclusiviteit die bijna afloopt.</li>
+    </ul>
+    <div class="hl-tip"><b>Contact zegt meer dan bezoek.</b> Dat iemand kijkt is leuk; dat iemand op WhatsApp klikt is een lead. Stuur daar dus op.</div>
     <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
   </div>
 
@@ -417,9 +467,17 @@ textarea{min-height:90px;resize:vertical}
     <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
   </div>
 
-  <p class="hl-voet">Handleiding bijgewerkt op 19 augustus 2026 · site v1.19 · ook te vinden op <code>cre01.netlify.app/wat-kan-ik-zelf.html</code></p>
+  <p class="hl-voet">Handleiding bijgewerkt op 19 augustus 2026 · site v1.20 · ook te vinden op <code>cre01.netlify.app/wat-kan-ik-zelf.html</code></p>
 </div>
       <!-- HANDLEIDING-EINDE -->
+    </div>
+
+    <div id="tab-overzicht" class="hidden">
+      <div class="page-head">
+        <h2>Overzicht</h2>
+        <div class="sub" style="color:var(--muted);font-size:.84rem" id="ovPeriode"></div>
+      </div>
+      <div class="ov" id="ovInhoud"></div>
     </div>
 
     <div id="tab-vormgeving" class="hidden">
@@ -1069,6 +1127,8 @@ document.querySelectorAll('.tab').forEach(t => {
     $('tab-vormgeving').classList.toggle('hidden', t.dataset.tab !== 'vormgeving');
     $('tab-hulp').classList.toggle('hidden', t.dataset.tab !== 'hulp');
     $('tab-teksten').classList.toggle('hidden', t.dataset.tab !== 'teksten');
+    $('tab-overzicht').classList.toggle('hidden', t.dataset.tab !== 'overzicht');
+    if (t.dataset.tab === 'overzicht') laadOverzicht();
     if (t.dataset.tab === 'vormgeving') ververVoorbeeld();
   });
 });
@@ -1404,6 +1464,226 @@ $('tkOpslaan').addEventListener('click', async () => {
     alert('Opslaan mislukt: ' + (err.message || err));
   }
 });
+
+
+/* ================= Overzicht =================
+   Vorm volgt de taak (dataviz-richtlijn): losse getallen worden tegels, geen
+   grafiek; verloop over tijd wordt een vlakgrafiek met één reeks; vergelijken
+   tussen woningen wordt een balkenrij in één kleur — de lengte draagt de
+   betekenis, niet de kleur. Onder elke grafiek staat dezelfde data als tabel. */
+let OV_DAGEN = [];
+
+async function laadOverzicht(){
+  const vak = $('ovInhoud');
+  if (!vak) return;
+  const [dagenRes] = await Promise.all([
+    sb.from('interesse_per_dag').select('*'),
+    laadInteresse(),
+  ]);
+  OV_DAGEN = (dagenRes && dagenRes.data) || [];
+  const { data: woningen } = await sb.from('woningen').select('*').order('volgorde',{ascending:true});
+  tekenOverzicht(woningen || []);
+}
+
+function ovReeks(dagen, veld, aantal){
+  // vult ontbrekende dagen aan met 0, zodat een gat niet als lijn wordt gelezen
+  const perDag = {};
+  (OV_DAGEN || []).forEach(r => { perDag[String(r.dag).slice(0,10)] = Number(r[veld]) || 0; });
+  const uit = [];
+  for (let i = aantal - 1; i >= 0; i--){
+    const d = new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate() - i);
+    const sleutel = d.toISOString().slice(0,10);
+    uit.push({ datum: d, sleutel: sleutel, waarde: perDag[sleutel] || 0 });
+  }
+  return uit;
+}
+const ovSom = (reeks) => reeks.reduce((t, p) => t + p.waarde, 0);
+
+function ovDatum(d){ return d.toLocaleDateString('nl-NL', { day:'numeric', month:'short' }); }
+
+/** Vlakgrafiek met één reeks + kruisdraad en tooltip. */
+function ovGrafiek(reeks, kleur, eenheid){
+  const B = 720, H = 190, marge = { boven:12, onder:22, links:30, rechts:8 };
+  const bx = B - marge.links - marge.rechts, by = H - marge.boven - marge.onder;
+  const max = Math.max(4, ...reeks.map(p => p.waarde));
+  const x = (i) => marge.links + (reeks.length < 2 ? bx / 2 : (i / (reeks.length - 1)) * bx);
+  const y = (v) => marge.boven + by - (v / max) * by;
+
+  const lijn = reeks.map((p,i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(p.waarde).toFixed(1)).join(' ');
+  const vlak = lijn + ' L' + x(reeks.length-1).toFixed(1) + ' ' + (marge.boven+by) + ' L' + x(0).toFixed(1) + ' ' + (marge.boven+by) + ' Z';
+
+  let raster = '';
+  [0, 0.5, 1].forEach(f => {
+    const yy = marge.boven + by - f * by;
+    raster += '<line x1="' + marge.links + '" y1="' + yy + '" x2="' + (B-marge.rechts) + '" y2="' + yy +
+      '" stroke="var(--raster)" stroke-width="1"/>' +
+      '<text class="ov-as" x="' + (marge.links-6) + '" y="' + (yy+3) + '" text-anchor="end">' + Math.round(max*f) + '</text>';
+  });
+  const eersteX = x(0), laatsteX = x(reeks.length-1);
+  raster += '<text class="ov-as" x="' + eersteX + '" y="' + (H-6) + '">' + ovDatum(reeks[0].datum) + '</text>' +
+            '<text class="ov-as" x="' + laatsteX + '" y="' + (H-6) + '" text-anchor="end">vandaag</text>';
+
+  return '<svg viewBox="0 0 ' + B + ' ' + H + '" role="img" aria-label="verloop per dag">' +
+      raster +
+      '<path d="' + vlak + '" fill="' + kleur + '" fill-opacity=".13"/>' +
+      '<path d="' + lijn + '" fill="none" stroke="' + kleur + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>' +
+      '<line class="ov-draad" x1="0" y1="' + marge.boven + '" x2="0" y2="' + (marge.boven+by) + '" stroke="' + kleur + '" stroke-width="1" opacity="0"/>' +
+      '<circle class="ov-punt" r="4.5" fill="' + kleur + '" stroke="#fff" stroke-width="2" opacity="0"/>' +
+      '<rect class="ov-vanger" x="' + marge.links + '" y="' + marge.boven + '" width="' + bx + '" height="' + by + '" fill="transparent"/>' +
+    '</svg>';
+}
+
+function ovKoppelHover(kaart, reeks, eenheid){
+  const svg = kaart.querySelector('svg');
+  const vanger = kaart.querySelector('.ov-vanger');
+  const draad = kaart.querySelector('.ov-draad');
+  const punt = kaart.querySelector('.ov-punt');
+  const tip = kaart.querySelector('.ov-tip');
+  if (!svg || !vanger) return;
+  const B = 720, marge = { links:30, rechts:8 };
+  const bx = B - marge.links - marge.rechts;
+
+  function naarSvg(e){
+    const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  vanger.addEventListener('mousemove', (e) => {
+    const p = naarSvg(e);
+    const i = Math.max(0, Math.min(reeks.length-1, Math.round(((p.x - marge.links) / bx) * (reeks.length-1))));
+    const px = marge.links + (i/(reeks.length-1))*bx;
+    const max = Math.max(4, ...reeks.map(r => r.waarde));
+    const py = 12 + (190-12-22) - (reeks[i].waarde / max) * (190-12-22);
+    draad.setAttribute('x1', px); draad.setAttribute('x2', px); draad.setAttribute('opacity', '.5');
+    punt.setAttribute('cx', px); punt.setAttribute('cy', py); punt.setAttribute('opacity', '1');
+    const doos = svg.getBoundingClientRect();
+    tip.innerHTML = '<b>' + reeks[i].waarde + '</b> ' + eenheid + '<br>' +
+      reeks[i].datum.toLocaleDateString('nl-NL', { weekday:'short', day:'numeric', month:'long' });
+    tip.style.opacity = '1';
+    const links = (px / B) * doos.width;
+    tip.style.left = Math.min(doos.width - 150, Math.max(0, links - 60)) + 'px';
+    tip.style.top = '48px';
+  });
+  vanger.addEventListener('mouseleave', () => {
+    draad.setAttribute('opacity','0'); punt.setAttribute('opacity','0'); tip.style.opacity = '0';
+  });
+}
+
+function ovTabel(reeks, kop){
+  return '<table class="ov-tabel"><thead><tr><th>Dag</th><th>' + kop + '</th></tr></thead><tbody>' +
+    reeks.slice().reverse().filter(p => p.waarde > 0).slice(0, 14).map(p =>
+      '<tr><td>' + p.datum.toLocaleDateString('nl-NL', { day:'numeric', month:'long' }) + '</td><td>' + p.waarde + '</td></tr>').join('') +
+    '</tbody></table>';
+}
+
+function tekenOverzicht(woningen){
+  const vak = $('ovInhoud');
+  const bezoek30 = ovReeks(OV_DAGEN, 'bezoeken', 30);
+  const kliks30 = ovReeks(OV_DAGEN, 'kliks', 30);
+  const bezoekWeek = ovSom(bezoek30.slice(-7)), bezoekVorige = ovSom(bezoek30.slice(-14,-7));
+  const kliksWeek = ovSom(kliks30.slice(-7)), kliksVorige = ovSom(kliks30.slice(-14,-7));
+
+  const online = woningen.filter(w => w.beschikbaar !== false).length;
+  const verborgen = woningen.length - online;
+
+  const nu = new Date();
+  const over30 = new Date(nu.getTime() + 30*86400000);
+  let gepland = 0, eerstvolgende = null;
+  woningen.forEach(w => (w.bezichtigingen || []).forEach(b => {
+    if (!b || !b.wanneer || b.status === 'afgezegd') return;
+    const d = new Date(b.wanneer);
+    if (d >= nu && d <= over30){ gepland++; if (!eerstvolgende || d < eerstvolgende.d) eerstvolgende = { d: d, w: w, wie: b.wie }; }
+  }));
+
+  function verschil(nu_, toen){
+    if (!toen && !nu_) return '<span>vorige week ook niets</span>';
+    if (!toen) return '<span class="op">nieuw deze week</span>';
+    const p = Math.round(((nu_ - toen) / toen) * 100);
+    if (p === 0) return '<span>gelijk aan vorige week</span>';
+    return '<span class="' + (p > 0 ? 'op' : 'neer') + '">' + (p > 0 ? '+' : '') + p + '%</span> t.o.v. vorige week';
+  }
+
+  const tegels = [
+    { label:'Woningen online', groot: online, onder: verborgen ? verborgen + ' verborgen' : 'geen verborgen' },
+    { label:'Bezoeken deze week', groot: bezoekWeek, onder: verschil(bezoekWeek, bezoekVorige) },
+    { label:'Contact gezocht', groot: kliksWeek, onder: verschil(kliksWeek, kliksVorige) },
+    { label:'Bezichtigingen', groot: gepland, onder: eerstvolgende
+        ? 'eerstvolgende ' + eerstvolgende.d.toLocaleDateString('nl-NL',{day:'numeric',month:'short'}) +
+          ' · ' + escapeHtml(eerstvolgende.w.titel)
+        : 'komende 30 dagen niets' },
+  ];
+
+  // interesse per woning: één kleur, lengte draagt de betekenis
+  const perWoning = woningen.map(w => ({
+    titel: w.titel,
+    kliks: (INTERESSE[w.slug] && INTERESSE[w.slug].kliks) || 0,
+    bezoeken: (INTERESSE[w.slug] && INTERESSE[w.slug].bezoeken) || 0,
+  })).sort((a,b) => b.kliks - a.kliks || b.bezoeken - a.bezoeken);
+  const maxKliks = Math.max(1, ...perWoning.map(w => w.kliks));
+
+  // vraagt aandacht
+  const aandacht = [];
+  woningen.forEach(w => {
+    const i = INTERESSE[w.slug] || { kliks:0, bezoeken:0 };
+    const dagen = w.created_at ? Math.floor((Date.now() - new Date(w.created_at)) / 86400000) : null;
+    const mist = [];
+    if (!w.hero) mist.push('geen hoofdfoto');
+    if (!(w.galerij||[]).length) mist.push('geen foto\'s');
+    if (!w.omschrijving) mist.push('geen omschrijving');
+    if (mist.length) aandacht.push({ titel:w.titel, wat: mist.join(', ') });
+    else if (dagen !== null && dagen > 60 && i.kliks === 0)
+      aandacht.push({ titel:w.titel, wat: dagen + ' dagen online, nog nooit contact gezocht' });
+    if (w.exclusief_tot){
+      const nog = Math.ceil((new Date(w.exclusief_tot) - Date.now()) / 86400000);
+      if (nog < 0) aandacht.push({ titel:w.titel, wat:'exclusiviteit verlopen' });
+      else if (nog <= 30) aandacht.push({ titel:w.titel, wat:'exclusief nog ' + nog + ' dagen' });
+    }
+  });
+
+  vak.innerHTML =
+    '<div class="ov-kpi">' + tegels.map(t =>
+      '<div class="ov-tegel"><div class="label">' + t.label + '</div>' +
+      '<div class="groot">' + t.groot + '</div><div class="onder">' + t.onder + '</div></div>').join('') + '</div>' +
+
+    '<div class="ov-rij">' +
+      '<div class="ov-kaart" id="ovBezoek"><h3>Bezoeken per dag</h3>' +
+        '<div class="sub">Laatste 30 dagen · ' + ovSom(bezoek30) + ' in totaal</div>' +
+        '<div class="ov-tip"></div>' + ovGrafiek(bezoek30, 'var(--mark)', 'bezoeken') +
+        '<button class="ov-schakel" type="button">Toon als tabel</button><div class="tabelvak" hidden>' + ovTabel(bezoek30,'Bezoeken') + '</div>' +
+      '</div>' +
+      '<div class="ov-kaart" id="ovKliks"><h3>Contactmomenten per dag</h3>' +
+        '<div class="sub">WhatsApp, e-mail of telefoon · ' + ovSom(kliks30) + ' in totaal</div>' +
+        '<div class="ov-tip"></div>' + ovGrafiek(kliks30, 'var(--mark2)', 'keer contact') +
+        '<button class="ov-schakel" type="button">Toon als tabel</button><div class="tabelvak" hidden>' + ovTabel(kliks30,'Contactmomenten') + '</div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="ov-rij">' +
+      '<div class="ov-kaart"><h3>Interesse per woning</h3><div class="sub">Aantal keer contact gezocht, hoogste eerst</div>' +
+        (perWoning.length ? '<div class="ov-balk">' + perWoning.map(w =>
+          '<div class="r"><span class="n" title="' + escapeHtml(w.titel) + '">' + escapeHtml(w.titel) + '</span>' +
+          '<span class="spoor"><span class="vul" style="width:' + Math.round((w.kliks/maxKliks)*100) + '%"></span></span>' +
+          '<span><b>' + w.kliks + '</b> <span style="color:var(--muted)">van ' + w.bezoeken + ' bezoeken</span></span></div>').join('') +
+        '</div>' : '<div class="ov-leeg">Nog geen cijfers.</div>') +
+      '</div>' +
+      '<div class="ov-kaart"><h3>Vraagt aandacht</h3><div class="sub">Wat je zou kunnen oppakken</div>' +
+        (aandacht.length ? '<ul class="ov-aandacht">' + aandacht.map(a =>
+          '<li><span class="wie">' + escapeHtml(a.titel) + '</span> — <span class="wat">' + escapeHtml(a.wat) + '</span></li>').join('') + '</ul>'
+        : '<div class="ov-leeg">Niets. Alle woningen zijn compleet.</div>') +
+      '</div>' +
+    '</div>';
+
+  $('ovPeriode').textContent = 'Bijgewerkt ' + new Date().toLocaleString('nl-NL', { day:'numeric', month:'long', hour:'2-digit', minute:'2-digit' });
+
+  ovKoppelHover($('ovBezoek'), bezoek30, 'bezoeken');
+  ovKoppelHover($('ovKliks'), kliks30, 'keer contact');
+  vak.querySelectorAll('.ov-schakel').forEach(knop => {
+    knop.addEventListener('click', () => {
+      const t = knop.nextElementSibling;
+      t.hidden = !t.hidden;
+      knop.textContent = t.hidden ? 'Toon als tabel' : 'Verberg de tabel';
+    });
+  });
+}
 
 </script>
 </body>

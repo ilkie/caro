@@ -85,6 +85,21 @@ group by slug;
 
 
 -- ------------------------------------------------------------
+-- 3b. Per dag, voor de grafieken op het overzicht
+-- ------------------------------------------------------------
+drop view if exists public.interesse_per_dag;
+create view public.interesse_per_dag with (security_invoker = true) as
+select
+  (moment at time zone 'Europe/Madrid')::date                as dag,
+  count(*) filter (where soort =  'bezoek')                  as bezoeken,
+  count(*) filter (where soort <> 'bezoek')                  as kliks
+from public.gebeurtenissen
+where moment > now() - interval '120 days'
+group by 1
+order by 1;
+
+
+-- ------------------------------------------------------------
 -- 4. Controle
 -- ------------------------------------------------------------
 select
