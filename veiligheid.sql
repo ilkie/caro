@@ -29,6 +29,13 @@
 --    Bewust géén security_invoker: de view mag de tabel lezen, de bezoeker
 --    niet. Alleen zichtbare woningen, alleen publieke kolommen.
 -- ------------------------------------------------------------
+-- Zodat dit bestand ook werkt als fotolayout.sql nog niet gedraaid heeft
+-- (en andersom): de kolommen die de etalage nodig heeft, bestaan hoe dan ook.
+alter table public.instellingen
+  add column if not exists fotolayout jsonb
+  default '{"stijl":"kolommen","kolommen":3,"marge":"normaal"}'::jsonb;
+alter table public.woningen add column if not exists fotolayout jsonb;
+
 drop view if exists public.woningen_publiek;
 create view public.woningen_publiek as
 select
@@ -36,7 +43,7 @@ select
   slaapkamers, badkamers, woonoppervlak, perceel, bouwjaar,
   hero, video, omschrijving,
   kenmerken_binnen, kenmerken_buiten,
-  galerij, afstanden,
+  galerij, afstanden, fotolayout,
   volgorde, uitgelicht,
   -- afgerond op ~1 km; het exacte adrespunt blijft in de tabel
   round(lat::numeric, 2)::float8 as lat,
@@ -55,7 +62,7 @@ grant select on public.woningen_publiek to anon, authenticated;
 -- ------------------------------------------------------------
 drop view if exists public.instellingen_publiek;
 create view public.instellingen_publiek as
-select id, palet, lettertype, keuzes, secties, teksten, maps_sleutel
+select id, palet, lettertype, keuzes, secties, teksten, maps_sleutel, fotolayout
 from public.instellingen
 where id = 'site';
 

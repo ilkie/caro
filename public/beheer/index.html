@@ -160,6 +160,7 @@ textarea{min-height:90px;resize:vertical}
 .hl-blok h2{font-family:'Noto Serif Display',Georgia,serif;font-stretch:62.5%;font-size:1.5rem;font-weight:500;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
 .hl-blok h2 span{font-family:inherit;font-size:.66rem;letter-spacing:.18em;color:var(--teal);font-weight:600;font-stretch:100%}
 .hl-blok p{margin-top:10px}
+.hl-blok h3{font-size:.94rem;font-weight:600;margin-top:18px;color:var(--teal-deep,#1E6675)}
 .hl-blok ul,.hl-blok ol{margin:12px 0 0;padding-left:20px}
 .hl-blok li{margin:6px 0}
 .hl-blok b{font-weight:600}
@@ -224,6 +225,26 @@ textarea{min-height:90px;resize:vertical}
 .ov-aandacht .wat{color:var(--terracotta)}
 .ov-leeg{color:var(--muted);font-size:.86rem;padding:8px 0}
 @media(max-width:1000px){ .ov-kpi{grid-template-columns:repeat(2,1fr)} .ov-rij{grid-template-columns:1fr} }
+
+/* ---------- Fotolayout ---------- */
+.fl-vb{margin-top:12px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px}
+.fl-vb .tegels{--g:6px;--k:3}
+.fl-vb .tegels i{display:block;background:var(--sand);border-radius:3px}
+.fl-vb .tegels.v-kolommen{column-count:var(--k);column-gap:var(--g)}
+.fl-vb .tegels.v-kolommen i{margin:0 0 var(--g);break-inside:avoid}
+.fl-vb .tegels.v-kolommen i.groot{column-span:all;height:auto!important;aspect-ratio:16/7}
+.fl-vb .tegels.v-raster{display:grid;grid-template-columns:repeat(var(--k),1fr);gap:var(--g);grid-auto-flow:dense}
+.fl-vb .tegels.v-raster i{aspect-ratio:4/3}
+.fl-vb .tegels.v-raster i.groot{grid-column:span 2;aspect-ratio:8/3}
+.fl-vb .tegels.v-editorial{display:grid;grid-template-columns:repeat(var(--k),1fr);gap:var(--g);grid-auto-flow:dense}
+.fl-vb .tegels.v-editorial i{aspect-ratio:3/4}
+.fl-vb .tegels.v-editorial i.groot{grid-column:span 2;aspect-ratio:3/2}
+.fl-vb .bij{color:var(--muted);font-size:.75rem;margin-top:8px}
+.gitem .gknop{display:flex;gap:4px;flex-shrink:0}
+.gitem .gknop button{width:28px;height:28px;border:1px solid var(--line);background:#fff;border-radius:7px;cursor:pointer;font-size:.8rem;line-height:1;padding:0}
+.gitem .gknop button:disabled{opacity:.3;cursor:default}
+.gitem .ggroot{display:inline-flex;align-items:center;gap:5px;font-size:.76rem;color:var(--muted);white-space:nowrap;cursor:pointer;flex-shrink:0}
+.wfl-uit{color:var(--muted);font-size:.78rem;margin:2px 0 8px}
 </style>
 </head>
 <body>
@@ -350,8 +371,19 @@ textarea{min-height:90px;resize:vertical}
       <li><b>De hoofdfoto</b> — de grote foto bovenaan de woningpagina, en meteen ook het beeld dat in het overzicht op de homepage verschijnt.</li>
       <li><b>De fotogalerij</b> — zoveel foto's als je wil. Je kunt er meerdere tegelijk kiezen, en per foto een bijschrift geven (bijvoorbeeld "ochtendlicht in de keuken"). Laat je het leeg, dan staat er gewoon niets.</li>
     </ul>
-    <p>Op de site wordt niets meer bijgesneden: elke foto blijft in zijn eigen verhouding staan, staand of liggend. Klikt een bezoeker erop, dan gaat de foto groot open en kan diegene met de pijltjes door je hele reeks — op de telefoon door te vegen.</p>
+    <p>Klikt een bezoeker op een foto, dan gaat die groot open en kan diegene met de pijltjes door je hele reeks — op de telefoon door te vegen.</p>
+    <h3>De volgorde bepaal je zelf</h3>
+    <p>Achter elke foto in de lijst staan een <b>&uarr;</b> en een <b>&darr;</b>. Daarmee schuif je een foto naar voren of naar achteren. De bovenste foto in de lijst is ook de eerste die een bezoeker ziet. Wil je één foto laten uitpakken, zet dan het vinkje <b>groot</b> aan: die foto wordt dan dubbel zo breed als de rest.</p>
+    <h3>De opmaak van de galerij</h3>
+    <p>Onder de foto's staat <b>Opmaak van de galerij</b>. Normaal volgt elke woning de instelling die je onder <b>Vormgeving</b> hebt gekozen. Zet het vinkje <i>volgt de standaard van de site</i> uit en je stelt het voor d&eacute;ze ene woning apart in. Je kiest drie dingen:</p>
+    <ul>
+      <li><b>Indeling</b> — <i>Kolommen</i>: elke foto houdt zijn eigen verhouding, er wordt niets bijgesneden (zo staat het nu). <i>Raster</i>: alles even groot en netjes uitgelijnd, dus w&eacute;l bijgesneden. <i>Editorial</i>: onrustiger ritme, waarbij de foto's die je groot hebt gezet er echt uitspringen.</li>
+      <li><b>Aantal naast elkaar</b> — 2, 3 of 4. Op een telefoon staan ze altijd onder elkaar, wat je hier ook kiest.</li>
+      <li><b>Ruimte ertussen</b> — krap, normaal of ruim.</li>
+    </ul>
+    <p>Onder de knoppen staat een klein voorbeeldje met grijze vlakjes: zo komen je foto's straks te staan. Dat verandert meteen mee, nog voor je opslaat.</p>
     <div class="hl-tip"><b>Over de grootte:</b> je hoeft niets voor te bereiden. Sleep je originelen erin — het dashboard verkleint ze zelf voor het web, zodat de pagina snel blijft laden. Gaat er onverhoopt één mis, dan blijven de andere gewoon staan.</div>
+    <div class="hl-let"><b>Wanneer wijk je af per woning?</b> Meestal niet. Kies onder Vormgeving één indeling die bij je werk past, dan ziet de hele site er hetzelfde uit. Heb je bij één woning bijzonder beeld — een reeks staande foto's, of juist twee foto's die je groot wil laten zien — dan is het fijn dat het kan.
     <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
   </div>
 
@@ -423,6 +455,7 @@ textarea{min-height:90px;resize:vertical}
       <li><b>Stijl</b> — vijf kant-en-klare kleurstijlen: <i>Huisstijl</i> (zoals nu), <i>Zand &amp; klei</i>, <i>Olijf &amp; linnen</i>, <i>Diep petrol</i> en <i>Inkt &amp; wit</i>.</li>
       <li><b>Lettertype</b> — vier combinaties: <i>Huisstijl</i>, <i>Klassiek</i>, <i>Warm</i> en <i>Modern</i>.</li>
       <li><b>Zelf bijstellen</b> — wil je binnen zo'n stijl iets anders? Kies dan los de <i>accentkleur</i> (knoppen en links), de <i>achtergrond</i>, de <i>tekstkleur</i> en de kleur van de <i>donkere woningpagina</i>. Kies je niets, dan volgt alles de stijl.</li>
+      <li><b>Foto's bij een woning</b> — hoe de fotogalerij op een woningpagina eruitziet: de indeling (kolommen, raster of editorial), hoeveel foto's er naast elkaar staan en hoeveel ruimte ertussen zit. Dit geldt voor alle woningen; per woning kun je er alsnog van afwijken — zie <a href="#hl-fotos">De foto's</a>.</li>
       <li><b>Blokken op de homepage</b> — de header, de woningen, het fotografieblok, Over Caro en Contact. Verbergen kan, en met de pijltjes wissel je ze van plek.</li>
     </ul>
     <div class="hl-tip"><b>Niets is definitief tot je op Opslaan klikt.</b> En bevalt het toch niet? Met <b>Terug naar het hoofddesign</b> staat alles — kleuren, letters én blokken — in één klik weer zoals het hoort. Daarna nog even Opslaan.</div>
@@ -467,7 +500,7 @@ textarea{min-height:90px;resize:vertical}
     <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
   </div>
 
-  <p class="hl-voet">Handleiding bijgewerkt op 19 augustus 2026 · site v1.20 · ook te vinden op <code>cre01.netlify.app/wat-kan-ik-zelf.html</code></p>
+  <p class="hl-voet">Handleiding bijgewerkt op 19 augustus 2026 · site v1.22 · ook te vinden op <code>cre01.netlify.app/wat-kan-ik-zelf.html</code></p>
 </div>
       <!-- HANDLEIDING-EINDE -->
     </div>
@@ -511,6 +544,12 @@ textarea{min-height:90px;resize:vertical}
             <p class="vg-kop">Zelf bijstellen</p>
             <div id="keuzeLijst"></div>
             <div class="vg-let" style="border-left-color:var(--terracotta);background:rgba(177,91,60,.08)">Kies je hier niets, dan volgt alles de stijl hierboven. Combinaties die slecht leesbaar zouden worden, worden automatisch een tint bijgeschoven.</div>
+          </div>
+          <div class="vg-blok">
+            <p class="vg-kop">Foto's bij een woning</p>
+            <div id="flKeuzes"></div>
+            <div class="fl-vb" id="flVoorbeeld"></div>
+            <div class="vg-let">Dit is de standaard voor alle woningen. Wil je bij één woning iets anders, dan stel je dat bij de woning zelf in.</div>
           </div>
           <div class="vg-blok">
             <p class="vg-kop">Blokken op de homepage</p>
@@ -585,6 +624,12 @@ textarea{min-height:90px;resize:vertical}
       <div class="hint">Kies één of meer foto's; je kunt per foto een bijschrift geven.</div>
       <div id="galList" style="margin-top:10px"></div>
 
+      <div class="section-t">Opmaak van de galerij</div>
+      <div class="wfl-uit">Standaard volgt deze woning de instelling uit Vormgeving. Zet het vinkje uit om er voor déze woning van af te wijken.</div>
+      <label class="schakel" style="margin-bottom:10px"><input type="checkbox" id="f_fl_volgt" checked> volgt de standaard van de site</label>
+      <div id="wflKeuzes" class="hidden"></div>
+      <div class="fl-vb hidden" id="wflVoorbeeld"></div>
+
       <div class="section-t">Afstanden (locatie)</div>
       <div id="afstList"></div>
       <button class="btn btn-ghost btn-sm" id="addAfst" type="button">+ Afstand toevoegen</button>
@@ -652,7 +697,7 @@ async function refresh(){
     $('app').classList.remove('hidden');
     $('whoEmail').textContent = session.user.email;
     loadWoningen();
-    laadVormgeving();
+    laadFotolayout().then(laadVormgeving);
     laadTeksten();
   } else {
     $('app').classList.add('hidden');
@@ -729,8 +774,10 @@ function openForm(w){
   $('f_uitgelicht').checked = !!w.uitgelicht;
   heroData = { src: w.hero || '', file: null };
   renderHero();
-  galItems = (w.galerij||[]).map(g=>({ src:g.src, label:g.label||'', file:null }));
+  galItems = (w.galerij||[]).map(g=>({ src:g.src, label:g.label||'', groot:!!g.groot, file:null }));
+  wFotolayout = w.fotolayout ? flNormaliseer(w.fotolayout, FL_SITE) : null;
   renderGal();
+  wflTeken();
   renderAfst(w.afstanden||[]);
   $('deleteBtn').style.visibility = w.id ? 'visible' : 'hidden';
   $('overlay').classList.remove('hidden');
@@ -747,18 +794,26 @@ function renderHero(){ $('heroPrev').innerHTML = heroData.src ? `<img src="${her
 
 /* Galerij */
 $('f_gal_file').addEventListener('change', (e)=>{
-  [...e.target.files].forEach(f=> galItems.push({ src:URL.createObjectURL(f), label:'', file:f }));
+  [...e.target.files].forEach(f=> galItems.push({ src:URL.createObjectURL(f), label:'', groot:false, file:f }));
   e.target.value=''; renderGal();
 });
 function renderGal(){
   const c=$('galList'); c.innerHTML='';
   galItems.forEach((g,i)=>{
     const row=document.createElement('div'); row.className='gitem';
-    row.innerHTML = `<img src="${g.src}"/><input placeholder="Bijschrift (optioneel)" value="${escapeHtml(g.label)}" data-gi="${i}"/><button class="mini" title="Verwijderen" data-gx="${i}">✕</button>`;
+    row.innerHTML = `<img src="${g.src}"/><input placeholder="Bijschrift (optioneel)" value="${escapeHtml(g.label)}" data-gi="${i}"/>` +
+      `<label class="ggroot" title="Deze foto wordt dubbel zo breed"><input type="checkbox" data-gg="${i}" ${g.groot?'checked':''}> groot</label>` +
+      `<span class="gknop"><button type="button" title="Naar voren" data-gu="${i}" ${i===0?'disabled':''}>↑</button>` +
+      `<button type="button" title="Naar achteren" data-gd="${i}" ${i===galItems.length-1?'disabled':''}>↓</button></span>` +
+      `<button class="mini" title="Verwijderen" data-gx="${i}">✕</button>`;
     row.querySelector('[data-gi]').addEventListener('input', ev=> galItems[i].label = ev.target.value);
+    row.querySelector('[data-gg]').addEventListener('change', ev=>{ galItems[i].groot = ev.target.checked; renderGal(); });
+    row.querySelector('[data-gu]').addEventListener('click', ()=>{ [galItems[i-1],galItems[i]]=[galItems[i],galItems[i-1]]; renderGal(); });
+    row.querySelector('[data-gd]').addEventListener('click', ()=>{ [galItems[i+1],galItems[i]]=[galItems[i],galItems[i+1]]; renderGal(); });
     row.querySelector('[data-gx]').addEventListener('click', ()=>{ galItems.splice(i,1); renderGal(); });
     c.appendChild(row);
   });
+  if (typeof wflTeken === 'function') wflTeken();
 }
 
 /* Afstanden */
@@ -812,7 +867,7 @@ $('saveBtn').addEventListener('click', async ()=>{
       try{
         let src = g.src;
         if (g.file) src = await uploadFile(g.file);
-        if (src) galerij.push({ src, label: g.label||'' });
+        if (src) galerij.push({ src, label: g.label||'', groot: !!g.groot });
       }catch(e){ mislukt++; }
     }
     if (mislukt) toast(mislukt + ' foto(\'s) niet gelukt — de rest is opgeslagen');
@@ -830,6 +885,7 @@ $('saveBtn').addEventListener('click', async ()=>{
       video:$('f_video').value.trim(), omschrijving:$('f_omschrijving').value,
       kenmerken_binnen: lines($('f_kb_in').value), kenmerken_buiten: lines($('f_kb_uit').value),
       galerij, afstanden,
+      fotolayout: wFotolayout,
       beschikbaar:$('f_beschikbaar').checked, uitgelicht:$('f_uitgelicht').checked,
       adres:$('f_adres').value.trim() || null,
       lat:$('f_lat').value ? Number($('f_lat').value) : null,
@@ -879,6 +935,7 @@ refresh();
    bestanden die de site zelf gebruikt. De doorzichtige tinten worden hier op
    dezelfde manier berekend als in src/lib/palet.js; wijzig je daar iets, pas
    het dan ook hier aan. */
+let FL_SITE = null;
 let PALETTEN = [], KEUZE_GROEPEN = {}, LETTERTYPES = [], HOOFDDESIGN = null, SECTIE_INFO = [], vg = null, vgOpgeslagen = '';
 
 function vgTint(hex, alpha){
@@ -909,6 +966,7 @@ function vgStandaard(){
     palet: h.palet || 'huisstijl',
     lettertype: h.lettertype || 'huisstijl',
     keuzes: vgNormaliseerKeuzes(h.keuzes),
+    fotolayout: flNormaliseer(h.fotolayout),
     secties: vgNormaliseer(h.secties),
   };
 }
@@ -982,7 +1040,7 @@ async function laadVormgeving(){
     $('paletLijst').innerHTML = '<div class="empty">Kon de kleurenbestanden niet laden.</div>';
     return;
   }
-  const { data, error } = await sb.from('instellingen').select('palet,lettertype,keuzes,secties,maps_sleutel').eq('id','site').maybeSingle();
+  const { data, error } = await sb.from('instellingen').select('palet,lettertype,keuzes,secties,maps_sleutel,fotolayout').eq('id','site').maybeSingle();
   if (error){
     $('paletLijst').innerHTML = '<div class="empty">Kon de instellingen niet laden: ' + error.message +
       '<br><br>Draait <b>instellingen-tabel.sql</b> al in Supabase?</div>';
@@ -992,8 +1050,10 @@ async function laadVormgeving(){
     palet: (data && data.palet) || 'huisstijl',
     lettertype: (data && data.lettertype) || 'huisstijl',
     keuzes: vgNormaliseerKeuzes(data && data.keuzes),
+    fotolayout: flNormaliseer(data && data.fotolayout),
     secties: vgNormaliseer(data && data.secties),
   };
+  FL_SITE = vg.fotolayout;
   if (!LETTERTYPES.some(l => l.id === vg.lettertype)) vg.lettertype = 'huisstijl';
   vg.maps_sleutel = (data && data.maps_sleutel) || '';
   MAPS_SLEUTEL = vg.maps_sleutel;
@@ -1084,6 +1144,7 @@ function tekenVormgeving(){
     sl.appendChild(rij);
   });
 
+  tekenFotolayout();
   $('vgOpslaan').disabled = JSON.stringify(vg) === vgOpgeslagen;
   ververVoorbeeld();
 }
@@ -1146,13 +1207,14 @@ $('vgOpslaan').addEventListener('click', async () => {
   busy(true);
   try {
     const { data, error } = await sb.from('instellingen')
-      .update({ palet: vg.palet, lettertype: vg.lettertype, keuzes: vg.keuzes, secties: vg.secties, maps_sleutel: vg.maps_sleutel || null })
+      .update({ palet: vg.palet, lettertype: vg.lettertype, keuzes: vg.keuzes, secties: vg.secties, fotolayout: vg.fotolayout, maps_sleutel: vg.maps_sleutel || null })
       .eq('id', 'site')
       .select();
     if (error) throw error;
     if (!data || !data.length) throw new Error('De rij met instellingen bestaat nog niet. Draai instellingen-tabel.sql in Supabase.');
     await triggerRebuild();
     vgOpgeslagen = JSON.stringify(vg);
+    FL_SITE = vg.fotolayout;
     $('vgOpslaan').disabled = true;
     busy(false);
     toast('Opgeslagen — de site wordt bijgewerkt (1 à 2 minuten)');
@@ -1684,6 +1746,119 @@ function tekenOverzicht(woningen){
     });
   });
 }
+
+
+/* ================= Fotolayout =================
+   De mogelijkheden staan in /fotolayout.json — dezelfde bron als de site
+   (src/lib/fotolayout.js). Er is één standaard voor de hele site en per woning
+   kan daarvan worden afgeweken; een woning zonder eigen keuze volgt de
+   standaard vanzelf. */
+let FL = null;   // { standaard, stijlen, kolommen, marges }
+
+async function laadFotolayout(){
+  try { FL = await (await fetch('/fotolayout.json')).json(); }
+  catch(e){ FL = null; }
+}
+
+function flNormaliseer(ruw, terugval){
+  const t = terugval || (FL ? FL.standaard : { stijl:'kolommen', kolommen:3, marge:'normaal' });
+  const b = (ruw && typeof ruw === 'object' && !Array.isArray(ruw)) ? ruw : {};
+  if (!FL) return { stijl:t.stijl, kolommen:t.kolommen, marge:t.marge };
+  return {
+    stijl:    FL.stijlen.some(x => x.id === b.stijl)                 ? b.stijl          : t.stijl,
+    kolommen: FL.kolommen.some(x => x.id === Number(b.kolommen))     ? Number(b.kolommen) : t.kolommen,
+    marge:    FL.marges.some(x => x.id === b.marge)                  ? b.marge          : t.marge,
+  };
+}
+
+/* Bouwt de drie rijen keuzeknoppen. `bij` wordt aangeroepen na elke klik. */
+function flTekenKeuzes(doel, huidig, bij){
+  if (!FL){ doel.innerHTML = '<div class="empty">Kon fotolayout.json niet laden.</div>'; return; }
+  doel.innerHTML = '';
+  const groepen = [
+    { sleutel:'stijl',    naam:'Indeling', uitleg:'', opties: FL.stijlen.map(x => ({ id:x.id, naam:x.naam, titel:x.omschrijving })) },
+    { sleutel:'kolommen', naam:'Aantal naast elkaar', uitleg:'Op een telefoon staan ze altijd onder elkaar.',
+      opties: FL.kolommen.map(x => ({ id:x.id, naam:x.naam, titel:x.uitleg })) },
+    { sleutel:'marge',    naam:'Ruimte ertussen', uitleg:'', opties: FL.marges.map(x => ({ id:x.id, naam:x.naam, titel:'' })) },
+  ];
+  groepen.forEach(g => {
+    const blok = document.createElement('div');
+    blok.className = 'keuzegroep';
+    blok.innerHTML = '<div class="kop">' + g.naam + '</div>' + (g.uitleg ? '<div class="uit">' + g.uitleg + '</div>' : '');
+    const rij = document.createElement('div');
+    rij.className = 'keuzerij';
+    g.opties.forEach(o => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'keuze' + (huidig[g.sleutel] === o.id ? ' actief' : '');
+      b.style.paddingLeft = '13px';
+      b.textContent = o.naam;
+      if (o.titel) b.title = o.titel;
+      b.addEventListener('click', () => { huidig[g.sleutel] = o.id; bij(); });
+      rij.appendChild(b);
+    });
+    blok.appendChild(rij);
+    if (g.sleutel === 'stijl'){
+      const stijl = FL.stijlen.find(x => x.id === huidig.stijl);
+      if (stijl){
+        const uitleg = document.createElement('div');
+        uitleg.className = 'uit';
+        uitleg.style.margin = '7px 0 0';
+        uitleg.textContent = stijl.omschrijving;
+        blok.appendChild(uitleg);
+      }
+    }
+    doel.appendChild(blok);
+  });
+}
+
+/* Kleine live weergave. `groot` is een lijst met nummers van foto's die dubbel
+   zo breed zijn; `aantal` het aantal tegels (standaard acht). */
+function flTekenVoorbeeld(doel, layout, groot, aantal){
+  if (!FL) return;
+  const marge = (FL.marges.find(m => m.id === layout.marge) || FL.marges[1]).waarde;
+  const gr = groot || [];
+  const n = Math.max(3, Math.min(aantal || 8, 16));
+  const hoogtes = [96, 132, 74, 118, 88, 140, 104, 80];   // alleen voor 'kolommen'
+  let tegels = '';
+  for (let i = 0; i < n; i++){
+    const g = gr.indexOf(i) !== -1 ? ' class="groot"' : '';
+    const h = layout.stijl === 'kolommen' ? ' style="height:' + hoogtes[i % hoogtes.length] + 'px"' : '';
+    tegels += '<i' + g + h + '></i>';
+  }
+  doel.innerHTML =
+    '<div class="tegels v-' + layout.stijl + '" style="--g:' + marge + ';--k:' + layout.kolommen + '">' + tegels + '</div>' +
+    '<div class="bij">Elk grijs vlak is een foto. Zo komen ze op de woningpagina te staan.</div>';
+}
+
+/* ---- de standaard voor de hele site (tabblad Vormgeving) ---- */
+function tekenFotolayout(){
+  if (!vg || !vg.fotolayout) return;
+  flTekenKeuzes($('flKeuzes'), vg.fotolayout, () => {
+    tekenFotolayout();
+    $('vgOpslaan').disabled = JSON.stringify(vg) === vgOpgeslagen;
+  });
+  flTekenVoorbeeld($('flVoorbeeld'), vg.fotolayout);
+}
+
+/* ---- afwijken per woning (in het woningformulier) ---- */
+let wFotolayout = null;      // null = volgt de standaard
+
+function wflTeken(){
+  const volgt = wFotolayout === null;
+  $('f_fl_volgt').checked = volgt;
+  $('wflKeuzes').classList.toggle('hidden', volgt);
+  $('wflVoorbeeld').classList.toggle('hidden', volgt);
+  if (volgt) return;
+  flTekenKeuzes($('wflKeuzes'), wFotolayout, wflTeken);
+  flTekenVoorbeeld($('wflVoorbeeld'), wFotolayout,
+    galItems.map((g,i)=> g.groot ? i : -1).filter(i => i >= 0), galItems.length || 8);
+}
+
+$('f_fl_volgt').addEventListener('change', (e) => {
+  wFotolayout = e.target.checked ? null : flNormaliseer(null, FL_SITE);
+  wflTeken();
+});
 
 </script>
 </body>

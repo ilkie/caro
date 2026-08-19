@@ -25,11 +25,12 @@ export type Woning = {
   omschrijving?: string
   kenmerken_binnen?: string[]
   kenmerken_buiten?: string[]
-  galerij?: { src: string; label?: string }[]
+  galerij?: { src: string; label?: string; groot?: boolean }[]
   afstanden?: { plek: string; tijd: string }[]
   volgorde?: number
   beschikbaar?: boolean
   uitgelicht?: boolean
+  fotolayout?: { stijl?: string; kolommen?: number; marge?: string } | null
 }
 
 // Alle zichtbare woningen (op volgorde) voor de homepage.

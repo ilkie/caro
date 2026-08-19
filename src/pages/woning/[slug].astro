@@ -4,6 +4,7 @@ import { getAlleWoningen, SUPABASE_URL, SUPABASE_ANON_KEY } from '../../lib/supa
 import { getInstellingen } from '../../lib/instellingen';
 import { kaartUrl, kaartBron } from '../../lib/kaart.js';
 import { tekst, mailLink, whatsappLink, telLink } from '../../lib/teksten.js';
+import { fotolayoutVan, galerijAttributen } from '../../lib/fotolayout.js';
 
 export async function getStaticPaths() {
   const woningen = await getAlleWoningen();
@@ -21,7 +22,10 @@ const heeftVideo = !!(d.video && d.video.length > 0);
 
 // Kaart: bewust onnauwkeurig. Het adres en de exacte coördinaten blijven in de
 // database — hier komt alleen een afgerond punt (~1 km) de pagina op.
-const { mapsSleutel, teksten } = await getInstellingen();
+const { mapsSleutel, teksten, fotolayout } = await getInstellingen();
+// Opmaak van de galerij: de standaard van de site, tenzij deze woning een eigen keuze heeft.
+const layout = fotolayoutVan(d, fotolayout);
+const gal = galerijAttributen(layout);
 const t = (id) => tekst(teksten, id);
 const kaart = kaartUrl(d.lat, d.lon, mapsSleutel);
 const heeftLocatie = !!kaart;
@@ -73,9 +77,9 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
   {galerij.length > 0 && (
     <section style="padding:20px 0 90px">
       <div class="wrap" style="margin-bottom:22px"><div class="eyebrow">Beeld</div></div>
-      <div class="wp-gal">
+      <div class={gal.klasse} style={gal.stijl}>
         {galerij.map((g, i) => (
-          <button class="wp-tile" type="button" data-i={i} aria-label={`Foto ${i + 1} vergroten`}>
+          <button class={`wp-tile${g.groot ? ' groot' : ''}`} type="button" data-i={i} aria-label={`Foto ${i + 1} vergroten`}>
             {g.src && <img src={g.src} alt={g.label || d.titel} loading={i < 6 ? 'eager' : 'lazy'} onerror="this.style.opacity=0" />}
             {g.label && <span>{g.label}</span>}
           </button>

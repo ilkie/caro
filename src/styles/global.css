@@ -294,14 +294,41 @@ body.theme-dark{--wp-line:var(--cream-15);background:var(--wp-bg);color:var(--cr
 .theme-dark .lead p{color:var(--cream-85)}
 .theme-dark .section-head p{color:var(--cream-70)}
 
-/* Galerij: kolommen (masonry). Elke foto houdt zijn eigen verhouding, dus
-   er wordt niets afgesneden, en de marge tussen de beelden is overal exact
-   --gal-gap — horizontaal én verticaal. */
-.wp-gal{--gal-gap:8px;max-width:1200px;margin:0 auto;padding:0 24px;column-count:3;column-gap:var(--gal-gap)}
-.wp-tile{position:relative;display:block;width:100%;margin:0 0 var(--gal-gap);break-inside:avoid;-webkit-column-break-inside:avoid;border-radius:3px;overflow:hidden;background:var(--wp-panel,var(--wp-panel));cursor:zoom-in;border:0;padding:0}
-.wp-tile img{width:100%;height:auto;display:block;transition:opacity .3s}
+/* Galerij — drie opmaken, gekozen in het dashboard.
+   --gal-kolommen en --gal-gap komen uit de instellingen mee als inline stijl. */
+.wp-gal{--gal-gap:14px;--gal-kolommen:3;max-width:1200px;margin:0 auto;padding:0 24px}
+.wp-tile{position:relative;display:block;width:100%;border:0;padding:0;border-radius:3px;overflow:hidden;
+  background:var(--wp-panel,#16303a);cursor:zoom-in}
+.wp-tile img{width:100%;display:block;transition:opacity .3s}
 .wp-tile:hover img{opacity:.86}
-.wp-tile span{position:absolute;left:12px;bottom:10px;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.9);text-shadow:0 1px 4px rgba(0,0,0,.5)}
+.wp-tile span{position:absolute;left:12px;bottom:10px;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,255,255,.9);text-shadow:0 1px 4px rgba(0,0,0,.5)}
+
+/* 1. Kolommen — niets bijgesneden, elke foto houdt zijn verhouding */
+.wp-gal.g-kolommen{column-count:var(--gal-kolommen);column-gap:var(--gal-gap)}
+.wp-gal.g-kolommen .wp-tile{margin:0 0 var(--gal-gap);break-inside:avoid;-webkit-column-break-inside:avoid}
+.wp-gal.g-kolommen .wp-tile img{height:auto}
+/* een gemarkeerde foto gaat hier als brede band over de volle breedte */
+.wp-gal.g-kolommen .wp-tile.groot{column-span:all;aspect-ratio:16/7}
+.wp-gal.g-kolommen .wp-tile.groot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+/* 2. Raster — alles even groot en uitgelijnd, dus wél bijgesneden */
+.wp-gal.g-raster{display:grid;grid-template-columns:repeat(var(--gal-kolommen),1fr);gap:var(--gal-gap);grid-auto-flow:dense}
+.wp-gal.g-raster .wp-tile{aspect-ratio:4/3}
+.wp-gal.g-raster .wp-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.wp-gal.g-raster .wp-tile.groot{grid-column:span 2;aspect-ratio:8/3}
+
+/* 3. Editorial — afwisselend ritme; gemarkeerde foto's zijn dubbel zo breed */
+.wp-gal.g-editorial{display:grid;grid-template-columns:repeat(var(--gal-kolommen),1fr);gap:var(--gal-gap);grid-auto-flow:dense}
+.wp-gal.g-editorial .wp-tile{aspect-ratio:3/4}
+.wp-gal.g-editorial .wp-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.wp-gal.g-editorial .wp-tile.groot{grid-column:span 2;aspect-ratio:3/2}
+
+@media(max-width:900px){ .wp-gal{--gal-kolommen:2} }
+@media(max-width:560px){
+  .wp-gal{--gal-kolommen:1}
+  .wp-gal.g-raster .wp-tile.groot,.wp-gal.g-editorial .wp-tile.groot{grid-column:span 1}
+}
 
 /* Vergroot beeld (lightbox) met vorige/volgende */
 .lb{position:fixed;inset:0;z-index:200;display:none;background:var(--wp-panel-96);backdrop-filter:blur(3px)}
@@ -331,8 +358,6 @@ body.theme-dark{--wp-line:var(--cream-15);background:var(--wp-bg);color:var(--cr
 .theme-dark .loc-grid h2{color:var(--cream)}
 .theme-dark .loc-grid p{color:var(--cream-70)}
 
-@media(max-width:900px){ .wp-gal{column-count:2} }
-@media(max-width:560px){ .wp-gal{column-count:1} }
 
 .ph.kaart{aspect-ratio:4/3;min-height:280px}
 .ph.kaart iframe{position:absolute;inset:0;width:100%;height:100%;border:0;filter:saturate(.9)}

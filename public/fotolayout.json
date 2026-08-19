@@ -1,0 +1,19 @@
+{
+  "toelichting": "Hoe de fotogalerij op een woningpagina eruitziet. Er is één standaard voor de hele site (Vormgeving) en per woning kan daarvan afgeweken worden. Gelezen door de site (src/lib/fotolayout.js) en het dashboard.",
+  "standaard": { "stijl": "kolommen", "kolommen": 3, "marge": "normaal" },
+  "stijlen": [
+    { "id": "kolommen",  "naam": "Kolommen",  "omschrijving": "Elke foto houdt zijn eigen verhouding. Er wordt niets bijgesneden — staand en liggend door elkaar." },
+    { "id": "raster",    "naam": "Raster",    "omschrijving": "Alle foto's even groot en netjes uitgelijnd. Wordt wél bijgesneden." },
+    { "id": "editorial", "naam": "Editorial", "omschrijving": "Onrustiger ritme: sommige foto's dubbel zo breed, de rest eromheen." }
+  ],
+  "kolommen": [
+    { "id": 2, "naam": "2 breed", "uitleg": "Grote foto's, rustig" },
+    { "id": 3, "naam": "3 breed", "uitleg": "Zoals nu" },
+    { "id": 4, "naam": "4 breed", "uitleg": "Veel foto's in beeld" }
+  ],
+  "marges": [
+    { "id": "krap",    "naam": "Krap",    "waarde": "6px" },
+    { "id": "normaal", "naam": "Normaal", "waarde": "14px" },
+    { "id": "ruim",    "naam": "Ruim",    "waarde": "26px" }
+  ]
+}

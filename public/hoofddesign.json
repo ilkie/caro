@@ -3,6 +3,7 @@
   "palet": "huisstijl",
   "lettertype": "huisstijl",
   "keuzes": { "accent": "stijl", "achtergrond": "stijl", "tekst": "stijl", "donker": "stijl" },
+  "fotolayout": { "stijl": "kolommen", "kolommen": 3, "marge": "normaal" },
   "secties": [
     { "id": "hero", "aan": true },
     { "id": "woningen", "aan": true },
