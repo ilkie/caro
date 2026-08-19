@@ -1,6 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { getAlleWoningen, SUPABASE_URL, SUPABASE_ANON_KEY } from '../../lib/supabase';
+import { getInstellingen } from '../../lib/instellingen';
+import { kaartUrl, kaartBron } from '../../lib/kaart.js';
 
 export async function getStaticPaths() {
   const woningen = await getAlleWoningen();
@@ -15,6 +17,12 @@ const kenmerkenBuiten = d.kenmerken_buiten || [];
 const afstanden = d.afstanden || [];
 const alineas = (d.omschrijving || '').split(/\n{2,}|\n/).map((s) => s.trim()).filter(Boolean);
 const heeftVideo = !!(d.video && d.video.length > 0);
+
+// Kaart: bewust onnauwkeurig. Het adres en de exacte coördinaten blijven in de
+// database — hier komt alleen een afgerond punt (~1 km) de pagina op.
+const { mapsSleutel } = await getInstellingen();
+const kaart = kaartUrl(d.lat, d.lon, mapsSleutel);
+const heeftLocatie = !!kaart;
 const pageTitle = `${d.titel}, ${d.plaats} — ${d.status} | Caro Leriche`;
 const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaapkamers, ${d.woonoppervlak} m². Persoonlijk begeleid door Caro Leriche, Real Estate Spain.`;
 ---
@@ -164,12 +172,24 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
   </section>
 
   <!-- LOCATIE -->
-  {afstanden.length > 0 && (
+  {(afstanden.length > 0 || heeftLocatie) && (
     <section class="pad">
       <div class="wrap loc-grid reveal">
-        <div class="ph" style="background:linear-gradient(135deg,var(--wp-glow),var(--wp-panel))">
-          <!-- ✎ VUL IN: vervang door een Google Maps-embed -->
-          <span class="tag">Kaart / locatie</span>
+        <div class="ph kaart" style="background:linear-gradient(135deg,var(--wp-glow),var(--wp-panel))">
+          {heeftLocatie ? (
+            <Fragment>
+              <iframe
+                src={kaart}
+                title={`Ligging van ${d.titel} in ${d.plaats}`}
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+              ></iframe>
+              <span class="tag">{d.plaats}{d.regio ? `, ${d.regio}` : ''} · bij benadering</span>
+            </Fragment>
+          ) : (
+            <span class="tag">Locatie op aanvraag</span>
+          )}
         </div>
         <div>
           <div class="eyebrow">Locatie</div>

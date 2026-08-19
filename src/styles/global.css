@@ -334,6 +334,10 @@ body.theme-dark{--wp-line:var(--cream-15);background:var(--wp-bg);color:var(--cr
 @media(max-width:900px){ .wp-gal{column-count:2} }
 @media(max-width:560px){ .wp-gal{column-count:1} }
 
+.ph.kaart{aspect-ratio:4/3;min-height:280px}
+.ph.kaart iframe{position:absolute;inset:0;width:100%;height:100%;border:0;filter:saturate(.9)}
+.ph.kaart .tag{z-index:3}
+
 /* Persoonlijk bandje (footer woningpagina) */
 .wp-personal{padding:66px 0;text-align:center;border-top:1px solid var(--cream-15)}
 .wp-personal .portret{width:96px;height:96px;border-radius:50%;object-fit:cover;object-position:center 22%;margin:0 auto 22px;border:2px solid var(--cream-30)}

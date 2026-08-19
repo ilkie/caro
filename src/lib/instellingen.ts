@@ -4,7 +4,7 @@ import sectieData from '../../public/secties.json' with { type: 'json' }
 
 export type Sectie = { id: string; aan: boolean }
 export type Keuzes = Record<string, string>
-export type Instellingen = { palet: string; lettertype: string; keuzes: Keuzes; secties: Sectie[] }
+export type Instellingen = { palet: string; lettertype: string; keuzes: Keuzes; secties: Sectie[]; mapsSleutel: string }
 
 // De secties van de homepage, in de volgorde zoals de site oorspronkelijk was.
 // Staat een sectie hier niet bij, dan bestaat hij niet — onbekende id's uit de
@@ -17,6 +17,7 @@ export const STANDAARD_INSTELLINGEN: Instellingen = {
   lettertype: STANDAARD_LETTERTYPE,
   keuzes: { ...STANDAARD_KEUZES },
   secties: normaliseerSecties(HOOFDDESIGN.secties),
+  mapsSleutel: '',
 }
 
 /** Alleen bestaande groepen en bestaande opties; de rest wordt 'stijl'. */
@@ -60,7 +61,7 @@ export async function getInstellingen(): Promise<Instellingen> {
   try {
     const { data, error } = await supabase
       .from('instellingen')
-      .select('palet, lettertype, keuzes, secties')
+      .select('palet, lettertype, keuzes, secties, maps_sleutel')
       .eq('id', 'site')
       .maybeSingle()
     if (error) {
@@ -73,6 +74,7 @@ export async function getInstellingen(): Promise<Instellingen> {
       lettertype: vindLettertype(data?.lettertype).id,
       keuzes: normaliseerKeuzes(data?.keuzes),
       secties: normaliseerSecties(data?.secties),
+      mapsSleutel: typeof data?.maps_sleutel === 'string' ? data.maps_sleutel.trim() : '',
     }
     return cache
   } catch (e: any) {

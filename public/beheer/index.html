@@ -138,6 +138,13 @@ textarea{min-height:90px;resize:vertical}
 .bez-rij{display:grid;grid-template-columns:170px 1fr 130px 34px;gap:8px;align-items:center;margin-bottom:8px}
 .bez-rij select{padding:9px 10px}
 @media(max-width:720px){ .bez-rij{grid-template-columns:1fr 1fr;} }
+
+/* ---------- Locatie ---------- */
+.adresrij{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start}
+.kaartvoorbeeld{margin-top:12px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.kaartvoorbeeld iframe{width:100%;height:230px;border:0;display:block}
+.kaartvoorbeeld .onder{padding:9px 13px;font-size:.8rem;color:var(--muted);border-top:1px solid var(--line)}
+.kaartvoorbeeld .onder b{color:var(--ink);font-weight:600}
 </style>
 </head>
 <body>
@@ -197,6 +204,14 @@ textarea{min-height:90px;resize:vertical}
           <div class="vg-blok">
             <p class="vg-kop">Stijl</p>
             <div class="palet-lijst" id="paletLijst"></div>
+          </div>
+          <div class="vg-blok">
+            <p class="vg-kop">Kaart</p>
+            <div class="field">
+              <label>Google Maps-sleutel</label>
+              <input id="f_maps" placeholder="Leeg laten = OpenStreetMap" />
+              <div class="hint">Eenmalig. Maak een sleutel in Google Cloud (Maps Embed API) en beperk hem tot je eigen domein.</div>
+            </div>
           </div>
           <div class="vg-blok">
             <p class="vg-kop">Lettertype</p>
@@ -283,6 +298,18 @@ textarea{min-height:90px;resize:vertical}
       <div class="section-t">Afstanden (locatie)</div>
       <div id="afstList"></div>
       <button class="btn btn-ghost btn-sm" id="addAfst" type="button">+ Afstand toevoegen</button>
+
+      <div class="section-t">Locatie</div>
+      <div class="field">
+        <label>Adres</label>
+        <div class="adresrij">
+          <input id="f_adres" placeholder="Calle Mayor 12, 03293 Elche, Alicante" />
+          <button class="btn btn-ghost btn-sm" id="zoekAdres" type="button">Zoek op de kaart</button>
+        </div>
+        <div class="hint" id="adresStatus">Het adres blijft priv&eacute;. Bezoekers zien alleen een kaartje van de buurt, plus de plaats en regio.</div>
+      </div>
+      <input type="hidden" id="f_lat" /><input type="hidden" id="f_lon" />
+      <div id="kaartVak"></div>
 
       <div class="section-t">Bezichtigingen</div>
       <div class="hint">Alleen voor jezelf — dit komt nooit op de site.</div>
@@ -396,6 +423,11 @@ function openForm(w){
   $('f_omschrijving').value = w.omschrijving || '';
   $('f_kb_in').value = (w.kenmerken_binnen||[]).join('\n');
   $('f_kb_uit').value = (w.kenmerken_buiten||[]).join('\n');
+  $('f_adres').value = w.adres || '';
+  $('f_lat').value = w.lat != null ? w.lat : '';
+  $('f_lon').value = w.lon != null ? w.lon : '';
+  $('adresStatus').innerHTML = 'Het adres blijft priv&eacute;. Bezoekers zien alleen een kaartje van de buurt, plus de plaats en regio.';
+  toonKaartVoorbeeld();
   $('f_referentie').value = w.referentie || '';
   $('f_contactpersoon').value = w.contactpersoon || '';
   $('f_exclusief_tot').value = w.exclusief_tot || '';
@@ -508,6 +540,9 @@ $('saveBtn').addEventListener('click', async ()=>{
       kenmerken_binnen: lines($('f_kb_in').value), kenmerken_buiten: lines($('f_kb_uit').value),
       galerij, afstanden,
       beschikbaar:$('f_beschikbaar').checked, uitgelicht:$('f_uitgelicht').checked,
+      adres:$('f_adres').value.trim() || null,
+      lat:$('f_lat').value ? Number($('f_lat').value) : null,
+      lon:$('f_lon').value ? Number($('f_lon').value) : null,
       referentie:$('f_referentie').value.trim() || null,
       contactpersoon:$('f_contactpersoon').value.trim() || null,
       exclusief_tot:$('f_exclusief_tot').value || null,
@@ -579,6 +614,7 @@ function vgVariabelen(k){
 function vgStandaard(){
   const h = HOOFDDESIGN || {};
   return {
+    maps_sleutel: (vg && vg.maps_sleutel) || '',   // de kaartsleutel hoort niet bij het uiterlijk
     palet: h.palet || 'huisstijl',
     lettertype: h.lettertype || 'huisstijl',
     keuzes: vgNormaliseerKeuzes(h.keuzes),
@@ -655,7 +691,7 @@ async function laadVormgeving(){
     $('paletLijst').innerHTML = '<div class="empty">Kon de kleurenbestanden niet laden.</div>';
     return;
   }
-  const { data, error } = await sb.from('instellingen').select('palet,lettertype,keuzes,secties').eq('id','site').maybeSingle();
+  const { data, error } = await sb.from('instellingen').select('palet,lettertype,keuzes,secties,maps_sleutel').eq('id','site').maybeSingle();
   if (error){
     $('paletLijst').innerHTML = '<div class="empty">Kon de instellingen niet laden: ' + error.message +
       '<br><br>Draait <b>instellingen-tabel.sql</b> al in Supabase?</div>';
@@ -668,6 +704,14 @@ async function laadVormgeving(){
     secties: vgNormaliseer(data && data.secties),
   };
   if (!LETTERTYPES.some(l => l.id === vg.lettertype)) vg.lettertype = 'huisstijl';
+  vg.maps_sleutel = (data && data.maps_sleutel) || '';
+  MAPS_SLEUTEL = vg.maps_sleutel;
+  $('f_maps').value = vg.maps_sleutel;
+  $('f_maps').addEventListener('input', (e) => {
+    vg.maps_sleutel = e.target.value.trim();
+    MAPS_SLEUTEL = vg.maps_sleutel;
+    $('vgOpslaan').disabled = JSON.stringify(vg) === vgOpgeslagen;
+  });
   if (!PALETTEN.some(p => p.id === vg.palet)) vg.palet = 'huisstijl';
   vgOpgeslagen = JSON.stringify(vg);
   tekenVormgeving();
@@ -807,7 +851,7 @@ $('vgOpslaan').addEventListener('click', async () => {
   busy(true);
   try {
     const { data, error } = await sb.from('instellingen')
-      .update({ palet: vg.palet, lettertype: vg.lettertype, keuzes: vg.keuzes, secties: vg.secties })
+      .update({ palet: vg.palet, lettertype: vg.lettertype, keuzes: vg.keuzes, secties: vg.secties, maps_sleutel: vg.maps_sleutel || null })
       .eq('id', 'site')
       .select();
     if (error) throw error;
@@ -943,6 +987,70 @@ function renderBez(){
 $('addBez').addEventListener('click', () => {
   bezItems.push({ wanneer: '', wie: '', status: 'gepland', notitie: '' });
   renderBez();
+});
+
+
+/* ================= Locatie: adres → kaart =================
+   Caro typt het adres; OpenStreetMap (Nominatim) zoekt de plek erbij. Wat op
+   de site komt is bewust afgerond op ~1 km — zelfde berekening als in
+   src/lib/kaart.js. Wijzig je daar iets, pas het dan ook hier aan. */
+let MAPS_SLEUTEL = '';
+
+function kaartVervaagd(lat, lon){
+  const a = Number(lat), b = Number(lon);
+  if (!isFinite(a) || !isFinite(b) || (a === 0 && b === 0)) return null;
+  if (a < -90 || a > 90 || b < -180 || b > 180) return null;
+  return { lat: Math.round(a * 100) / 100, lon: Math.round(b * 100) / 100 };
+}
+function kaartUrlVan(lat, lon, zoom){
+  const plek = kaartVervaagd(lat, lon);
+  if (!plek) return null;
+  if (MAPS_SLEUTEL) {
+    return 'https://www.google.com/maps/embed/v1/view?key=' + encodeURIComponent(MAPS_SLEUTEL) +
+      '&center=' + plek.lat + ',' + plek.lon + '&zoom=' + (zoom || 13) + '&maptype=roadmap';
+  }
+  const d = 0.02, afg = (n) => Number(n.toFixed(4));
+  const bbox = [afg(plek.lon - d), afg(plek.lat - d / 2), afg(plek.lon + d), afg(plek.lat + d / 2)].join(',');
+  return 'https://www.openstreetmap.org/export/embed.html?bbox=' + bbox + '&layer=mapnik';
+}
+
+function toonKaartVoorbeeld(){
+  const vak = $('kaartVak');
+  const lat = $('f_lat').value, lon = $('f_lon').value;
+  const url = kaartUrlVan(lat, lon);
+  if (!url){ vak.innerHTML = ''; return; }
+  const plek = kaartVervaagd(lat, lon);
+  vak.innerHTML =
+    '<div class="kaartvoorbeeld">' +
+      '<iframe src="' + url + '" title="Voorbeeld van de kaart" loading="lazy"></iframe>' +
+      '<div class="onder">Dit ziet een bezoeker: <b>de buurt</b>, niet het huis. ' +
+        'Afgerond op ' + plek.lat.toFixed(2) + ', ' + plek.lon.toFixed(2) + ' — ongeveer een kilometer. ' +
+        (MAPS_SLEUTEL ? 'Kaart via Google Maps.' : 'Kaart via OpenStreetMap; vul een Google-sleutel in bij Vormgeving voor Google Maps.') +
+      '</div>' +
+    '</div>';
+}
+
+$('zoekAdres').addEventListener('click', async () => {
+  const adres = $('f_adres').value.trim();
+  const status = $('adresStatus');
+  if (!adres){ status.textContent = 'Vul eerst een adres in.'; return; }
+  status.textContent = 'Zoeken…';
+  try {
+    const r = await fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=' +
+      encodeURIComponent(adres), { headers: { 'Accept': 'application/json' } });
+    const data = await r.json();
+    if (!data || !data.length){
+      status.textContent = 'Niets gevonden. Probeer het met straat, plaats en provincie.';
+      return;
+    }
+    $('f_lat').value = data[0].lat;
+    $('f_lon').value = data[0].lon;
+    status.innerHTML = 'Gevonden: ' + escapeHtml(data[0].display_name) +
+      ' — klopt dit niet? Pas het adres aan en zoek opnieuw.';
+    toonKaartVoorbeeld();
+  } catch (e) {
+    status.textContent = 'Zoeken lukte niet: ' + (e.message || e);
+  }
 });
 
 </script>
