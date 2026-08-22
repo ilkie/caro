@@ -209,12 +209,17 @@
   transform-style:preserve-3d;transform-origin:left center;will-change:transform}
 .mg-flip .kant{position:absolute;inset:0;display:flex;align-items:center;
   justify-content:flex-start;backface-visibility:hidden;overflow:hidden}
-.mg-flip .kant.achter{transform:rotateY(180deg)}
+/* De achterkant staat 180 graden gedraaid, dus zijn links en rechts daar
+   omgekeerd. Zonder deze twee regels landt de binnenkomende linkerpagina tegen
+   de buitenrand in plaats van tegen de rug — 225 pixels te ver — en schiet hij
+   pas op zijn plek zodra de blader-laag verdwijnt. Dat was het verspringen. */
+.mg-flip .kant.achter{transform:rotateY(180deg);justify-content:flex-end}
 /* De echte pagina's worden hierheen verhuisd (niet gekopieerd), dus ze houden
    hun eigen `scale(var(--mg-schaal))` uit de basisregel. Alleen het krimppunt
    moet naar de rugzijde — anders zweeft de pagina in zijn layoutvak. */
 .mg-flip .helft.links .mg-pag{transform-origin:right center}
 .mg-flip .helft.rechts .mg-pag,.mg-flip .kant .mg-pag{transform-origin:left center}
+.mg-flip .kant.achter .mg-pag{transform-origin:right center}
 .mg-flip .mg-pag{box-shadow:none}
 /* het schaduwvlak dat over de omslaande pagina trekt */
 .mg-flip .kant::after{content:"";position:absolute;inset:0;pointer-events:none;
