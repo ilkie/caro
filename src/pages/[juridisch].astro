@@ -1,0 +1,64 @@
+---
+/**
+ * De vier juridische pagina's: /aviso-legal/, /privacidad/, /cookies/ en
+ * /disclaimer/.
+ *
+ * Eén bestand voor alle vier, want ze verschillen alleen in titel en tekst.
+ * De tekst komt uit de vaste teksten, dus Caro past hem aan in het dashboard
+ * (tabblad Teksten, groep "Juridische pagina's") — er hoeft niets aan de code
+ * te gebeuren als haar jurist met een nieuwe versie komt.
+ *
+ * Zolang een tekst niet ingevuld is, staat er een duidelijke regel dat hij nog
+ * volgt. Liever dat dan een lege pagina achter een link die het wél belooft.
+ */
+import Base from '../layouts/Base.astro';
+import { getInstellingen } from '../lib/instellingen';
+import { tekst, JURIDISCH } from '../lib/teksten.js';
+
+export async function getStaticPaths() {
+  return JURIDISCH.map((p) => ({ params: { juridisch: p.slug }, props: { pagina: p } }));
+}
+
+const { pagina } = Astro.props;
+const instellingen = await getInstellingen();
+const t = (id) => tekst(instellingen.teksten, id);
+
+const alineas = (t(pagina.tekst) || '').split(/\n{2,}|\n/).map((s) => s.trim()).filter(Boolean);
+const bijgewerkt = new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Base title={`${pagina.titel} — ${t('footer_naam')}`}>
+  <section class="jur">
+    <div class="wrap">
+      <p class="eyebrow">{t('footer_naam')}</p>
+      <h1>{pagina.titel}</h1>
+      <div class="tekst">
+        {alineas.map((a) => <p>{a}</p>)}
+      </div>
+      <p class="bij">Laatst bijgewerkt: {bijgewerkt}</p>
+      <nav class="andere">
+        {JURIDISCH.filter((p) => p.slug !== pagina.slug).map((p) => (
+          <a href={`/${p.slug}/`}>{p.titel}</a>
+        ))}
+      </nav>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .jur { padding: 120px 0 90px; }
+  .jur .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+  .jur .eyebrow {
+    text-transform: uppercase; letter-spacing: .3em; font-size: .68rem;
+    color: var(--accent); margin: 0 0 10px;
+  }
+  .jur h1 { font-family: var(--serif); font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; margin: 0 0 32px; }
+  .jur .tekst p { margin: 0 0 18px; line-height: 1.75; }
+  .jur .tekst p:last-child { margin-bottom: 0; }
+  .jur .bij { margin-top: 36px; font-size: .82rem; color: var(--muted); }
+  .jur .andere {
+    margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--line);
+    display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: .86rem;
+  }
+  .jur .andere a { color: var(--accent); text-decoration: none; }
+  .jur .andere a:hover { text-decoration: underline; }
+</style>

@@ -14,6 +14,7 @@ import { paletCss, lettertypeUrl } from '../../../lib/palet.js';
 import { tekst } from '../../../lib/teksten.js';
 import { logoAttributen } from '../../../lib/logo.js';
 import { magazineIndeling, magazineFeiten } from '../../../lib/magazine.js';
+import MagazineVoet from '../../../components/MagazineVoet.astro';
 
 export async function getStaticPaths() {
   const woningen = await getAlleWoningen();
@@ -26,6 +27,8 @@ const t = (id) => tekst(instellingen.teksten, id);
 const merk = logoAttributen(instellingen.logo);
 
 const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
+// Jaartal uit de bouwdatum, net als in de footer van de site.
+const JAAR = new Date().getFullYear();
 const ind = magazineIndeling(d);
 const feiten = magazineFeiten(d);
 
@@ -124,6 +127,7 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
           {toonPrijs ? <div class="prijs">{euro(d.prijs)}</div> : null}
         </div>
       </div>
+      <MagazineVoet teksten={instellingen.teksten} jaar={JAAR} />
     </section></div>
 
     <!-- ---------- Het verhaal ---------- -->
@@ -149,12 +153,13 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
           </div>
         )}
       </div>
+      <MagazineVoet teksten={instellingen.teksten} jaar={JAAR} />
       <div class="paginanr">{volgende()}</div>
     </section></div>
 
     <!-- ---------- Fotopagina's ---------- -->
     {ind.fotopaginas.map((p, i) => (
-      <div class="mg-vel"><section class="mg-pag">
+      <div class="mg-vel"><section class={p.vorm === 'een' ? 'mg-pag op-beeld' : 'mg-pag'}>
         <div class={`mg-fotos ${p.vorm}`}>
           {p.fotos.map((f) => (
             <figure>
@@ -163,6 +168,7 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
             </figure>
           ))}
         </div>
+        <MagazineVoet teksten={instellingen.teksten} jaar={JAAR} />
         <div class="paginanr">{volgende()}</div>
       </section></div>
     ))}
@@ -200,6 +206,7 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
             </div>
           )}
         </div>
+        <MagazineVoet teksten={instellingen.teksten} jaar={JAAR} />
         <div class="paginanr">{volgende()}</div>
       </section></div>
     )}
@@ -233,6 +240,7 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
           </div>
         </div>
       </div>
+        <MagazineVoet teksten={instellingen.teksten} jaar={JAAR} />
     </section></div>
 
     {sluitLeeg && <div class="mg-vel leeg" aria-hidden="true"></div>}

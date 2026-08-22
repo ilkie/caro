@@ -38,13 +38,31 @@
 .mg-pag.donker{background:var(--wp-bg);color:#fff}
 .mg-pag.donker .paginanr{color:rgba(255,255,255,.55)}
 
+/* ---------- De voettekst op elk vel ----------
+   Staat op dezelfde regel als het paginanummer: copyright en de vier
+   juridische pagina's links, het nummer rechts. `right:30mm` houdt hem van
+   het nummer af, ook bij een lange naam. De punten tussen de links zijn
+   opmaak, geen tekst — vandaar `::before` en niet een punt in de HTML. */
+.mg-voet{position:absolute;left:16mm;right:30mm;bottom:9mm;font-size:6.4pt;letter-spacing:.1em;
+  color:var(--muted);display:flex;flex-wrap:wrap;align-items:baseline;line-height:1.5}
+.mg-voet a{color:inherit;text-decoration:none}
+.mg-voet a::before{content:'·';margin:0 5px;opacity:.6}
+.mg-pag.donker .mg-voet{color:rgba(255,255,255,.5)}
+
+/* Vult een foto het hele vel, dan zou grijze tekst wegvallen in het beeld.
+   Daar krijgen de voettekst én het paginanummer wit met een zachte schaduw,
+   net als de bijschriften. */
+.mg-pag.op-beeld .mg-voet,.mg-pag.op-beeld .paginanr,
+.mg-cover .mg-voet{color:rgba(255,255,255,.82);text-shadow:0 1px 5px rgba(0,0,0,.65)}
+
 /* ---------- Voorkant ---------- */
 .mg-cover{background:var(--wp-bg)}
 .mg-cover .beeld{position:absolute;inset:0}
 .mg-cover .beeld img{width:100%;height:100%;object-fit:cover}
 .mg-cover .waas{position:absolute;inset:0;
   background:linear-gradient(180deg,rgba(15,35,42,.55) 0%,rgba(15,35,42,.05) 38%,rgba(15,35,42,.86) 100%)}
-.mg-cover .inhoud{position:absolute;inset:0;padding:16mm;display:flex;flex-direction:column;
+/* Onderaan iets meer lucht dan de andere randen: daar staat nu de voettekst. */
+.mg-cover .inhoud{position:absolute;inset:0;padding:16mm 16mm 26mm;display:flex;flex-direction:column;
   justify-content:space-between;color:#fff}
 .mg-cover .merk{display:flex;align-items:center;gap:10px}
 .mg-cover .merk img{height:16mm;width:auto;filter:brightness(0) invert(1)}
@@ -120,7 +138,7 @@
 .mg-slot{position:absolute;inset:0;display:flex;flex-direction:column}
 .mg-slot .beeld{height:150mm;overflow:hidden}
 .mg-slot .beeld img{width:100%;height:100%;object-fit:cover}
-.mg-slot .onder{flex:1;padding:14mm 16mm;display:flex;flex-direction:column;justify-content:space-between}
+.mg-slot .onder{flex:1;padding:14mm 16mm 24mm;display:flex;flex-direction:column;justify-content:space-between}
 .mg-slot .merk{display:flex;align-items:center;gap:10px}
 .mg-slot .merk img{height:16mm;width:auto;filter:brightness(0) invert(1)}
 .mg-slot .merk .naam{font-family:var(--serif);font-size:20pt;line-height:1;font-stretch:85%}

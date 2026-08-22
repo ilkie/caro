@@ -1,0 +1,22 @@
+---
+/**
+ * De voettekst onderaan elke pagina van het magazine.
+ *
+ * Staat op elk vel, ook op papier: het boekje gaat als PDF de deur uit en dan
+ * is dit de enige plek waar het copyright en de juridische pagina's nog te
+ * vinden zijn. Op het scherm zijn het echte links (in een nieuw tabblad, zodat
+ * je het magazine niet kwijtraakt); op papier zijn het gewoon de vier namen.
+ *
+ * De links komen uit dezelfde lijst als de footer van de site, zodat ze niet
+ * uit elkaar kunnen lopen.
+ */
+import { JURIDISCH, copyrightRegel } from '../lib/teksten.js';
+
+const { teksten, jaar } = Astro.props;
+---
+<div class="mg-voet">
+  <span class="c">{copyrightRegel(teksten, jaar)}</span>
+  {JURIDISCH.map((p) => (
+    <a href={`/${p.slug}/`} target="_blank" rel="noopener">{p.titel}</a>
+  ))}
+</div>

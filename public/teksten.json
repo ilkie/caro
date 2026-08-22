@@ -267,6 +267,47 @@
           "standaard": "RAICV 3994"
         }
       ]
+    },
+    {
+      "id": "juridisch",
+      "naam": "Juridische pagina's",
+      "uitleg": "De vier pagina's onderaan de site. Ze staan er al, met deze tekst erin, zodat de links werken; vervang de tekst zodra je de jouwe hebt. Dit is geen juridisch advies — laat de teksten nakijken.",
+      "velden": [
+        {
+          "id": "juridisch_naam",
+          "naam": "Naam bij het copyright",
+          "hint": "Staat in de regel onderaan elke pagina en in het magazine.",
+          "standaard": "Carine Leriche"
+        },
+        {
+          "id": "juridisch_aviso",
+          "naam": "Aviso Legal",
+          "type": "pagina",
+          "hint": "Een lege regel begint een nieuwe alinea.",
+          "standaard": "Deze tekst is nog niet ingevuld. Zet hier de tekst die je van je gestor of jurist krijgt; zolang dit veld leeg is, ziet een bezoeker precies deze regel."
+        },
+        {
+          "id": "juridisch_privacidad",
+          "naam": "Privacidad",
+          "type": "pagina",
+          "hint": "Een lege regel begint een nieuwe alinea.",
+          "standaard": "Deze tekst is nog niet ingevuld. Zet hier de tekst die je van je gestor of jurist krijgt; zolang dit veld leeg is, ziet een bezoeker precies deze regel."
+        },
+        {
+          "id": "juridisch_cookies",
+          "naam": "Cookies",
+          "type": "pagina",
+          "hint": "Een lege regel begint een nieuwe alinea.",
+          "standaard": "Deze tekst is nog niet ingevuld. Zet hier de tekst die je van je gestor of jurist krijgt; zolang dit veld leeg is, ziet een bezoeker precies deze regel."
+        },
+        {
+          "id": "juridisch_disclaimer",
+          "naam": "Disclaimer",
+          "type": "pagina",
+          "hint": "Een lege regel begint een nieuwe alinea.",
+          "standaard": "Deze tekst is nog niet ingevuld. Zet hier de tekst die je van je gestor of jurist krijgt; zolang dit veld leeg is, ziet een bezoeker precies deze regel."
+        }
+      ]
     }
   ]
 }

@@ -19,6 +19,15 @@ export const VELDEN = GROEPEN.flatMap((g) =>
 export const STANDAARD_TEKSTEN = Object.fromEntries(VELDEN.map((v) => [v.id, v.standaard]));
 
 /**
+ * Hoeveel tekens een veld hoogstens mag zijn. Een gewone regel op de site is
+ * kort; een juridische pagina (`type: "pagina"`) is dat per definitie niet.
+ * Zonder dit onderscheid werd zo'n tekst stilzwijgend op 1200 tekens afgekapt
+ * en verdween de staart van het privacybeleid zonder dat iemand het zag.
+ */
+const GRENS = { pagina: 24000 };
+export const grensVan = (veld) => GRENS[veld && veld.type] || 1200;
+
+/**
  * Maakt een bruikbare set teksten, wat er ook in de database staat:
  * onbekende sleutels eruit, niet-teksten eruit, lege waarden terug naar de
  * standaard, en veel te lange waarden afgekapt.
@@ -29,10 +38,26 @@ export function normaliseerTeksten(ruw) {
   for (const veld of VELDEN) {
     const waarde = bron[veld.id];
     if (typeof waarde !== 'string') continue;
-    const schoon = waarde.trim().slice(0, 1200);
+    const schoon = waarde.trim().slice(0, grensVan(veld));
     if (schoon) uit[veld.id] = schoon;
   }
   return uit;
+}
+
+/**
+ * De vier juridische pagina's onderaan de site. Eén lijst, zodat de footer,
+ * het magazine en de pagina's zelf niet uit elkaar kunnen lopen.
+ */
+export const JURIDISCH = [
+  { slug: 'aviso-legal', titel: 'Aviso Legal', tekst: 'juridisch_aviso' },
+  { slug: 'privacidad', titel: 'Privacidad', tekst: 'juridisch_privacidad' },
+  { slug: 'cookies', titel: 'Cookies', tekst: 'juridisch_cookies' },
+  { slug: 'disclaimer', titel: 'Disclaimer', tekst: 'juridisch_disclaimer' },
+];
+
+/** De regel onderaan elke pagina: "© 2026 Carine Leriche". */
+export function copyrightRegel(teksten, jaar) {
+  return '© ' + jaar + ' ' + tekst(teksten, 'juridisch_naam');
 }
 
 /** Eén tekst opvragen, met de standaard als vangnet. */

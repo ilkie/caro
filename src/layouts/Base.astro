@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import { paletCss, lettertypeUrl } from '../lib/palet.js';
 import { getInstellingen } from '../lib/instellingen';
-import { tekst, whatsappLink } from '../lib/teksten.js';
+import { tekst, whatsappLink, copyrightRegel, JURIDISCH } from '../lib/teksten.js';
 import { logoAttributen } from '../lib/logo.js';
 
 // Het kleurpalet dat Caro in het dashboard koos. Bij een onbereikbare database
@@ -16,7 +16,7 @@ const {
   nav = 'full',
   theme = 'light',
 } = Astro.props;
-const SITE_VERSION = 'v1.33';
+const SITE_VERSION = 'v1.34';
 
 // Jaartal komt uit de bouwdatum, zodat het na de jaarwisseling vanzelf klopt.
 const JAAR = new Date().getFullYear();
@@ -77,7 +77,11 @@ const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%
     <div class="wrap">
       <div class="fname">{t('footer_naam')}</div>
       <div>{t('footer_regel')}</div>
-      <div>{t('footer_raicv')} · © {JAAR} {t('footer_naam')}</div>
+      <div>{t('footer_raicv')}</div>
+      <div class="juridisch">
+        <span>{copyrightRegel(instellingen.teksten, JAAR)}</span>
+        {JURIDISCH.map((p) => <a href={`/${p.slug}/`}>{p.titel}</a>)}
+      </div>
       <div class="bouwer">© {JAAR} Mephio Webtools · {SITE_VERSION}</div>
       <a href="/beheer/" class="beheer-link" aria-label="Inloggen (beheer)" title="Beheer">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10" rx="2"></rect><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"></path></svg>
@@ -85,6 +89,14 @@ const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%
     </div>
   </footer>
   <style>
+    /* De juridische regel: de punten zijn scheidingstekens tussen de links, dus
+       ze horen bij de opmaak en niet in de tekst — anders leest een schermlezer
+       ze mee op. Vandaar `::before` in plaats van een punt in de HTML. */
+    .juridisch{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;
+      gap:2px 0;width:100%;margin-top:10px;font-size:.8rem;opacity:.85}
+    .juridisch a{color:inherit;text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
+    .juridisch a:hover{border-bottom-color:currentColor}
+    .juridisch a::before{content:'·';opacity:.55;margin:0 9px}
     .bouwer{opacity:.5;font-size:.72rem;letter-spacing:.12em;width:100%;text-align:center;margin-top:6px}
     .beheer-link{opacity:.25;color:inherit;display:inline-flex;width:100%;justify-content:center;margin-top:12px;transition:opacity .2s}
     .beheer-link:hover{opacity:.7}
