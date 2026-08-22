@@ -1305,7 +1305,7 @@ async function laadVormgeving(){
     $('paletLijst').innerHTML = '<div class="empty">Kon de kleurenbestanden niet laden.</div>';
     return;
   }
-  const { data, error } = await sb.from('instellingen').select('palet,lettertype,keuzes,secties,maps_sleutel,fotolayout,logo,weergave').eq('id','site').maybeSingle();
+  const { data, error } = await sb.from('instellingen').select('*').eq('id','site').maybeSingle();
   if (error){
     $('paletLijst').innerHTML = '<div class="empty">Kon de instellingen niet laden: ' + error.message +
       '<br><br>Draait <b>instellingen-tabel.sql</b> al in Supabase?</div>';
@@ -1489,7 +1489,7 @@ $('vgOpslaan').addEventListener('click', async () => {
     toast('Opgeslagen — de site wordt bijgewerkt (1 à 2 minuten)');
   } catch(err){
     busy(false);
-    alert('Opslaan mislukt: ' + (err.message || err));
+    alert(vgKolomHint(err) || ('Opslaan mislukt: ' + (err.message || err)));
   }
 });
 
@@ -1846,7 +1846,7 @@ $('tkOpslaan').addEventListener('click', async () => {
     toast('Teksten opgeslagen — de site wordt bijgewerkt (1 à 2 minuten)');
   } catch (err) {
     busy(false);
-    alert('Opslaan mislukt: ' + (err.message || err));
+    alert(vgKolomHint(err) || ('Opslaan mislukt: ' + (err.message || err)));
   }
 });
 
@@ -2754,6 +2754,30 @@ function tekenTaalrij(){
     b.addEventListener('click', () => { tkTaal = t.id; tekenTeksten(); });
     doel.appendChild(b);
   });
+}
+
+
+/* Welke kolom hoort bij welk SQL-bestand. Struikelt het opslaan over een kolom
+   die nog niet bestaat, dan zeggen we welk bestand er nog moet draaien — een
+   kale "column ... does not exist" helpt niemand verder. */
+const VG_KOLOM_BESTAND = {
+  fotolayout: 'fotolayout.sql',
+  logo: 'logo.sql',
+  weergave: 'weergave.sql',
+  teksten: 'instellingen-tabel.sql',
+  magazine: 'magazine-eigen.sql'
+};
+
+function vgKolomHint(err){
+  const bericht = String((err && err.message) || err || '');
+  for (const kolom of Object.keys(VG_KOLOM_BESTAND)){
+    if (bericht.indexOf(kolom) !== -1 && /does not exist|bestaat niet|schema cache/i.test(bericht)){
+      return 'De kolom "' + kolom + '" bestaat nog niet in de database.\n\n' +
+             'Draai ' + VG_KOLOM_BESTAND[kolom] + ' in Supabase (SQL Editor → plakken → Run) ' +
+             'en probeer het daarna opnieuw.\n\nOorspronkelijke melding: ' + bericht;
+    }
+  }
+  return null;
 }
 
 </script>

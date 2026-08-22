@@ -73,15 +73,39 @@ let ruweTeksten: any = null
 export async function getInstellingen(taal?: string): Promise<Instellingen> {
   if (cache) return { ...cache, teksten: normaliseerTeksten(ruweTeksten, taal) }
   try {
+    // `*` en géén lijst met kolomnamen. Dat is hier veilig — de view is de
+    // etalage, dus alles wat erin zit mag publiek zijn — en het voorkomt een
+    // valkuil die ons al een keer heeft gebeten: vraag je een kolom op die nog
+    // niet bestaat (omdat de bijbehorende SQL nog niet gedraaid is), dan
+    // mislukt de héle query en valt de site stilletjes terug op het
+    // hoofddesign. Caro's kleuren, lettertype, logo en fotolayout waren dan
+    // allemaal weg, zonder dat er iets zichtbaar kapot was.
     const { data, error } = await supabase
       .from('instellingen_publiek')
-      .select('palet, lettertype, keuzes, secties, maps_sleutel, teksten, fotolayout, logo, weergave')
+      .select('*')
       .eq('id', 'site')
       .maybeSingle()
     if (error) {
-      console.warn('[supabase] instellingen:', error.message, '→ standaard gebruikt')
+      // Onmisbaar in het bouwlog van Netlify: als dit gebeurt ziet de site er
+      // uit als het hoofddesign en lijkt élke keuze van Caro verdwenen.
+      console.warn('\n' + '='.repeat(70))
+      console.warn('LET OP — de instellingen konden niet gelezen worden:')
+      console.warn('  ' + error.message)
+      console.warn('De site is nu gebouwd met het hoofddesign. Alles wat Caro in')
+      console.warn('Vormgeving heeft gekozen (kleuren, lettertype, logo, fotolayout)')
+      console.warn('staat er dus NIET in. Draait alle SQL uit de repo al in Supabase?')
+      console.warn('='.repeat(70) + '\n')
       cache = STANDAARD_INSTELLINGEN
       return { ...cache, teksten: normaliseerTeksten(null, taal) }
+    }
+    // Ontbreekt er een kolom, dan valt alléén dat ene onderdeel terug op de
+    // standaard; de rest van de instellingen blijft gewoon werken.
+    for (const [kolom, bestand] of [['fotolayout', 'fotolayout.sql'], ['logo', 'logo.sql'],
+                                    ['weergave', 'weergave.sql']] as const) {
+      if (data && !(kolom in data)) {
+        console.warn(`[supabase] kolom "${kolom}" ontbreekt in instellingen_publiek — ` +
+                     `draai ${bestand} in Supabase. De rest van de instellingen werkt gewoon.`)
+      }
     }
     ruweTeksten = data?.teksten
     cache = {
