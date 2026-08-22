@@ -15,6 +15,8 @@
  * weer terug te zetten.
  */
 
+import { woord } from './woorden.js';
+
 export const MAX_FOTOS = 26;
 
 /** Wat er per woning aan het magazine veranderd kan worden. Leeg = de standaard. */
@@ -158,14 +160,14 @@ export function magazineIndeling(woning) {
 }
 
 /** De feiten die op de verhaalpagina onder elkaar komen — lege waarden vallen weg. */
-export function magazineFeiten(woning) {
+export function magazineFeiten(woning, taal = 'en') {
   const w = woning || {};
   const rijen = [
-    { n: w.slaapkamers, l: 'Slaapkamers' },
-    { n: w.badkamers, l: 'Badkamers' },
-    { n: w.woonoppervlak, l: 'Woonoppervlak', achter: ' m²' },
-    { n: w.perceel, l: 'Perceel', achter: ' m²' },
-    { n: w.bouwjaar, l: 'Bouwjaar' },
+    { n: w.slaapkamers, l: woord(taal, 'slaapkamers') },
+    { n: w.badkamers, l: woord(taal, 'badkamers') },
+    { n: w.woonoppervlak, l: woord(taal, 'woonoppervlak'), achter: ' m²' },
+    { n: w.perceel, l: woord(taal, 'perceel'), achter: ' m²' },
+    { n: w.bouwjaar, l: woord(taal, 'bouwjaar') },
   ];
   return rijen
     .filter((r) => r.n !== null && r.n !== undefined && r.n !== '' && Number(r.n) > 0)

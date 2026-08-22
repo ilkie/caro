@@ -2,21 +2,30 @@
 import '../styles/global.css';
 import { paletCss, lettertypeUrl } from '../lib/palet.js';
 import { getInstellingen } from '../lib/instellingen';
-import { tekst, whatsappLink, copyrightRegel, JURIDISCH } from '../lib/teksten.js';
+import { tekst, whatsappLink, copyrightRegel, JURIDISCH,
+         TALEN, STANDAARD_TAAL, schoneTaal, link } from '../lib/teksten.js';
 import { logoAttributen } from '../lib/logo.js';
 
 // Het kleurpalet dat Caro in het dashboard koos. Bij een onbereikbare database
 // valt dit terug op de huisstijl, dus de site ziet er altijd goed uit.
-const instellingen = await getInstellingen();
-const t = (id) => tekst(instellingen.teksten, id);
-
 const {
   title = 'Caro Leriche — Real Estate Spain',
   description = 'Persoonlijk en exclusief vastgoed in Spanje. Caro Leriche begeleidt kopers bij het vinden van hun plek in de zon — en fotografeert de woningen zelf.',
   nav = 'full',
   theme = 'light',
+  // De taal van deze pagina, en het adres zónder taalvoorvoegsel — dat laatste
+  // heeft de taalwissel nodig om naar dezelfde pagina in een andere taal te
+  // kunnen springen.
+  taal: taalRuw = STANDAARD_TAAL,
+  pad = '/',
 } = Astro.props;
-const SITE_VERSION = 'v1.36';
+const taal = schoneTaal(taalRuw);
+
+const instellingen = await getInstellingen(taal);
+const t = (id) => tekst(instellingen.teksten, id);
+const a = (naar) => link(taal, naar);
+
+const SITE_VERSION = 'v1.38';
 
 // Jaartal komt uit de bouwdatum, zodat het na de jaarwisseling vanzelf klopt.
 const JAAR = new Date().getFullYear();
@@ -27,13 +36,16 @@ const merk = logoAttributen(instellingen.logo);
 const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='12'%20fill='%232A7385'/%3E%3Ctext%20x='32'%20y='45'%20font-family='Georgia,serif'%20font-size='32'%20fill='white'%20text-anchor='middle'%3ECL%3C/text%3E%3C/svg%3E";
 ---
 <!doctype html>
-<html lang="nl">
+<html lang={taal}>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{title}</title>
   <meta name="description" content={description} />
   <meta name="robots" content="index, follow" />
+  <!-- Zelfde pagina, andere taal. x-default wijst naar de standaardtaal. -->
+  {TALEN.map((x) => <link rel="alternate" hreflang={x.id} href={link(x.id, pad)} />)}
+  <link rel="alternate" hreflang="x-default" href={link(STANDAARD_TAAL, pad)} />
   <meta property="og:type" content="website" />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
@@ -48,7 +60,7 @@ const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%
 <body class={theme === 'dark' ? 'theme-dark' : undefined}>
   <header class="top">
     <div class="wrap">
-      <a class={merk.klasse} style={merk.stijl} href="/">
+      <a class={merk.klasse} style={merk.stijl} href={a('/')}>
         <img class="brandlogo" src={merk.url} alt={t('footer_naam')} />
         {merk.toonNaam && (
           <span class="name">{t('footer_naam')}{merk.toonOndertitel && <small>{t('footer_regel')}</small>}</span>
@@ -57,16 +69,34 @@ const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%
       {nav === 'full' ? (
         <Fragment>
           <nav>
-            <a href="/#woningen">{t('menu_woningen')}</a>
-            <a href="/#fotografie">{t('menu_fotografie')}</a>
-            <a href="/#over">{t('menu_over')}</a>
-            <a href="/#contact">{t('menu_contact')}</a>
-            <a class="cta" href="/#contact">{t('menu_knop')}</a>
+            <a href={a('/#woningen')}>{t('menu_woningen')}</a>
+            <a href={a('/#fotografie')}>{t('menu_fotografie')}</a>
+            <a href={a('/#over')}>{t('menu_over')}</a>
+            <a href={a('/#contact')}>{t('menu_contact')}</a>
+            <a class="cta" href={a('/#contact')}>{t('menu_knop')}</a>
           </nav>
+          <div class="taalwissel">
+        {TALEN.map((x) => (
+          <a href={link(x.id, pad)} hreflang={x.id} lang={x.id}
+             class={x.id === taal ? 'nu' : undefined}
+             aria-current={x.id === taal ? 'true' : undefined}
+             title={x.naam}>{x.kort}</a>
+        ))}
+      </div>
           <button class="burger" aria-label="menu" type="button" onclick="var n=document.querySelector('.top nav');n.style.display=(getComputedStyle(n).display==='none'?'flex':'none')">☰</button>
         </Fragment>
       ) : (
-        <nav><a class="cta" href={whatsappLink(instellingen.teksten)}>{t('menu_knop_woning')}</a></nav>
+        <Fragment>
+          <div class="taalwissel">
+        {TALEN.map((x) => (
+          <a href={link(x.id, pad)} hreflang={x.id} lang={x.id}
+             class={x.id === taal ? 'nu' : undefined}
+             aria-current={x.id === taal ? 'true' : undefined}
+             title={x.naam}>{x.kort}</a>
+        ))}
+      </div>
+          <nav><a class="cta" href={whatsappLink(instellingen.teksten)}>{t('menu_knop_woning')}</a></nav>
+        </Fragment>
       )}
     </div>
   </header>
@@ -80,7 +110,7 @@ const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%
       <div>{t('footer_raicv')}</div>
       <div class="juridisch">
         <span>{copyrightRegel(instellingen.teksten, JAAR)}</span>
-        {JURIDISCH.map((p) => <a href={`/${p.slug}/`}>{p.titel}</a>)}
+        {JURIDISCH.map((p) => <a href={a(`/${p.slug}/`)}>{p.titel}</a>)}
       </div>
       <div class="bouwer">© {JAAR} Mephio Webtools · {SITE_VERSION}</div>
       <a href="/beheer/" class="beheer-link" aria-label="Inloggen (beheer)" title="Beheer">
@@ -89,6 +119,17 @@ const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%
     </div>
   </footer>
   <style>
+    /* De taalwissel: drie korte codes, de huidige taal opgelicht. Bewust geen
+       vlaggetjes — een vlag is een land en geen taal, en Engels heeft er drie
+       die evenveel recht hebben. */
+    .taalwissel{display:flex;align-items:center;gap:2px;font-size:.68rem;letter-spacing:.1em}
+    .taalwissel a{padding:6px 8px;border-radius:var(--r-pill);color:var(--muted);transition:.15s}
+    .taalwissel a:hover{color:var(--accent);background:var(--sand)}
+    .taalwissel a.nu{color:var(--accent);font-weight:600}
+    .theme-dark .taalwissel a{color:var(--cream-70)}
+    .theme-dark .taalwissel a:hover{color:#fff;background:rgba(255,255,255,.12)}
+    .theme-dark .taalwissel a.nu{color:#fff}
+    @media (max-width:900px){ .taalwissel{margin-left:auto;margin-right:6px} }
     /* De juridische regel: de punten zijn scheidingstekens tussen de links, dus
        ze horen bij de opmaak en niet in de tekst — anders leest een schermlezer
        ze mee op. Vandaar `::before` in plaats van een punt in de HTML. */

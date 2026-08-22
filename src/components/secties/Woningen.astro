@@ -1,8 +1,13 @@
 ---
 // Spotlight + overzicht. Krijgt de woningen en de teksten mee van de homepage.
-import { tekst } from '../../lib/teksten.js';
-import { statusVan } from '../../lib/status.js';
-const { alle = [], teksten = {} } = Astro.props;
+import { tekst, link, schoneTaal } from '../../lib/teksten.js';
+import { woorden } from '../../lib/woorden.js';
+import { statusVan, isAfgerond } from '../../lib/status.js';
+import { rustigKlasse } from '../../lib/weergave.js';
+const { alle = [], teksten = {}, weergave = {}, taal: taalRuw } = Astro.props;
+const taal = schoneTaal(taalRuw);
+const a = (naar) => link(taal, naar);
+const w = woorden(taal);
 const t = (id) => tekst(teksten, id);
 const uitgelicht = alle.find((w) => w.uitgelicht) || alle[0];
 const overige = alle.filter((w) => !uitgelicht || w.slug !== uitgelicht.slug);
@@ -21,8 +26,8 @@ const cijfer = (n, achter) => (n === null || n === undefined || n === '' || Numb
     </div>
 
     {uitgelicht && (
-      <div class="spotlight reveal">
-        <a href={`/woning/${uitgelicht.slug}/`} class="img">
+      <div class={`spotlight reveal${rustigKlasse(weergave, isAfgerond(uitgelicht.status))}`}>
+        <a href={a(`/woning/${uitgelicht.slug}/`)} class="img">
           <img src={uitgelicht.hero} alt={uitgelicht.titel} onerror="this.remove()" />
           {statusVan(uitgelicht.status) && (
             <span class={`badge ${statusVan(uitgelicht.status).klasse}`}>{statusVan(uitgelicht.status).naam}</span>
@@ -35,10 +40,10 @@ const cijfer = (n, achter) => (n === null || n === undefined || n === '' || Numb
           <div class="prijs">{euro(uitgelicht.prijs)}</div>
           <div class="plaats">{uitgelicht.plaats}</div>
           <div class="meta">
-            {[cijfer(uitgelicht.slaapkamers, 'slaapkamers'), cijfer(uitgelicht.badkamers, 'badkamers'),
+            {[cijfer(uitgelicht.slaapkamers, w('slaapkamers').toLowerCase()), cijfer(uitgelicht.badkamers, w('badkamers').toLowerCase()),
               cijfer(uitgelicht.woonoppervlak, 'm²')].filter(Boolean).map((r) => <span>{r}</span>)}
           </div>
-          <a class="go" href={`/woning/${uitgelicht.slug}/`}>{t('woningen_link')}</a>
+          <a class="go" href={a(`/woning/${uitgelicht.slug}/`)}>{t('woningen_link')}</a>
         </div>
       </div>
     )}
@@ -49,22 +54,23 @@ const cijfer = (n, achter) => (n === null || n === undefined || n === '' || Numb
           <span class="eyebrow">{t('woningen_meer')}</span>
         </div>
         <div class="woningen-grid">
-          {overige.map((w) => (
-            <a class="card" href={`/woning/${w.slug}/`}>
+          {/* `x` en niet `w`: `w` is hierboven al de woordenlijst. */}
+          {overige.map((x) => (
+            <a class={`card${rustigKlasse(weergave, isAfgerond(x.status))}`} href={a(`/woning/${x.slug}/`)}>
               <div class="img">
-                <img src={w.hero} alt={w.titel} loading="lazy" onerror="this.remove()" />
-                {statusVan(w.status) && (
-                  <span class={`status ${statusVan(w.status).klasse}`}>{statusVan(w.status).kort}</span>
+                <img src={x.hero} alt={x.titel} loading="lazy" onerror="this.remove()" />
+                {statusVan(x.status) && (
+                  <span class={`status ${statusVan(x.status).klasse}`}>{statusVan(x.status).kort}</span>
                 )}
               </div>
               <div class="body">
-                <h3>{w.titel}</h3>
-                <div class="plaats">{w.plaats}</div>
+                <h3>{x.titel}</h3>
+                <div class="plaats">{x.plaats}</div>
                 <div class="meta">
-                  {[cijfer(w.slaapkamers, 'slk'), cijfer(w.badkamers, 'bad'),
-                    cijfer(w.woonoppervlak, 'm²')].filter(Boolean).map((r) => <span>{r}</span>)}
+                  {[cijfer(x.slaapkamers, w('slk')), cijfer(x.badkamers, w('bad')),
+                    cijfer(x.woonoppervlak, 'm²')].filter(Boolean).map((r) => <span>{r}</span>)}
                 </div>
-                <div class="prijs">{euro(w.prijs)}</div>
+                <div class="prijs">{euro(x.prijs)}</div>
                 <div class="link">{t('woningen_link')}</div>
               </div>
             </a>

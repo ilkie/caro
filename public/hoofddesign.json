@@ -2,14 +2,48 @@
   "toelichting": "Het hoofddesign: waar 'Terug naar het hoofddesign' in het dashboard naartoe zet, en waar de site op terugvalt als de database onbereikbaar is. Wil je een nieuwe look tot standaard maken? Pas dit bestand aan, dan volgt de rest.",
   "palet": "huisstijl",
   "lettertype": "huisstijl",
-  "keuzes": { "accent": "stijl", "achtergrond": "stijl", "tekst": "stijl", "donker": "stijl" },
-  "fotolayout": { "stijl": "kolommen", "kolommen": 3, "marge": "normaal" },
-  "logo": { "bron": "standaard", "url": "", "vorm": "cirkel-feller", "formaat": "normaal", "naam": "naam-ondertitel", "op_donker": "zoals-hij-is" },
+  "keuzes": {
+    "accent": "stijl",
+    "achtergrond": "stijl",
+    "tekst": "stijl",
+    "donker": "stijl"
+  },
+  "fotolayout": {
+    "stijl": "kolommen",
+    "kolommen": 3,
+    "marge": "normaal"
+  },
+  "logo": {
+    "bron": "standaard",
+    "url": "",
+    "vorm": "cirkel-feller",
+    "formaat": "normaal",
+    "naam": "naam-ondertitel",
+    "op_donker": "zoals-hij-is"
+  },
   "secties": [
-    { "id": "hero", "aan": true },
-    { "id": "woningen", "aan": true },
-    { "id": "fotografie", "aan": true },
-    { "id": "over", "aan": true },
-    { "id": "contact", "aan": true }
-  ]
+    {
+      "id": "hero",
+      "aan": true
+    },
+    {
+      "id": "woningen",
+      "aan": true
+    },
+    {
+      "id": "fotografie",
+      "aan": true
+    },
+    {
+      "id": "over",
+      "aan": true
+    },
+    {
+      "id": "contact",
+      "aan": true
+    }
+  ],
+  "weergave": {
+    "verkocht": "rustig"
+  }
 }

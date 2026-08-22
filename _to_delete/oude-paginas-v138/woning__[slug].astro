@@ -1,0 +1,293 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getAlleWoningen, SUPABASE_URL, SUPABASE_ANON_KEY } from '../../lib/supabase';
+import { getInstellingen } from '../../lib/instellingen';
+import { kaartUrl, kaartBron } from '../../lib/kaart.js';
+import { tekst, mailLink, whatsappLink, telLink } from '../../lib/teksten.js';
+import { fotolayoutVan, galerijAttributen } from '../../lib/fotolayout.js';
+import { logoAttributen } from '../../lib/logo.js';
+import { statusVan, isAfgerond } from '../../lib/status.js';
+import { rustigKlasse } from '../../lib/weergave.js';
+
+export async function getStaticPaths() {
+  const woningen = await getAlleWoningen();
+  return woningen.map((w) => ({ params: { slug: w.slug }, props: { woning: w } }));
+}
+
+const { woning: d } = Astro.props;
+const status = statusVan(d.status);
+const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
+const galerij = d.galerij || [];
+const kenmerkenBinnen = d.kenmerken_binnen || [];
+const kenmerkenBuiten = d.kenmerken_buiten || [];
+const afstanden = d.afstanden || [];
+const alineas = (d.omschrijving || '').split(/\n{2,}|\n/).map((s) => s.trim()).filter(Boolean);
+const heeftVideo = !!(d.video && d.video.length > 0);
+
+// Kaart: bewust onnauwkeurig. Het adres en de exacte coördinaten blijven in de
+// database — hier komt alleen een afgerond punt (~1 km) de pagina op.
+const instellingen = await getInstellingen();
+const { mapsSleutel, teksten, fotolayout } = instellingen;
+const merkUrl = logoAttributen(instellingen.logo).url;
+// Opmaak van de galerij: de standaard van de site, tenzij deze woning een eigen keuze heeft.
+const layout = fotolayoutVan(d, fotolayout);
+const gal = galerijAttributen(layout);
+const t = (id) => tekst(teksten, id);
+const kaart = kaartUrl(d.lat, d.lon, mapsSleutel);
+const heeftLocatie = !!kaart;
+const pageTitle = status
+  ? `${d.titel}, ${d.plaats} — ${status.naam} | Caro Leriche`
+  : `${d.titel}, ${d.plaats} | Caro Leriche`;
+const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaapkamers, ${d.woonoppervlak} m². Persoonlijk begeleid door Caro Leriche, Real Estate Spain.`;
+---
+<Base title={pageTitle} description={pageDesc} nav="minimal" theme="dark">
+  <!-- VIDEO-HERO (kleiner, met fijn kader) -->
+  <section class={`wp-hero${rustigKlasse(instellingen.weergave, isAfgerond(d.status)) ? ' wp-af' : ''}`} id="top">
+    <div class="wrap">
+      <div class="frame">
+        <div class="stage">
+          {d.hero && <img src={d.hero} alt={d.titel} onerror="this.remove()" />}
+          {heeftVideo && (
+            <video class="bgvid" autoplay muted loop playsinline poster={d.hero}>
+              <source src={d.video} type="video/mp4" />
+            </video>
+          )}
+        </div>
+      </div>
+      <h1 class="naam"><span class="typed" data-text={d.titel}></span><span class="caret"></span></h1>
+      <div class="prijs">{euro(d.prijs)}</div>
+      <div class="sub">
+        {status && <span class={`wp-status ${status.klasse}`}>{status.naam}</span>}
+        {d.plaats}{d.regio ? `, ${d.regio}` : ''}
+      </div>
+      {heeftVideo && <button class="soundbtn" type="button" aria-label="Geluid aan of uit">🔈 tik voor geluid</button>}
+    </div>
+  </section>
+
+  <!-- FEITEN (los, dunne lijn) -->
+  <section class="facts">
+    <div class="wrap">
+      <div class="f"><div class="n">{d.slaapkamers}</div><div class="l">Slaapkamers</div></div>
+      <div class="f"><div class="n">{d.badkamers}</div><div class="l">Badkamers</div></div>
+      <div class="f"><div class="n">{d.woonoppervlak}</div><div class="l">m² woonopp.</div></div>
+      <div class="f"><div class="n">{d.perceel}</div><div class="l">m² perceel</div></div>
+      <div class="f"><div class="n">{d.bouwjaar}</div><div class="l">Bouwjaar</div></div>
+    </div>
+  </section>
+
+  <!-- VERHAAL -->
+  <section class="pad">
+    <div class="wrap lead reveal">
+      <div class="eyebrow">Welkom thuis</div>
+      <h2>{d.titel}</h2>
+      {alineas.map((p) => <p>{p}</p>)}
+      <div class="btns" style="margin-top:26px">
+        <a class="btn btn-magazine" href={`/woning/${d.slug}/magazine/`} data-magazine>{t('magazine_knop')}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERIJ (kolommen, foto's volledig zichtbaar, klikbaar) -->
+  {galerij.length > 0 && (
+    <section style="padding:20px 0 90px">
+      <div class="wrap" style="margin-bottom:22px"><div class="eyebrow">Beeld</div></div>
+      <div class={gal.klasse} style={gal.stijl}>
+        {galerij.map((g, i) => (
+          <button class={`wp-tile${g.groot ? ' groot' : ''}`} type="button" data-i={i} aria-label={`Foto ${i + 1} vergroten`}>
+            {g.src && <img src={g.src} alt={g.label || d.titel} loading={i < 6 ? 'eager' : 'lazy'} onerror="this.style.opacity=0" />}
+            {g.label && <span>{g.label}</span>}
+          </button>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- VERGROOT BEELD (klik op een foto → groot, met vorige/volgende) -->
+  {galerij.length > 0 && (
+    <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Foto vergroot">
+      <div class="lb-tel" id="lbTel"></div>
+      <button class="lb-btn lb-close" type="button" id="lbClose" aria-label="Sluiten">✕</button>
+      <button class="lb-btn lb-prev" type="button" id="lbPrev" aria-label="Vorige foto">←</button>
+      <button class="lb-btn lb-next" type="button" id="lbNext" aria-label="Volgende foto">→</button>
+      <figure><img id="lbImg" src="" alt="" /></figure>
+      <figcaption id="lbCap"></figcaption>
+    </div>
+  )}
+  {galerij.length > 0 && (
+    <script is:inline define:vars={{ fotos: galerij }}>
+      (function () {
+        var lb = document.getElementById('lb');
+        if (!lb || !fotos.length) return;
+        var img = document.getElementById('lbImg'),
+          cap = document.getElementById('lbCap'),
+          tel = document.getElementById('lbTel'),
+          i = 0,
+          vorigeFocus = null;
+
+        function toon(n) {
+          i = (n + fotos.length) % fotos.length;
+          img.src = fotos[i].src;
+          img.alt = fotos[i].label || '';
+          cap.textContent = fotos[i].label || '';
+          tel.textContent = i + 1 + ' / ' + fotos.length;
+        }
+        function openLb(n) {
+          vorigeFocus = document.activeElement;
+          toon(n);
+          lb.classList.add('open');
+          document.body.style.overflow = 'hidden';
+          document.getElementById('lbNext').focus();
+        }
+        function sluit() {
+          lb.classList.remove('open');
+          document.body.style.overflow = '';
+          if (vorigeFocus) vorigeFocus.focus();
+        }
+
+        document.querySelectorAll('.wp-tile').forEach(function (t) {
+          t.addEventListener('click', function () { openLb(Number(t.dataset.i)); });
+        });
+        document.getElementById('lbClose').addEventListener('click', sluit);
+        document.getElementById('lbPrev').addEventListener('click', function () { toon(i - 1); });
+        document.getElementById('lbNext').addEventListener('click', function () { toon(i + 1); });
+        lb.addEventListener('click', function (e) {
+          if (e.target === lb || e.target.tagName === 'FIGURE') sluit();
+        });
+        document.addEventListener('keydown', function (e) {
+          if (!lb.classList.contains('open')) return;
+          if (e.key === 'Escape') sluit();
+          if (e.key === 'ArrowLeft') toon(i - 1);
+          if (e.key === 'ArrowRight') toon(i + 1);
+        });
+        var x0 = null; // vegen op mobiel
+        lb.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+        lb.addEventListener('touchend', function (e) {
+          if (x0 === null) return;
+          var dx = e.changedTouches[0].clientX - x0;
+          if (Math.abs(dx) > 45) toon(dx < 0 ? i + 1 : i - 1);
+          x0 = null;
+        }, { passive: true });
+      })();
+    </script>
+  )}
+
+  <!-- KENMERKEN -->
+  <section class="pad feat">
+    <div class="wrap reveal">
+      <div class="section-head">
+        <div class="eyebrow">Kenmerken</div>
+        <h2>Alles wat deze woning bijzonder maakt</h2>
+      </div>
+      <div class="feat-grid">
+        <div class="col">
+          <h3>Binnen</h3>
+          <ul>{kenmerkenBinnen.map((k) => <li>{k}</li>)}</ul>
+        </div>
+        <div class="col">
+          <h3>Buiten</h3>
+          <ul>{kenmerkenBuiten.map((k) => <li>{k}</li>)}</ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCATIE -->
+  {(afstanden.length > 0 || heeftLocatie) && (
+    <section class="pad">
+      <div class="wrap loc-grid reveal">
+        <div class="ph kaart" style="background:linear-gradient(135deg,var(--wp-glow),var(--wp-panel))">
+          {heeftLocatie ? (
+            <Fragment>
+              <iframe
+                src={kaart}
+                title={`Ligging van ${d.titel} in ${d.plaats}`}
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+              ></iframe>
+              <span class="tag">{d.plaats}{d.regio ? `, ${d.regio}` : ''} · bij benadering</span>
+            </Fragment>
+          ) : (
+            <span class="tag">Locatie op aanvraag</span>
+          )}
+        </div>
+        <div>
+          <div class="eyebrow">Locatie</div>
+          <h2 style="font-size:clamp(1.7rem,3vw,2.3rem);font-weight:400;margin:.3em 0 .5em">{d.plaats}</h2>
+          <p>Rustig gelegen, met alles binnen handbereik.</p>
+          <div class="dist">
+            {afstanden.map((a) => (
+              <div class="d"><span>{a.plek}</span><span>{a.tijd}</span></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- CONTACT -->
+  <section class="pad contact">
+    <div class="wrap">
+      <div class="agent-card">
+        <div class="agent-photo"><img src={merkUrl} alt={t('footer_naam')} /></div>
+        <div>
+          <h3>{t('footer_naam')}</h3>
+          <div style="opacity:.85;font-size:.9rem;margin-top:4px">{t('footer_regel')}</div>
+        </div>
+      </div>
+      <div>
+        <h2>{t('contact_woning_kop')}</h2>
+        <p>{t('contact_woning_tekst')}</p>
+        <div class="btns">
+          <a class="btn btn-primary" href={whatsappLink(teksten)}>{t('contact_knop_whatsapp')}</a>
+          <a class="btn btn-ghost" href={mailLink(teksten)}>{t('contact_knop_mail')}</a>
+          <a class="btn btn-ghost" href={telLink(teksten)}>{t('tel_weergave')}</a>
+          <a class="btn btn-ghost" href={`/woning/${d.slug}/magazine/`} data-magazine>{t('magazine_knop')}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PERSOONLIJK (footer-quote, alleen woningpagina) -->
+  <section class="wp-personal">
+    <div class="wrap">
+      <img class="portret" src="/caro-portret.jpg" alt="Caro Leriche" onerror="this.remove()" />
+      <blockquote>“Seeing clients super happy makes my heart jump.”</blockquote>
+      <div class="ondertekening">Caro Leriche</div>
+    </div>
+  </section>
+
+  <!-- TELLEN: hoe vaak deze woning bekeken en aangeklikt wordt.
+       Er gaat niets persoonlijks mee — alleen de woning, het soort en het moment.
+       Geen cookie, geen bezoeker-id, geen externe dienst. -->
+  <script is:inline define:vars={{ slug: d.slug, sbUrl: SUPABASE_URL, sbKey: SUPABASE_ANON_KEY }}>
+    (function () {
+      if (window.top !== window.self) return; // niet meetellen in een voorbeeldvenster
+      function tel(soort) {
+        try {
+          fetch(sbUrl + '/rest/v1/gebeurtenissen', {
+            method: 'POST',
+            keepalive: true,
+            headers: {
+              'apikey': sbKey,
+              'Authorization': 'Bearer ' + sbKey,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal',
+            },
+            body: JSON.stringify({ slug: slug, soort: soort }),
+          }).catch(function () {});
+        } catch (e) { /* tellen mag nooit de pagina storen */ }
+      }
+      tel('bezoek');
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('a[href]');
+        if (!a) return;
+        var h = a.getAttribute('href') || '';
+        if (h.indexOf('wa.me') > -1 || h.indexOf('whatsapp') > -1) tel('whatsapp');
+        else if (h.indexOf('mailto:') === 0) tel('email');
+        else if (h.indexOf('tel:') === 0) tel('telefoon');
+        else if (a.hasAttribute('data-magazine')) tel('magazine');
+      });
+    })();
+  </script>
+</Base>

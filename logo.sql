@@ -15,6 +15,9 @@
 -- ============================================================
 
 alter table public.instellingen
+  add column if not exists weergave jsonb
+  default '{"verkocht":"rustig"}'::jsonb;
+alter table public.instellingen
   add column if not exists logo jsonb
   default '{"bron":"standaard","url":"","vorm":"cirkel-feller","formaat":"normaal","naam":"naam-ondertitel","op_donker":"zoals-hij-is"}'::jsonb;
 
@@ -33,7 +36,7 @@ alter table public.instellingen
 -- De etalage opnieuw, nu mét logo. Dezelfde kolommen als in veiligheid.sql.
 drop view if exists public.instellingen_publiek;
 create view public.instellingen_publiek as
-select id, palet, lettertype, keuzes, secties, teksten, maps_sleutel, fotolayout, logo
+select id, palet, lettertype, keuzes, secties, teksten, maps_sleutel, fotolayout, logo, weergave
 from public.instellingen
 where id = 'site';
 

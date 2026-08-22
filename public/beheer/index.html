@@ -321,6 +321,26 @@ textarea{min-height:90px;resize:vertical}
 .st-rij .keuze i{background:var(--st-hex,var(--line));border-color:transparent}
 .st-rij .keuze.actief{border-color:var(--st-hex,var(--teal));background:var(--st-waas,rgba(41,130,150,.09))}
 .st-uit{color:var(--muted);font-size:.78rem;margin-top:7px;min-height:1.2em}
+
+/* ---------- Weergave: verkochte woningen ---------- */
+.wg-vb{display:flex;gap:12px;margin-top:12px}
+.wg-vb figure{flex:1;margin:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.wg-vb .doek{aspect-ratio:16/10;background:linear-gradient(135deg,#E7D3BF,#CDB79F);position:relative}
+.wg-vb .doek b{position:absolute;top:8px;left:8px;background:#5C5852;color:#fff;font-size:.55rem;
+  letter-spacing:.14em;text-transform:uppercase;padding:4px 9px;border-radius:999px;font-weight:500}
+.wg-vb figcaption{padding:8px 10px;font-size:.74rem;color:var(--muted)}
+.wg-vb figcaption s{color:var(--muted);opacity:.6}
+.wg-vb .rustig .doek{filter:grayscale(.88) brightness(.97)}
+
+/* ---------- Teksten in drie talen ---------- */
+.tk-talen{display:flex;gap:6px;align-items:center;margin:0 0 18px;flex-wrap:wrap}
+.tk-talen .keuze{padding-left:13px}
+.tk-talen .tel{color:var(--muted);font-size:.76rem;margin-left:6px}
+.tk-bron{margin-top:5px;font-size:.78rem;color:var(--muted);font-style:italic;
+  border-left:2px solid var(--line);padding-left:9px}
+.tk-eentalig{border-left:2px solid var(--teal)}
+.tk-eentalig .tk-kop::after{content:'in alle talen hetzelfde';font-size:.68rem;color:var(--teal);
+  margin-left:auto;padding-left:10px;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -373,11 +393,12 @@ textarea{min-height:90px;resize:vertical}
       <div class="page-head">
         <h2>Teksten</h2>
         <div style="display:flex;gap:10px">
-          <button class="btn btn-ghost" id="tkHerstelAlles" type="button">Alles terug naar de standaardtekst</button>
+          <button class="btn btn-ghost" id="tkHerstelAlles" type="button">Deze taal terug naar de standaardtekst</button>
           <button class="btn btn-primary" id="tkOpslaan" type="button" disabled>Opslaan</button>
         </div>
       </div>
       <div class="vg-let" style="margin:0 0 18px">Dit zijn de vaste teksten van de site — dus niet de teksten bij een woning, die staan bij de woning zelf. Wat je hier leeg laat of terugzet, valt terug op de oorspronkelijke tekst.</div>
+      <div class="tk-talen" id="tkTaalRij"></div>
       <div id="tekstLijst" style="max-width:760px"></div>
     </div>
 
@@ -404,6 +425,7 @@ textarea{min-height:90px;resize:vertical}
         <li><a href="#hl-logo">Je logo</a></li>
         <li><a href="#hl-magazine">Het magazine bij een woning</a></li>
         <li><a href="#hl-teksten">De vaste teksten en je gegevens</a></li>
+        <li><a href="#hl-talen">De site in drie talen</a></li>
         <li><a href="#hl-juridisch">De regel onderaan en de vier juridische pagina's</a></li>
         <li><a href="#hl-publiceren">Opslaan en publiceren</a></li>
         <li><a href="#hl-mislukt">Als er iets niet lukt</a></li>
@@ -525,6 +547,9 @@ textarea{min-height:90px;resize:vertical}
       <li><b>Verkocht</b> &mdash; grijs. Rond.</li>
     </ul>
     <p>Het bolletje bij elke knop heeft precies de kleur die het labeltje op de site krijgt, dus je ziet vooraf wat je kiest. Onder de knoppen staat in &eacute;&eacute;n zin wat die stand betekent.</p>
+    <h3>Verkochte woningen rustiger tonen</h3>
+    <p>Onder <b>Vormgeving</b> staat een vinkje <i>Verkochte woningen rustiger tonen</i>. Staat dat aan (en dat is zo vanaf het begin), dan krijgt een woning die verkocht is &mdash; of verkocht onder voorbehoud &mdash; een grijze foto en een streep door de prijs. Beweeg je er met de muis overheen, dan komt de kleur even terug. Het labeltje houdt wel zijn eigen kleur, anders zie je niet meer wat er aan de hand is.</p>
+    <p>Zet je het uit, dan ziet een verkochte woning er precies zo uit als de rest en verschilt alleen het labeltje. Naast het vinkje staan twee vlakjes die het verschil laten zien.</p>
     <div class="hl-tip"><b>Laat een verkochte woning gerust staan.</b> Een grijs <i>verkocht</i>-labeltje is geen rommel op je site &mdash; het laat zien d&aacute;t je verkoopt. Wil je hem toch weg, zet hem dan op "niet tonen" bij <a href="#hl-plek">Spotlight, volgorde en verbergen</a>.</div>
     <div class="hl-let"><b>De status verbergt de woning niet.</b> Ook bij <i>verkocht</i> blijft de pagina gewoon te bekijken, met prijs en al. Dat is met opzet; wil je hem echt van de site af, gebruik dan het vinkje "tonen op de site".</div>
     <a class="hl-omhoog" href="#hl-top">&uarr; terug naar boven</a>
@@ -627,6 +652,27 @@ textarea{min-height:90px;resize:vertical}
     </ul>
     <div class="hl-tip"><b>Blauw omrand veld?</b> Dat betekent dat je die tekst hebt aangepast ten opzichte van de oorspronkelijke. Handig om te zien wat van jou is.</div>
     <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
+  </div>
+
+  <div class="hl-blok" id="hl-talen">
+    <h2>De site in drie talen <span>TABBLAD TEKSTEN</span></h2>
+    <p>De site staat in het <b>Engels</b>, het <b>Nederlands</b> en het <b>Spaans</b>. Engels is de gewone versie: wie caroleriche.com opent komt daar binnen. Nederlands staat op <b>/nl/</b> en Spaans op <b>/es/</b>. Rechtsboven in het menu staan drie knopjes &mdash; EN, NL, ES &mdash; waarmee een bezoeker wisselt; hij blijft dan op dezelfde pagina, alleen in een andere taal.</p>
+    <h3>Wat er vertaald is</h3>
+    <ul>
+      <li><b>Alles wat de site zelf zegt</b>: het menu, de knoppen, de koppen, de blokken op de homepage, de contactteksten en alle woorden in het magazine. Die zijn in alle drie de talen ingevuld.</li>
+      <li><b>Wat je bij een woning intypt</b> &mdash; de titel, de omschrijving, de kenmerken &mdash; blijft staan zoals j&iacute;j het schrijft. Dat is bewust: dat is jouw tekst over d&eacute;ze woning, en die is niet in drie talen te gieten zonder dat jij hem drie keer schrijft. Een Engelse bezoeker ziet dus de omschrijving in de taal waarin jij hem hebt ingevoerd.</li>
+    </ul>
+    <h3>Een tekst aanpassen</h3>
+    <p>In het tabblad <b>Teksten</b> staan bovenaan drie taalknoppen. Klik op een taal en je ziet alle teksten in die taal. Achter een taal staat hoeveel velden je daar hebt aangepast, dus je ziet in &eacute;&eacute;n oogopslag waar je aan het werk bent geweest.</p>
+    <ul>
+      <li>Werk je in het Engels of Spaans, dan staat de <b>Nederlandse zin er grijs onder</b>. Handig als houvast bij het vertalen.</li>
+      <li>Velden met een <b>blauw streepje</b> ernaast &mdash; je telefoonnummer, e-mailadres, je naam, het registratienummer &mdash; zijn in elke taal hetzelfde. Pas je die in &eacute;&eacute;n taal aan, dan verandert het meteen overal.</li>
+      <li><b>Deze taal terug naar de standaardtekst</b> zet alleen de taal terug die op dat moment op je scherm staat. Je vertaalwerk in de andere twee blijft dus gewoon staan.</li>
+    </ul>
+    <h3>Het magazine</h3>
+    <p>Het magazine volgt de taal van de pagina waar de bezoeker vandaan komt. Bovenin het boekje staan dezelfde drie knopjes, dus wie liever een Spaans exemplaar meestuurt, klikt op ES en bewaart het dan als PDF. Op papier verdwijnen die knopjes vanzelf.</p>
+    <div class="hl-let"><b>De Engelse en Spaanse teksten zijn een eerste versie.</b> De korte dingen (menu, knoppen, labels) zitten goed. Je pers&oacute;&oacute;nlijke stukken &mdash; de kop op de homepage, het verhaal over jezelf &mdash; zijn jouw stem; lees die even na en pas ze aan tot ze klinken zoals jij praat. Dat doe je gewoon in het tabblad Teksten.</div>
+    <a class="hl-omhoog" href="#hl-top">&uarr; terug naar boven</a>
   </div>
 
   <div class="hl-blok" id="hl-juridisch">
@@ -736,6 +782,12 @@ textarea{min-height:90px;resize:vertical}
             <div id="flKeuzes"></div>
             <div class="fl-vb" id="flVoorbeeld"></div>
             <div class="vg-let">Dit is de standaard voor alle woningen. Wil je bij één woning iets anders, dan stel je dat bij de woning zelf in.</div>
+          </div>
+          <div class="vg-blok">
+            <p class="vg-kop">Verkochte woningen</p>
+            <label class="schakel"><input type="checkbox" id="wgVerkocht"> rustiger tonen: grijzere foto en een streep door de prijs</label>
+            <div class="wg-vb" id="wgVoorbeeld"></div>
+            <div class="vg-let">De woning blijft gewoon op de site staan &mdash; dat laat juist zien d&aacute;t je verkoopt. Wil je hem echt weghalen, gebruik dan het vinkje &ldquo;tonen op de site&rdquo; bij de woning zelf.</div>
           </div>
           <div class="vg-blok">
             <p class="vg-kop">Blokken op de homepage</p>
@@ -1178,6 +1230,7 @@ function vgStandaard(){
     lettertype: h.lettertype || 'huisstijl',
     keuzes: vgNormaliseerKeuzes(h.keuzes),
     fotolayout: flNormaliseer(h.fotolayout),
+    weergave: wgNormaliseer(h.weergave),
     logo: lgNormaliseer(h.logo),
     secties: vgNormaliseer(h.secties),
   };
@@ -1252,7 +1305,7 @@ async function laadVormgeving(){
     $('paletLijst').innerHTML = '<div class="empty">Kon de kleurenbestanden niet laden.</div>';
     return;
   }
-  const { data, error } = await sb.from('instellingen').select('palet,lettertype,keuzes,secties,maps_sleutel,fotolayout,logo').eq('id','site').maybeSingle();
+  const { data, error } = await sb.from('instellingen').select('palet,lettertype,keuzes,secties,maps_sleutel,fotolayout,logo,weergave').eq('id','site').maybeSingle();
   if (error){
     $('paletLijst').innerHTML = '<div class="empty">Kon de instellingen niet laden: ' + error.message +
       '<br><br>Draait <b>instellingen-tabel.sql</b> al in Supabase?</div>';
@@ -1263,6 +1316,7 @@ async function laadVormgeving(){
     lettertype: (data && data.lettertype) || 'huisstijl',
     keuzes: vgNormaliseerKeuzes(data && data.keuzes),
     fotolayout: flNormaliseer(data && data.fotolayout),
+    weergave: wgNormaliseer(data && data.weergave),
     logo: lgNormaliseer(data && data.logo),
     secties: vgNormaliseer(data && data.secties),
   };
@@ -1359,6 +1413,7 @@ function tekenVormgeving(){
 
   tekenFotolayout();
   tekenLogo();
+  tekenWeergave();
   $('vgOpslaan').disabled = JSON.stringify(vg) === vgOpgeslagen;
   ververVoorbeeld();
 }
@@ -1421,7 +1476,7 @@ $('vgOpslaan').addEventListener('click', async () => {
   busy(true);
   try {
     const { data, error } = await sb.from('instellingen')
-      .update({ palet: vg.palet, lettertype: vg.lettertype, keuzes: vg.keuzes, secties: vg.secties, fotolayout: vg.fotolayout, logo: vg.logo, maps_sleutel: vg.maps_sleutel || null })
+      .update({ palet: vg.palet, lettertype: vg.lettertype, keuzes: vg.keuzes, secties: vg.secties, fotolayout: vg.fotolayout, logo: vg.logo, weergave: vg.weergave, maps_sleutel: vg.maps_sleutel || null })
       .eq('id', 'site')
       .select();
     if (error) throw error;
@@ -1644,14 +1699,15 @@ const TK_PAGINA = {
 
 async function laadTeksten(){
   try {
-    const r = await fetch('/teksten.json');
-    TEKST_GROEPEN = (await r.json()).groepen || [];
+    const bron = await (await fetch('/teksten.json')).json();
+    TEKST_GROEPEN = bron.groepen || [];
+    TK_TALEN = bron.talen || [{ id:'nl', naam:'Nederlands' }];
+    tkTaal = (TK_TALEN.find(t => t.standaard) || TK_TALEN[0]).id;
   } catch (e) {
     $('tekstLijst').innerHTML = '<div class="empty">Kon de teksten niet laden.</div>';
     return;
   }
-  TEKST_STANDAARD = {};
-  TEKST_GROEPEN.forEach(g => g.velden.forEach(v => { TEKST_STANDAARD[v.id] = v.standaard; }));
+  TEKST_STANDAARD = tkStandaardVoor(tkTaal);
 
   const { data, error } = await sb.from('instellingen').select('teksten').eq('id','site').maybeSingle();
   if (error){
@@ -1659,10 +1715,20 @@ async function laadTeksten(){
       '<br><br>Draait <b>instellingen-tabel.sql</b> al in Supabase?</div>';
     return;
   }
+  // Wat er in de database staat kan twee vormen hebben: het nieuwe geheel per
+  // taal, of de oude platte set van vóór de vertaling. Die oude set was
+  // Nederlands, dus die zetten we als Nederlandse laag terug — anders zou
+  // Caro's Nederlandse tekst ineens op de Engelse site staan.
   const bewaard = (data && data.teksten) || {};
+  const perTaal = TK_TALEN.some(t => bewaard[t.id] && typeof bewaard[t.id] === 'object');
   tk = {};
-  Object.keys(TEKST_STANDAARD).forEach(id => {
-    tk[id] = typeof bewaard[id] === 'string' && bewaard[id].trim() ? bewaard[id] : TEKST_STANDAARD[id];
+  TK_TALEN.forEach(t => {
+    const std = tkStandaardVoor(t.id);
+    const laag = perTaal ? (bewaard[t.id] || {}) : (t.id === 'nl' ? bewaard : {});
+    tk[t.id] = {};
+    Object.keys(std).forEach(id => {
+      tk[t.id][id] = typeof laag[id] === 'string' && laag[id].trim() ? laag[id] : std[id];
+    });
   });
   tkOpgeslagen = JSON.stringify(tk);
   tekenTeksten();
@@ -1671,26 +1737,39 @@ async function laadTeksten(){
 /** Alleen bewaren wat afwijkt van de standaard. */
 function tkAfwijkend(){
   const uit = {};
-  Object.keys(tk).forEach(id => { if (tk[id] !== TEKST_STANDAARD[id]) uit[id] = tk[id]; });
+  TK_TALEN.forEach(t => {
+    const std = tkStandaardVoor(t.id), laag = tk[t.id] || {}, deel = {};
+    Object.keys(std).forEach(id => {
+      if (typeof laag[id] === 'string' && laag[id].trim() && laag[id] !== std[id]) deel[id] = laag[id];
+    });
+    if (Object.keys(deel).length) uit[t.id] = deel;
+  });
   return uit;
 }
 
 function tekenTeksten(){
   const lijst = $('tekstLijst');
   if (!TEKST_GROEPEN.length) return;
+  TEKST_STANDAARD = tkStandaardVoor(tkTaal);
+  tekenTaalrij();
   lijst.innerHTML = '';
   TEKST_GROEPEN.forEach(groep => {
     const vak = document.createElement('div');
     vak.className = 'tk-groep';
     vak.innerHTML = '<h3>' + groep.naam + '</h3><p class="uit">' + (groep.uitleg || '') + '</p>';
     groep.velden.forEach(veld => {
-      const gewijzigd = tk[veld.id] !== TEKST_STANDAARD[veld.id];
+      const laag = tk[tkTaal] || (tk[tkTaal] = {});
+      const gewijzigd = laag[veld.id] !== TEKST_STANDAARD[veld.id];
+      // Een eentalig veld (nummer, adres, merknaam) hoeft niet vertaald te
+      // worden; wat je hier invult geldt meteen in alle drie de talen.
+      const eentalig = !!veld.eentalig;
       // 'lang' is een paar regels, 'pagina' is een heel document (de
       // juridische pagina's) — allebei een tekstvak, maar niet even hoog.
       const pagina = veld.type === 'pagina';
       const lang = veld.type === 'lang' || pagina;
       const rij = document.createElement('div');
-      rij.className = 'tk-veld' + (pagina ? ' tk-pagina' : '') + (gewijzigd ? ' tk-gewijzigd' : '');
+      rij.className = 'tk-veld' + (pagina ? ' tk-pagina' : '') + (eentalig ? ' tk-eentalig' : '') +
+        (gewijzigd ? ' tk-gewijzigd' : '');
       rij.innerHTML =
         '<div class="tk-kop"><label>' + veld.naam + '</label><span class="rechts">' +
           '<span class="teller"></span>' +
@@ -1702,7 +1781,7 @@ function tekenTeksten(){
         (veld.hint ? '<div class="hint">' + veld.hint + '</div>' : '');
       const invoer = rij.querySelector(lang ? 'textarea' : 'input');
       const teller = rij.querySelector('.teller');
-      invoer.value = tk[veld.id];
+      invoer.value = laag[veld.id];
 
       function meet(){
         if (!veld.max) { teller.textContent = ''; return; }
@@ -1712,17 +1791,29 @@ function tekenTeksten(){
       }
       meet();
       invoer.addEventListener('input', () => {
-        tk[veld.id] = invoer.value;
+        laag[veld.id] = invoer.value;
+        if (eentalig) TK_TALEN.forEach(t => { (tk[t.id] || (tk[t.id] = {}))[veld.id] = invoer.value; });
         meet();
         rij.classList.toggle('tk-gewijzigd', invoer.value !== TEKST_STANDAARD[veld.id]);
         rij.querySelector('.tk-herstel').disabled = invoer.value === TEKST_STANDAARD[veld.id];
         $('tkOpslaan').disabled = JSON.stringify(tk) === tkOpgeslagen;
       });
       rij.querySelector('.tk-herstel').addEventListener('click', () => {
-        tk[veld.id] = TEKST_STANDAARD[veld.id];
+        laag[veld.id] = TEKST_STANDAARD[veld.id];
+        if (eentalig) TK_TALEN.forEach(t => { (tk[t.id] || (tk[t.id] = {}))[veld.id] = tkStandaard(veld, t.id); });
         tekenTeksten();
         $('tkOpslaan').disabled = JSON.stringify(tk) === tkOpgeslagen;
       });
+      // Bij het vertalen helpt het om de Nederlandse zin erbij te zien.
+      if (!eentalig && tkTaal !== 'nl'){
+        const bron = tkStandaard(veld, 'nl');
+        if (bron){
+          const b = document.createElement('div');
+          b.className = 'tk-bron';
+          b.textContent = 'NL: ' + bron;
+          rij.appendChild(b);
+        }
+      }
       vak.appendChild(rij);
     });
     lijst.appendChild(vak);
@@ -1731,9 +1822,12 @@ function tekenTeksten(){
 }
 
 $('tkHerstelAlles').addEventListener('click', () => {
-  tk = { ...TEKST_STANDAARD };
+  // Alleen de taal die nu op het scherm staat — anders gooi je met één klik
+  // ook het vertaalwerk in de andere twee talen weg.
+  const naam = (TK_TALEN.find(t => t.id === tkTaal) || {}).naam || tkTaal;
+  tk[tkTaal] = { ...tkStandaardVoor(tkTaal) };
   tekenTeksten();
-  toast('Alle teksten terug naar de standaard — klik op Opslaan om het door te voeren');
+  toast('Alle teksten in het ' + naam + ' terug naar de standaard — klik op Opslaan om het door te voeren');
 });
 
 $('tkOpslaan').addEventListener('click', async () => {
@@ -2589,6 +2683,77 @@ function stTeken(){
   else if (nu) uit.innerHTML = 'Deze woning heeft nu de eigen tekst <b>' + escapeHtml(nu) +
     '</b>. Die blijft staan tot je hierboven iets kiest.';
   else uit.textContent = '';
+}
+
+
+/* ================= Weergave: verkochte woningen =================
+   Eén schakelaar, bewaard in instellingen.weergave. De twee vlakjes eronder
+   laten meteen zien wat het verschil is. */
+function wgNormaliseer(ruw){
+  const b = (ruw && typeof ruw === 'object' && !Array.isArray(ruw)) ? ruw : {};
+  return { verkocht: b.verkocht === 'gewoon' ? 'gewoon' : 'rustig' };
+}
+
+function tekenWeergave(){
+  if (!vg || !vg.weergave) return;
+  const rustig = vg.weergave.verkocht === 'rustig';
+  $('wgVerkocht').checked = rustig;
+  $('wgVoorbeeld').innerHTML =
+    '<figure class="' + (rustig ? 'rustig' : '') + '"><div class="doek"><b>Verkocht</b></div>' +
+      '<figcaption>Zo komt hij op de site' + (rustig ? ': <s>&euro; 595.000</s>' : ': &euro; 595.000') + '</figcaption></figure>' +
+    '<figure><div class="doek"><b style="background:#B15B3C">Te koop</b></div>' +
+      '<figcaption>Een woning die nog te koop staat: &euro; 595.000</figcaption></figure>';
+}
+
+$('wgVerkocht').addEventListener('change', (e) => {
+  if (!vg) return;
+  vg.weergave = { verkocht: e.target.checked ? 'rustig' : 'gewoon' };
+  tekenWeergave();
+  $('vgOpslaan').disabled = JSON.stringify(vg) === vgOpgeslagen;
+});
+
+
+/* ================= Teksten in drie talen =================
+   `tk` is nu een geheel per taal: { nl:{...}, en:{...}, es:{...} }.
+   `tkTaal` is de taal die op dit moment op het scherm staat. */
+let TK_TALEN = [], tkTaal = 'en';
+
+/** De standaardtekst van een veld in één taal, met dezelfde terugvalketen als
+    de site (gekozen taal -> Engels -> Nederlands). */
+function tkStandaard(veld, taal){
+  const s = veld && veld.standaard;
+  if (typeof s === 'string') return s;              // oud formaat
+  if (!s || typeof s !== 'object') return '';
+  const keten = [taal, 'en', 'nl'].concat(TK_TALEN.map(t => t.id));
+  for (const t of keten) if (typeof s[t] === 'string' && s[t].trim()) return s[t];
+  return '';
+}
+
+function tkStandaardVoor(taal){
+  const uit = {};
+  TEKST_GROEPEN.forEach(g => g.velden.forEach(v => { uit[v.id] = tkStandaard(v, taal); }));
+  return uit;
+}
+
+/** Hoeveel velden wijken er in deze taal af van de standaard? */
+function tkAantalAnders(taal){
+  const std = tkStandaardVoor(taal), laag = tk[taal] || {};
+  return Object.keys(std).filter(id => laag[id] !== undefined && laag[id] !== std[id]).length;
+}
+
+function tekenTaalrij(){
+  const doel = $('tkTaalRij');
+  if (!doel || !TK_TALEN.length) return;
+  doel.innerHTML = '';
+  TK_TALEN.forEach(t => {
+    const n = tkAantalAnders(t.id);
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'keuze' + (t.id === tkTaal ? ' actief' : '');
+    b.innerHTML = t.naam + (n ? '<span class="tel">' + n + ' aangepast</span>' : '');
+    b.addEventListener('click', () => { tkTaal = t.id; tekenTeksten(); });
+    doel.appendChild(b);
+  });
 }
 
 </script>

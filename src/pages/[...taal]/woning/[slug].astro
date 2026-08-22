@@ -1,19 +1,30 @@
 ---
-import Base from '../../layouts/Base.astro';
-import { getAlleWoningen, SUPABASE_URL, SUPABASE_ANON_KEY } from '../../lib/supabase';
-import { getInstellingen } from '../../lib/instellingen';
-import { kaartUrl, kaartBron } from '../../lib/kaart.js';
-import { tekst, mailLink, whatsappLink, telLink } from '../../lib/teksten.js';
-import { fotolayoutVan, galerijAttributen } from '../../lib/fotolayout.js';
-import { logoAttributen } from '../../lib/logo.js';
-import { statusVan } from '../../lib/status.js';
+import Base from '../../../layouts/Base.astro';
+import { getAlleWoningen, SUPABASE_URL, SUPABASE_ANON_KEY } from '../../../lib/supabase';
+import { getInstellingen } from '../../../lib/instellingen';
+import { kaartUrl, kaartBron } from '../../../lib/kaart.js';
+import { tekst, mailLink, whatsappLink, telLink,
+         TALEN, taalPad, schoneTaal, link } from '../../../lib/teksten.js';
+import { fotolayoutVan, galerijAttributen } from '../../../lib/fotolayout.js';
+import { logoAttributen } from '../../../lib/logo.js';
+import { statusVan, isAfgerond } from '../../../lib/status.js';
+import { woorden } from '../../../lib/woorden.js';
+import { rustigKlasse } from '../../../lib/weergave.js';
 
 export async function getStaticPaths() {
   const woningen = await getAlleWoningen();
-  return woningen.map((w) => ({ params: { slug: w.slug }, props: { woning: w } }));
+  return TALEN.flatMap((t) =>
+    woningen.map((w) => ({
+      params: { taal: taalPad(t.id) || undefined, slug: w.slug },
+      props: { woning: w, taal: t.id },
+    }))
+  );
 }
 
 const { woning: d } = Astro.props;
+const taal = schoneTaal(Astro.props.taal);
+const a = (naar) => link(taal, naar);
+const w = woorden(taal);
 const status = statusVan(d.status);
 const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
 const galerij = d.galerij || [];
@@ -25,7 +36,7 @@ const heeftVideo = !!(d.video && d.video.length > 0);
 
 // Kaart: bewust onnauwkeurig. Het adres en de exacte coördinaten blijven in de
 // database — hier komt alleen een afgerond punt (~1 km) de pagina op.
-const instellingen = await getInstellingen();
+const instellingen = await getInstellingen(taal);
 const { mapsSleutel, teksten, fotolayout } = instellingen;
 const merkUrl = logoAttributen(instellingen.logo).url;
 // Opmaak van de galerij: de standaard van de site, tenzij deze woning een eigen keuze heeft.
@@ -39,9 +50,10 @@ const pageTitle = status
   : `${d.titel}, ${d.plaats} | Caro Leriche`;
 const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaapkamers, ${d.woonoppervlak} m². Persoonlijk begeleid door Caro Leriche, Real Estate Spain.`;
 ---
-<Base title={pageTitle} description={pageDesc} nav="minimal" theme="dark">
+<Base title={pageTitle} description={pageDesc} nav="minimal" theme="dark"
+      taal={taal} pad={`/woning/${d.slug}/`}>
   <!-- VIDEO-HERO (kleiner, met fijn kader) -->
-  <section class="wp-hero" id="top">
+  <section class={`wp-hero${rustigKlasse(instellingen.weergave, isAfgerond(d.status)) ? ' wp-af' : ''}`} id="top">
     <div class="wrap">
       <div class="frame">
         <div class="stage">
@@ -59,29 +71,29 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
         {status && <span class={`wp-status ${status.klasse}`}>{status.naam}</span>}
         {d.plaats}{d.regio ? `, ${d.regio}` : ''}
       </div>
-      {heeftVideo && <button class="soundbtn" type="button" aria-label="Geluid aan of uit">🔈 tik voor geluid</button>}
+      {heeftVideo && <button class="soundbtn" type="button" aria-label={w('geluid')}>{w('geluid_tik')}</button>}
     </div>
   </section>
 
   <!-- FEITEN (los, dunne lijn) -->
   <section class="facts">
     <div class="wrap">
-      <div class="f"><div class="n">{d.slaapkamers}</div><div class="l">Slaapkamers</div></div>
-      <div class="f"><div class="n">{d.badkamers}</div><div class="l">Badkamers</div></div>
+      <div class="f"><div class="n">{d.slaapkamers}</div><div class="l">{w('slaapkamers')}</div></div>
+      <div class="f"><div class="n">{d.badkamers}</div><div class="l">{w('badkamers')}</div></div>
       <div class="f"><div class="n">{d.woonoppervlak}</div><div class="l">m² woonopp.</div></div>
       <div class="f"><div class="n">{d.perceel}</div><div class="l">m² perceel</div></div>
-      <div class="f"><div class="n">{d.bouwjaar}</div><div class="l">Bouwjaar</div></div>
+      <div class="f"><div class="n">{d.bouwjaar}</div><div class="l">{w('bouwjaar')}</div></div>
     </div>
   </section>
 
   <!-- VERHAAL -->
   <section class="pad">
     <div class="wrap lead reveal">
-      <div class="eyebrow">Welkom thuis</div>
+      <div class="eyebrow">{w('welkom')}</div>
       <h2>{d.titel}</h2>
       {alineas.map((p) => <p>{p}</p>)}
       <div class="btns" style="margin-top:26px">
-        <a class="btn btn-magazine" href={`/woning/${d.slug}/magazine/`} data-magazine>{t('magazine_knop')}</a>
+        <a class="btn btn-magazine" href={a(`/woning/${d.slug}/magazine/`)} data-magazine>{t('magazine_knop')}</a>
       </div>
     </div>
   </section>
@@ -89,7 +101,7 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
   <!-- GALERIJ (kolommen, foto's volledig zichtbaar, klikbaar) -->
   {galerij.length > 0 && (
     <section style="padding:20px 0 90px">
-      <div class="wrap" style="margin-bottom:22px"><div class="eyebrow">Beeld</div></div>
+      <div class="wrap" style="margin-bottom:22px"><div class="eyebrow">{w('beeld')}</div></div>
       <div class={gal.klasse} style={gal.stijl}>
         {galerij.map((g, i) => (
           <button class={`wp-tile${g.groot ? ' groot' : ''}`} type="button" data-i={i} aria-label={`Foto ${i + 1} vergroten`}>
@@ -103,11 +115,11 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
 
   <!-- VERGROOT BEELD (klik op een foto → groot, met vorige/volgende) -->
   {galerij.length > 0 && (
-    <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Foto vergroot">
+    <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label={w('foto_groot')}>
       <div class="lb-tel" id="lbTel"></div>
       <button class="lb-btn lb-close" type="button" id="lbClose" aria-label="Sluiten">✕</button>
-      <button class="lb-btn lb-prev" type="button" id="lbPrev" aria-label="Vorige foto">←</button>
-      <button class="lb-btn lb-next" type="button" id="lbNext" aria-label="Volgende foto">→</button>
+      <button class="lb-btn lb-prev" type="button" id="lbPrev" aria-label={w('foto_vorige')}>←</button>
+      <button class="lb-btn lb-next" type="button" id="lbNext" aria-label={w('foto_volgende')}>→</button>
       <figure><img id="lbImg" src="" alt="" /></figure>
       <figcaption id="lbCap"></figcaption>
     </div>
@@ -174,16 +186,16 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
   <section class="pad feat">
     <div class="wrap reveal">
       <div class="section-head">
-        <div class="eyebrow">Kenmerken</div>
-        <h2>Alles wat deze woning bijzonder maakt</h2>
+        <div class="eyebrow">{w('kenmerken')}</div>
+        <h2>{w('kenmerken_sub')}</h2>
       </div>
       <div class="feat-grid">
         <div class="col">
-          <h3>Binnen</h3>
+          <h3>{w('binnen')}</h3>
           <ul>{kenmerkenBinnen.map((k) => <li>{k}</li>)}</ul>
         </div>
         <div class="col">
-          <h3>Buiten</h3>
+          <h3>{w('buiten')}</h3>
           <ul>{kenmerkenBuiten.map((k) => <li>{k}</li>)}</ul>
         </div>
       </div>
@@ -207,13 +219,13 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
               <span class="tag">{d.plaats}{d.regio ? `, ${d.regio}` : ''} · bij benadering</span>
             </Fragment>
           ) : (
-            <span class="tag">Locatie op aanvraag</span>
+            <span class="tag">{w('locatie_aanvraag')}</span>
           )}
         </div>
         <div>
-          <div class="eyebrow">Locatie</div>
+          <div class="eyebrow">{w('locatie')}</div>
           <h2 style="font-size:clamp(1.7rem,3vw,2.3rem);font-weight:400;margin:.3em 0 .5em">{d.plaats}</h2>
-          <p>Rustig gelegen, met alles binnen handbereik.</p>
+          <p>{w('locatie_sub')}</p>
           <div class="dist">
             {afstanden.map((a) => (
               <div class="d"><span>{a.plek}</span><span>{a.tijd}</span></div>
@@ -241,7 +253,7 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
           <a class="btn btn-primary" href={whatsappLink(teksten)}>{t('contact_knop_whatsapp')}</a>
           <a class="btn btn-ghost" href={mailLink(teksten)}>{t('contact_knop_mail')}</a>
           <a class="btn btn-ghost" href={telLink(teksten)}>{t('tel_weergave')}</a>
-          <a class="btn btn-ghost" href={`/woning/${d.slug}/magazine/`} data-magazine>{t('magazine_knop')}</a>
+          <a class="btn btn-ghost" href={a(`/woning/${d.slug}/magazine/`)} data-magazine>{t('magazine_knop')}</a>
         </div>
       </div>
     </div>

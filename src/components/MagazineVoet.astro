@@ -10,13 +10,14 @@
  * De links komen uit dezelfde lijst als de footer van de site, zodat ze niet
  * uit elkaar kunnen lopen.
  */
-import { JURIDISCH, copyrightRegel } from '../lib/teksten.js';
+import { JURIDISCH, copyrightRegel, link, schoneTaal } from '../lib/teksten.js';
 
-const { teksten, jaar } = Astro.props;
+const { teksten, jaar, taal: taalRuw } = Astro.props;
+const taal = schoneTaal(taalRuw);
 ---
 <div class="mg-voet">
   <span class="c">{copyrightRegel(teksten, jaar)}</span>
   {JURIDISCH.map((p) => (
-    <a href={`/${p.slug}/`} target="_blank" rel="noopener">{p.titel}</a>
+    <a href={link(taal, `/${p.slug}/`)} target="_blank" rel="noopener">{p.titel}</a>
   ))}
 </div>

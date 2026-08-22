@@ -1,5 +1,5 @@
 {
-  "toelichting": "Alle vaste teksten van de site, met hun oorspronkelijke waarde. Caro kan ze aanpassen in het dashboard (tabblad Teksten); wat ze niet aanraakt blijft de standaard hieronder. Gelezen door de site (src/lib/teksten.js) en door het dashboard. Nieuwe tekst toevoegen? Zet hem hier én gebruik hem in het bijbehorende component.",
+  "toelichting": "Alle vaste teksten van de site, in drie talen. Engels is de standaard en staat op /, Nederlands op /nl/ en Spaans op /es/. Caro past ze aan in het dashboard (tabblad Teksten, met de taalknoppen bovenaan); wat ze niet aanraakt blijft de standaard hieronder. Een veld met \"eentalig\": true is in elke taal hetzelfde (nummers, adressen, de merknaam) en wordt maar één keer getoond. Gelezen door de site (src/lib/teksten.js) en door het beheer-dashboard. Nieuwe tekst toevoegen? Zet hem hier in alle drie de talen én gebruik hem in het bijbehorende component.",
   "groepen": [
     {
       "id": "menu",
@@ -9,32 +9,56 @@
         {
           "id": "menu_woningen",
           "naam": "Menu: woningen",
-          "standaard": "Woningen"
+          "standaard": {
+            "nl": "Woningen",
+            "en": "Properties",
+            "es": "Propiedades"
+          }
         },
         {
           "id": "menu_fotografie",
           "naam": "Menu: fotografie",
-          "standaard": "Fotografie"
+          "standaard": {
+            "nl": "Fotografie",
+            "en": "Photography",
+            "es": "Fotografía"
+          }
         },
         {
           "id": "menu_over",
           "naam": "Menu: over Caro",
-          "standaard": "Over Caro"
+          "standaard": {
+            "nl": "Over Caro",
+            "en": "About Caro",
+            "es": "Sobre Caro"
+          }
         },
         {
           "id": "menu_contact",
           "naam": "Menu: contact",
-          "standaard": "Contact"
+          "standaard": {
+            "nl": "Contact",
+            "en": "Contact",
+            "es": "Contacto"
+          }
         },
         {
           "id": "menu_knop",
           "naam": "Knop rechtsboven",
-          "standaard": "Plan bezichtiging"
+          "standaard": {
+            "nl": "Plan bezichtiging",
+            "en": "Book a viewing",
+            "es": "Reservar una visita"
+          }
         },
         {
           "id": "menu_knop_woning",
           "naam": "Knop op een woningpagina",
-          "standaard": "WhatsApp Caro"
+          "standaard": {
+            "nl": "WhatsApp Caro",
+            "en": "WhatsApp Caro",
+            "es": "WhatsApp Caro"
+          }
         }
       ]
     },
@@ -46,24 +70,40 @@
         {
           "id": "hero_eyebrow",
           "naam": "Kleine regel erboven",
-          "standaard": "Real Estate Spain"
+          "standaard": {
+            "nl": "Real Estate Spain",
+            "en": "Real Estate Spain",
+            "es": "Real Estate Spain"
+          }
         },
         {
           "id": "hero_kop",
           "naam": "De grote zin",
-          "standaard": "Meer dan een makelaar.",
+          "standaard": {
+            "nl": "Meer dan een makelaar.",
+            "en": "More than an estate agent.",
+            "es": "Más que una agente inmobiliaria."
+          },
           "max": 60
         },
         {
           "id": "hero_tekst",
           "naam": "Zin eronder",
           "type": "lang",
-          "standaard": "Persoonlijk, met oog voor beeld, sfeer en verhaal — van de eerste kennismaking tot ver na de sleutel."
+          "standaard": {
+            "nl": "Persoonlijk, met oog voor beeld, sfeer en verhaal — van de eerste kennismaking tot ver na de sleutel.",
+            "en": "Personal, with an eye for image, atmosphere and story — from our first meeting to long after the keys change hands.",
+            "es": "Cercana, con ojo para la imagen, el ambiente y la historia — desde el primer encuentro hasta mucho después de la entrega de llaves."
+          }
         },
         {
           "id": "hero_knop",
           "naam": "Tekst op de knop",
-          "standaard": "Neem contact op"
+          "standaard": {
+            "nl": "Neem contact op",
+            "en": "Get in touch",
+            "es": "Ponte en contacto"
+          }
         }
       ]
     },
@@ -75,29 +115,49 @@
         {
           "id": "woningen_eyebrow",
           "naam": "Kleine regel",
-          "standaard": "In de spotlight"
+          "standaard": {
+            "nl": "In de spotlight",
+            "en": "In the spotlight",
+            "es": "Destacada"
+          }
         },
         {
           "id": "woningen_kop",
           "naam": "Kop",
-          "standaard": "Woning in de kijker",
+          "standaard": {
+            "nl": "Woning in de kijker",
+            "en": "Featured property",
+            "es": "Propiedad destacada"
+          },
           "max": 60
         },
         {
           "id": "woningen_meer",
           "naam": "Boven het overzicht",
-          "standaard": "Meer woningen"
+          "standaard": {
+            "nl": "Meer woningen",
+            "en": "More properties",
+            "es": "Más propiedades"
+          }
         },
         {
           "id": "woningen_link",
           "naam": "Link bij een woning",
-          "standaard": "Bekijk woning →"
+          "standaard": {
+            "nl": "Bekijk woning →",
+            "en": "View property →",
+            "es": "Ver propiedad →"
+          }
         },
         {
           "id": "magazine_knop",
           "naam": "Knop: magazine downloaden",
           "type": "kort",
-          "standaard": "Download het magazine",
+          "standaard": {
+            "nl": "Download het magazine",
+            "en": "Download the magazine",
+            "es": "Descargar la revista"
+          },
           "max": 40,
           "hint": "Staat op de woningpagina, onder de omschrijving en bij het contactblok."
         },
@@ -105,7 +165,11 @@
           "id": "magazine_slot",
           "naam": "Slotzin in het magazine",
           "type": "lang",
-          "standaard": "Persoonlijk begeleid, van eerste bezichtiging tot sleutel.",
+          "standaard": {
+            "nl": "Persoonlijk begeleid, van eerste bezichtiging tot sleutel.",
+            "en": "Personally guided, from the first viewing to the keys.",
+            "es": "Acompañamiento personal, desde la primera visita hasta las llaves."
+          },
           "max": 160,
           "hint": "De laatste zin op de achterkant van het magazine."
         }
@@ -119,24 +183,40 @@
         {
           "id": "fotografie_eyebrow",
           "naam": "Kleine regel",
-          "standaard": "Ook fotografie"
+          "standaard": {
+            "nl": "Ook fotografie",
+            "en": "Photography too",
+            "es": "También fotografía"
+          }
         },
         {
           "id": "fotografie_kop",
           "naam": "Kop",
-          "standaard": "Ik fotografeer en film de woningen zelf",
+          "standaard": {
+            "nl": "Ik fotografeer en film de woningen zelf",
+            "en": "I photograph and film the properties myself",
+            "es": "Fotografío y grabo las propiedades yo misma"
+          },
           "max": 70
         },
         {
           "id": "fotografie_tekst",
           "naam": "Tekst",
           "type": "lang",
-          "standaard": "Geen snelle standaard ‘kiekjes’: elke woning krijgt de aandacht die ze verdient, met de focus op licht, sfeer en verhaal — in foto én video. Wil je jouw woning zo in beeld gebracht zien? Vraag gerust naar de mogelijkheden."
+          "standaard": {
+            "nl": "Geen snelle standaard ‘kiekjes’: elke woning krijgt de aandacht die ze verdient, met de focus op licht, sfeer en verhaal — in foto én video. Wil je jouw woning zo in beeld gebracht zien? Vraag gerust naar de mogelijkheden.",
+            "en": "No quick standard snapshots: every property gets the attention it deserves, with the focus on light, atmosphere and story — in photo and video. Would you like your property captured this way? Feel free to ask about the possibilities.",
+            "es": "Nada de fotos rápidas y estándar: cada propiedad recibe la atención que merece, con el foco en la luz, el ambiente y la historia — en foto y en vídeo. ¿Quieres ver tu propiedad retratada así? Pregúntame sin compromiso por las posibilidades."
+          }
         },
         {
           "id": "fotografie_knop",
           "naam": "Tekst op de knop",
-          "standaard": "Vraag naar fotografie"
+          "standaard": {
+            "nl": "Vraag naar fotografie",
+            "en": "Ask about photography",
+            "es": "Preguntar por la fotografía"
+          }
         }
       ]
     },
@@ -148,25 +228,41 @@
         {
           "id": "over_eyebrow",
           "naam": "Kleine regel",
-          "standaard": "Over Caro"
+          "standaard": {
+            "nl": "Over Caro",
+            "en": "About Caro",
+            "es": "Sobre Caro"
+          }
         },
         {
           "id": "over_kop",
           "naam": "Kop",
-          "standaard": "Eerst kennismaken, dan pas zoeken",
+          "standaard": {
+            "nl": "Eerst kennismaken, dan pas zoeken",
+            "en": "First we meet, then we search",
+            "es": "Primero nos conocemos, después buscamos"
+          },
           "max": 70
         },
         {
           "id": "over_tekst1",
           "naam": "Eerste alinea",
           "type": "lang",
-          "standaard": "Ik kijk niet alleen naar waar je wil wonen, maar luister vooral naar hoe je wil leven. Daarbij begin ik niet met eindeloze lijstjes met bezichtigingen, maar is jou leren kennen de allereerste stap."
+          "standaard": {
+            "nl": "Ik kijk niet alleen naar waar je wil wonen, maar luister vooral naar hoe je wil leven. Daarbij begin ik niet met eindeloze lijstjes met bezichtigingen, maar is jou leren kennen de allereerste stap.",
+            "en": "I don't just look at where you want to live, but above all listen to how you want to live. So I don't start with endless lists of viewings — getting to know you is the very first step.",
+            "es": "No me fijo solo en dónde quieres vivir, sino sobre todo en cómo quieres vivir. Por eso no empiezo con listas interminables de visitas: conocerte a ti es el primer paso."
+          }
         },
         {
           "id": "over_tekst2",
           "naam": "Tweede alinea",
           "type": "lang",
-          "standaard": "Op zoek naar een woning, of denk je aan bouwen in Spanje? Laten we kennismaken — dan zoek ik gericht met je mee."
+          "standaard": {
+            "nl": "Op zoek naar een woning, of denk je aan bouwen in Spanje? Laten we kennismaken — dan zoek ik gericht met je mee.",
+            "en": "Looking for a home, or thinking about building in Spain? Let's meet — then I can search with you, with purpose.",
+            "es": "¿Buscas una vivienda o estás pensando en construir en España? Conozcámonos: así puedo buscar contigo de forma específica."
+          }
         }
       ]
     },
@@ -178,42 +274,70 @@
         {
           "id": "contact_kop",
           "naam": "Kop",
-          "standaard": "Op zoek naar jouw woning in Spanje?",
+          "standaard": {
+            "nl": "Op zoek naar jouw woning in Spanje?",
+            "en": "Looking for your home in Spain?",
+            "es": "¿Buscas tu casa en España?"
+          },
           "max": 70
         },
         {
           "id": "contact_tekst1",
           "naam": "Eerste alinea",
           "type": "lang",
-          "standaard": "Vertel me waar je naar zoekt — ik begeleid je persoonlijk, ook als de juiste woning nog gevonden moet worden."
+          "standaard": {
+            "nl": "Vertel me waar je naar zoekt — ik begeleid je persoonlijk, ook als de juiste woning nog gevonden moet worden.",
+            "en": "Tell me what you're looking for — I'll guide you personally, even if the right property still has to be found.",
+            "es": "Cuéntame qué buscas: te acompaño personalmente, también si la vivienda adecuada todavía está por encontrar."
+          }
         },
         {
           "id": "contact_tekst2",
           "naam": "Tweede alinea",
           "type": "lang",
-          "standaard": "Ik help je niet alleen bij aankoop, maar ook bij verkoop: van woningen tot gronden en projecten. En omdat kopen of bouwen in Spanje veel vragen oproept, leg ik je het hele proces uit en blijf ik naast je staan — tot en met een eventueel bouwtraject."
+          "standaard": {
+            "nl": "Ik help je niet alleen bij aankoop, maar ook bij verkoop: van woningen tot gronden en projecten. En omdat kopen of bouwen in Spanje veel vragen oproept, leg ik je het hele proces uit en blijf ik naast je staan — tot en met een eventueel bouwtraject.",
+            "en": "I help you not only with buying, but also with selling: from homes to land and projects. And because buying or building in Spain raises a lot of questions, I explain the whole process and stay beside you — right through any building project.",
+            "es": "No solo te ayudo a comprar, también a vender: desde viviendas hasta terrenos y proyectos. Y como comprar o construir en España plantea muchas preguntas, te explico todo el proceso y te acompaño hasta el final, incluida una posible obra."
+          }
         },
         {
           "id": "contact_knop_whatsapp",
           "naam": "Knop: WhatsApp",
-          "standaard": "WhatsApp Caro"
+          "standaard": {
+            "nl": "WhatsApp Caro",
+            "en": "WhatsApp Caro",
+            "es": "WhatsApp Caro"
+          }
         },
         {
           "id": "contact_knop_mail",
           "naam": "Knop: e-mail",
-          "standaard": "Stuur een e-mail"
+          "standaard": {
+            "nl": "Stuur een e-mail",
+            "en": "Send an email",
+            "es": "Enviar un correo"
+          }
         },
         {
           "id": "contact_woning_kop",
           "naam": "Kop op een woningpagina",
-          "standaard": "Deze woning met eigen ogen zien?",
+          "standaard": {
+            "nl": "Deze woning met eigen ogen zien?",
+            "en": "See this property for yourself?",
+            "es": "¿Quieres ver esta propiedad en persona?"
+          },
           "max": 70
         },
         {
           "id": "contact_woning_tekst",
           "naam": "Tekst op een woningpagina",
           "type": "lang",
-          "standaard": "Ik begeleid je persoonlijk — plan een vrijblijvende bezichtiging, ter plaatse of via een videorondleiding."
+          "standaard": {
+            "nl": "Ik begeleid je persoonlijk — plan een vrijblijvende bezichtiging, ter plaatse of via een videorondleiding.",
+            "en": "I'll guide you personally — book a viewing without obligation, on site or as a video tour.",
+            "es": "Te acompaño personalmente: reserva una visita sin compromiso, presencial o mediante un recorrido en vídeo."
+          }
         }
       ]
     },
@@ -225,24 +349,44 @@
         {
           "id": "tel_weergave",
           "naam": "Telefoonnummer zoals het er staat",
-          "standaard": "+34 604 27 29 07"
+          "standaard": {
+            "nl": "+34 604 27 29 07",
+            "en": "+34 604 27 29 07",
+            "es": "+34 604 27 29 07"
+          },
+          "eentalig": true
         },
         {
           "id": "tel_nummer",
           "naam": "Telefoonnummer om te bellen",
-          "standaard": "+34604272907",
-          "hint": "Zonder spaties, met landcode."
+          "standaard": {
+            "nl": "+34604272907",
+            "en": "+34604272907",
+            "es": "+34604272907"
+          },
+          "hint": "Zonder spaties, met landcode.",
+          "eentalig": true
         },
         {
           "id": "whatsapp",
           "naam": "WhatsApp-nummer",
-          "standaard": "34604272907",
-          "hint": "Alleen cijfers, met landcode, zonder plus."
+          "standaard": {
+            "nl": "34604272907",
+            "en": "34604272907",
+            "es": "34604272907"
+          },
+          "hint": "Alleen cijfers, met landcode, zonder plus.",
+          "eentalig": true
         },
         {
           "id": "email",
           "naam": "E-mailadres",
-          "standaard": "contact@caroleriche.com"
+          "standaard": {
+            "nl": "contact@caroleriche.com",
+            "en": "contact@caroleriche.com",
+            "es": "contact@caroleriche.com"
+          },
+          "eentalig": true
         }
       ]
     },
@@ -254,17 +398,32 @@
         {
           "id": "footer_naam",
           "naam": "Naam",
-          "standaard": "Caro Leriche"
+          "standaard": {
+            "nl": "Caro Leriche",
+            "en": "Caro Leriche",
+            "es": "Caro Leriche"
+          },
+          "eentalig": true
         },
         {
           "id": "footer_regel",
           "naam": "Regel eronder",
-          "standaard": "Real Estate Spain"
+          "standaard": {
+            "nl": "Real Estate Spain",
+            "en": "Real Estate Spain",
+            "es": "Real Estate Spain"
+          },
+          "eentalig": true
         },
         {
           "id": "footer_raicv",
           "naam": "Registratie",
-          "standaard": "RAICV 3994"
+          "standaard": {
+            "nl": "RAICV 3994",
+            "en": "RAICV 3994",
+            "es": "RAICV 3994"
+          },
+          "eentalig": true
         }
       ]
     },
@@ -277,35 +436,56 @@
           "id": "juridisch_naam",
           "naam": "Naam bij het copyright",
           "hint": "Staat in de regel onderaan elke pagina en in het magazine.",
-          "standaard": "Carine Leriche"
+          "standaard": {
+            "nl": "Carine Leriche",
+            "en": "Carine Leriche",
+            "es": "Carine Leriche"
+          },
+          "eentalig": true
         },
         {
           "id": "juridisch_aviso",
           "naam": "Aviso Legal",
           "type": "pagina",
           "hint": "Een lege regel begint een nieuwe alinea.",
-          "standaard": "Deze tekst is nog niet ingevuld. Zet hier de tekst die je van je gestor of jurist krijgt; zolang dit veld leeg is, ziet een bezoeker precies deze regel."
+          "standaard": {
+            "nl": "Deze tekst is nog niet ingevuld. Zet hier de tekst die je van je gestor of jurist krijgt; zolang dit veld leeg is, ziet een bezoeker precies deze regel.",
+            "en": "This text has not been filled in yet. Put the text you receive from your gestor or lawyer here; as long as this field is empty, visitors see exactly this line.",
+            "es": "Este texto todavía no se ha rellenado. Introduce aquí el texto que te facilite tu gestor o abogado; mientras este campo esté vacío, los visitantes verán exactamente esta línea."
+          }
         },
         {
           "id": "juridisch_privacidad",
           "naam": "Privacidad",
           "type": "pagina",
           "hint": "Een lege regel begint een nieuwe alinea.",
-          "standaard": "Deze tekst is nog niet ingevuld. Zet hier de tekst die je van je gestor of jurist krijgt; zolang dit veld leeg is, ziet een bezoeker precies deze regel."
+          "standaard": {
+            "nl": "Deze tekst is nog niet ingevuld. Zet hier de tekst die je van je gestor of jurist krijgt; zolang dit veld leeg is, ziet een bezoeker precies deze regel.",
+            "en": "This text has not been filled in yet. Put the text you receive from your gestor or lawyer here; as long as this field is empty, visitors see exactly this line.",
+            "es": "Este texto todavía no se ha rellenado. Introduce aquí el texto que te facilite tu gestor o abogado; mientras este campo esté vacío, los visitantes verán exactamente esta línea."
+          }
         },
         {
           "id": "juridisch_cookies",
           "naam": "Cookies",
           "type": "pagina",
           "hint": "Een lege regel begint een nieuwe alinea.",
-          "standaard": "Deze tekst is nog niet ingevuld. Zet hier de tekst die je van je gestor of jurist krijgt; zolang dit veld leeg is, ziet een bezoeker precies deze regel."
+          "standaard": {
+            "nl": "Deze tekst is nog niet ingevuld. Zet hier de tekst die je van je gestor of jurist krijgt; zolang dit veld leeg is, ziet een bezoeker precies deze regel.",
+            "en": "This text has not been filled in yet. Put the text you receive from your gestor or lawyer here; as long as this field is empty, visitors see exactly this line.",
+            "es": "Este texto todavía no se ha rellenado. Introduce aquí el texto que te facilite tu gestor o abogado; mientras este campo esté vacío, los visitantes verán exactamente esta línea."
+          }
         },
         {
           "id": "juridisch_disclaimer",
           "naam": "Disclaimer",
           "type": "pagina",
           "hint": "Een lege regel begint een nieuwe alinea.",
-          "standaard": "Deze tekst is nog niet ingevuld. Zet hier de tekst die je van je gestor of jurist krijgt; zolang dit veld leeg is, ziet een bezoeker precies deze regel."
+          "standaard": {
+            "nl": "Deze tekst is nog niet ingevuld. Zet hier de tekst die je van je gestor of jurist krijgt; zolang dit veld leeg is, ziet een bezoeker precies deze regel.",
+            "en": "This text has not been filled in yet. Put the text you receive from your gestor or lawyer here; as long as this field is empty, visitors see exactly this line.",
+            "es": "Este texto todavía no se ha rellenado. Introduce aquí el texto que te facilite tu gestor o abogado; mientras este campo esté vacío, los visitantes verán exactamente esta línea."
+          }
         }
       ]
     },
@@ -319,16 +499,45 @@
           "naam": "Regel op de voorkant",
           "type": "lang",
           "hint": "Staat klein onderaan de voorkant, onder de prijs.",
-          "standaard": "Information and availability subject to change. Please contact us for the latest information."
+          "standaard": {
+            "nl": "Information and availability subject to change. Please contact us for the latest information.",
+            "en": "Information and availability subject to change. Please contact us for the latest information.",
+            "es": "La información y la disponibilidad pueden cambiar. Contacta con nosotros para obtener la información más reciente."
+          }
         },
         {
           "id": "magazine_klein",
           "naam": "Kleine lettertjes op de achterkant",
           "type": "pagina",
           "hint": "Een lege regel begint een nieuwe alinea. De laatste alinea komt er iets duidelijker uit te staan — daar horen de naam en de gegevens.",
-          "standaard": "The information contained in this property magazine is provided for general information purposes only and is based on information available to Carine Leriche at the time of publication. Prices, availability, measurements, features, photographs and other property details may be subject to change and may contain errors or omissions.\n\nInformation concerning ownership, planning status, licences, permits, certificates, tourist licences, utilities, charges, taxes and other legal or administrative matters should be independently verified before entering into a transaction.\n\nThis magazine does not constitute a contractual offer or guarantee that the information provided is complete, accurate or up to date. Carine Leriche recommends that prospective buyers carry out the appropriate legal, technical and financial checks before committing to a purchase.\n\nCarine Leriche · NIF/NIE Y7836853P · RAICV nº 3994 · contact@caroleriche.com · caroleriche.com"
+          "standaard": {
+            "nl": "The information contained in this property magazine is provided for general information purposes only and is based on information available to Carine Leriche at the time of publication. Prices, availability, measurements, features, photographs and other property details may be subject to change and may contain errors or omissions.\n\nInformation concerning ownership, planning status, licences, permits, certificates, tourist licences, utilities, charges, taxes and other legal or administrative matters should be independently verified before entering into a transaction.\n\nThis magazine does not constitute a contractual offer or guarantee that the information provided is complete, accurate or up to date. Carine Leriche recommends that prospective buyers carry out the appropriate legal, technical and financial checks before committing to a purchase.\n\nCarine Leriche · NIF/NIE Y7836853P · RAICV nº 3994 · contact@caroleriche.com · caroleriche.com",
+            "en": "The information contained in this property magazine is provided for general information purposes only and is based on information available to Carine Leriche at the time of publication. Prices, availability, measurements, features, photographs and other property details may be subject to change and may contain errors or omissions.\n\nInformation concerning ownership, planning status, licences, permits, certificates, tourist licences, utilities, charges, taxes and other legal or administrative matters should be independently verified before entering into a transaction.\n\nThis magazine does not constitute a contractual offer or guarantee that the information provided is complete, accurate or up to date. Carine Leriche recommends that prospective buyers carry out the appropriate legal, technical and financial checks before committing to a purchase.\n\nCarine Leriche · NIF/NIE Y7836853P · RAICV nº 3994 · contact@caroleriche.com · caroleriche.com",
+            "es": "The information contained in this property magazine is provided for general information purposes only and is based on information available to Carine Leriche at the time of publication. Prices, availability, measurements, features, photographs and other property details may be subject to change and may contain errors or omissions.\n\nInformation concerning ownership, planning status, licences, permits, certificates, tourist licences, utilities, charges, taxes and other legal or administrative matters should be independently verified before entering into a transaction.\n\nThis magazine does not constitute a contractual offer or guarantee that the information provided is complete, accurate or up to date. Carine Leriche recommends that prospective buyers carry out the appropriate legal, technical and financial checks before committing to a purchase.\n\nCarine Leriche · NIF/NIE Y7836853P · RAICV nº 3994 · contact@caroleriche.com · caroleriche.com"
+          }
         }
       ]
+    }
+  ],
+  "talen": [
+    {
+      "id": "en",
+      "naam": "English",
+      "kort": "EN",
+      "pad": "",
+      "standaard": true
+    },
+    {
+      "id": "nl",
+      "naam": "Nederlands",
+      "kort": "NL",
+      "pad": "nl"
+    },
+    {
+      "id": "es",
+      "naam": "Español",
+      "kort": "ES",
+      "pad": "es"
     }
   ]
 }

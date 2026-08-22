@@ -4,12 +4,13 @@ import sectieData from '../../public/secties.json' with { type: 'json' }
 import { STANDAARD_TEKSTEN, normaliseerTeksten } from './teksten.js'
 import { STANDAARD_FOTOLAYOUT, normaliseerFotolayout } from './fotolayout.js'
 import { STANDAARD_LOGO, normaliseerLogo } from './logo.js'
+import { STANDAARD_WEERGAVE, normaliseerWeergave } from './weergave.js'
 
 export type Sectie = { id: string; aan: boolean }
 export type Keuzes = Record<string, string>
 export type Fotolayout = { stijl: string; kolommen: number; marge: string }
 export type Logo = { bron: string; url: string; vorm: string; formaat: string; naam: string; op_donker: string }
-export type Instellingen = { palet: string; lettertype: string; keuzes: Keuzes; secties: Sectie[]; mapsSleutel: string; teksten: Record<string, string>; fotolayout: Fotolayout; logo: Logo }
+export type Instellingen = { palet: string; lettertype: string; keuzes: Keuzes; secties: Sectie[]; mapsSleutel: string; teksten: Record<string, string>; fotolayout: Fotolayout; logo: Logo; weergave: any; tekstenRuw?: any }
 
 // De secties van de homepage, in de volgorde zoals de site oorspronkelijk was.
 // Staat een sectie hier niet bij, dan bestaat hij niet — onbekende id's uit de
@@ -26,6 +27,8 @@ export const STANDAARD_INSTELLINGEN: Instellingen = {
   teksten: { ...STANDAARD_TEKSTEN },
   fotolayout: normaliseerFotolayout(HOOFDDESIGN.fotolayout ?? STANDAARD_FOTOLAYOUT),
   logo: normaliseerLogo((HOOFDDESIGN as any).logo ?? STANDAARD_LOGO),
+  weergave: normaliseerWeergave((HOOFDDESIGN as any).weergave ?? STANDAARD_WEERGAVE),
+  tekstenRuw: null,
 }
 
 /** Alleen bestaande groepen en bestaande opties; de rest wordt 'stijl'. */
@@ -58,39 +61,45 @@ export function normaliseerSecties(ruw: unknown): Sectie[] {
   return schoon
 }
 
+// Eén keer ophalen, daarna per taal de teksten oplossen. De rest van de
+// instellingen (palet, logo, secties) is taalonafhankelijk.
 let cache: Instellingen | null = null
+let ruweTeksten: any = null
 
 /**
  * Haalt de vormgeving op. Faalt nooit de build: bij een fout, een lege tabel of
  * een onbereikbare database vallen we terug op de standaard (huisstijl, alles aan).
  */
-export async function getInstellingen(): Promise<Instellingen> {
-  if (cache) return cache
+export async function getInstellingen(taal?: string): Promise<Instellingen> {
+  if (cache) return { ...cache, teksten: normaliseerTeksten(ruweTeksten, taal) }
   try {
     const { data, error } = await supabase
       .from('instellingen_publiek')
-      .select('palet, lettertype, keuzes, secties, maps_sleutel, teksten, fotolayout, logo')
+      .select('palet, lettertype, keuzes, secties, maps_sleutel, teksten, fotolayout, logo, weergave')
       .eq('id', 'site')
       .maybeSingle()
     if (error) {
       console.warn('[supabase] instellingen:', error.message, '→ standaard gebruikt')
       cache = STANDAARD_INSTELLINGEN
-      return cache
+      return { ...cache, teksten: normaliseerTeksten(null, taal) }
     }
+    ruweTeksten = data?.teksten
     cache = {
       palet: vindPalet(data?.palet).id,
       lettertype: vindLettertype(data?.lettertype).id,
       keuzes: normaliseerKeuzes(data?.keuzes),
       secties: normaliseerSecties(data?.secties),
       mapsSleutel: typeof data?.maps_sleutel === 'string' ? data.maps_sleutel.trim() : '',
-      teksten: normaliseerTeksten(data?.teksten),
+      teksten: normaliseerTeksten(data?.teksten, taal),
+      tekstenRuw: data?.teksten ?? null,
       fotolayout: normaliseerFotolayout(data?.fotolayout),
       logo: normaliseerLogo(data?.logo),
+      weergave: normaliseerWeergave(data?.weergave),
     }
     return cache
   } catch (e: any) {
     console.warn('[supabase] instellingen ophalen faalde:', e?.message || e, '→ standaard gebruikt')
     cache = STANDAARD_INSTELLINGEN
-    return cache
+    return { ...cache, teksten: normaliseerTeksten(null, taal) }
   }
 }

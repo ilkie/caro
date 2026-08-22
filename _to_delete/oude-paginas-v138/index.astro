@@ -11,7 +11,7 @@ import Contact from '../components/secties/Contact.astro';
 import { logoAttributen } from '../lib/logo.js';
 
 const alle = await getWoningen();
-const { secties, teksten, logo } = await getInstellingen();
+const { secties, teksten, logo, weergave } = await getInstellingen();
 
 // Welke sectie hoort bij welk component. Staat een id hier niet in, dan wordt
 // hij overgeslagen — zo kan een oude instelling de pagina nooit slopen.
@@ -29,6 +29,6 @@ const merkUrl = logoAttributen(logo).url;
 <Base>
   {zichtbaar.map((s) => {
     const Sectie = componenten[s.id];
-    return <Sectie alle={alle} teksten={teksten} merkUrl={merkUrl} />;
+    return <Sectie alle={alle} teksten={teksten} merkUrl={merkUrl} weergave={weergave} />;
   })}
 </Base>

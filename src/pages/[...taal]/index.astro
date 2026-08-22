@@ -1,0 +1,43 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getWoningen } from '../../lib/supabase';
+import { getInstellingen } from '../../lib/instellingen';
+
+import Hero from '../../components/secties/Hero.astro';
+import Woningen from '../../components/secties/Woningen.astro';
+import Fotografie from '../../components/secties/Fotografie.astro';
+import Over from '../../components/secties/Over.astro';
+import Contact from '../../components/secties/Contact.astro';
+import { logoAttributen } from '../../lib/logo.js';
+import { TALEN, taalPad, schoneTaal } from '../../lib/teksten.js';
+
+// Eén bestand voor alle drie de talen: Engels op /, Nederlands op /nl/,
+// Spaans op /es/. De standaardtaal krijgt `undefined` als pad, waardoor
+// Astro hem op de wortel zet.
+export async function getStaticPaths() {
+  return TALEN.map((t) => ({ params: { taal: taalPad(t.id) || undefined }, props: { taal: t.id } }));
+}
+
+const taal = schoneTaal(Astro.props.taal);
+const alle = await getWoningen();
+const { secties, teksten, logo, weergave } = await getInstellingen(taal);
+
+// Welke sectie hoort bij welk component. Staat een id hier niet in, dan wordt
+// hij overgeslagen — zo kan een oude instelling de pagina nooit slopen.
+const componenten = {
+  hero: Hero,
+  woningen: Woningen,
+  fotografie: Fotografie,
+  over: Over,
+  contact: Contact,
+};
+
+const zichtbaar = secties.filter((s) => s.aan && componenten[s.id]);
+const merkUrl = logoAttributen(logo).url;
+---
+<Base taal={taal} pad="/">
+  {zichtbaar.map((s) => {
+    const Sectie = componenten[s.id];
+    return <Sectie alle={alle} teksten={teksten} merkUrl={merkUrl} weergave={weergave} taal={taal} />;
+  })}
+</Base>

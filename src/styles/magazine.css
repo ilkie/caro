@@ -27,6 +27,15 @@
   border-bottom:1px solid rgba(255,255,255,.35);padding-bottom:2px}
 .mg-terug:hover{opacity:1}
 
+/* De taalkeuze in de balk. Alleen op het scherm — op papier heeft een lezer
+   niets aan drie knopjes, en het boekje staat er dan al in de taal die hij
+   gekozen heeft. */
+.mg-talen{display:flex;gap:2px;align-items:center}
+.mg-talen a{color:#fff;opacity:.6;font-size:.68rem;letter-spacing:.1em;padding:6px 8px;
+  border-radius:var(--r-pill);transition:.15s}
+.mg-talen a:hover{opacity:1;background:rgba(255,255,255,.14)}
+.mg-talen a.nu{opacity:1;font-weight:600;background:rgba(255,255,255,.18)}
+
 .mg-stapel{padding:26px 16px 60px;display:flex;flex-direction:column;align-items:center;gap:26px}
 
 /* ---------- Eén vel ---------- */

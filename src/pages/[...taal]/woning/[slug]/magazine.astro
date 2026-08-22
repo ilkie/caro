@@ -1,0 +1,677 @@
+---
+/**
+ * Het magazine van één woning: een A4-boekje dat de bezoeker als PDF bewaart.
+ *
+ * Bewust géén Base.astro: deze pagina heeft geen menu en geen footer, want die
+ * horen niet op papier. Het palet, het lettertype en het logo komen wél uit de
+ * instellingen, zodat het magazine meeverandert met de rest van de site.
+ */
+import '../../../../styles/global.css';
+import '../../../../styles/magazine.css';
+import { getAlleWoningen } from '../../../../lib/supabase';
+import { getInstellingen } from '../../../../lib/instellingen';
+import { paletCss, lettertypeUrl } from '../../../../lib/palet.js';
+import { tekst, TALEN, taalPad, schoneTaal, link } from '../../../../lib/teksten.js';
+import { logoAttributen } from '../../../../lib/logo.js';
+import { magazineIndeling, magazineFeiten } from '../../../../lib/magazine.js';
+import { statusVan } from '../../../../lib/status.js';
+import { woorden } from '../../../../lib/woorden.js';
+import MagazineVoet from '../../../../components/MagazineVoet.astro';
+
+export async function getStaticPaths() {
+  const woningen = await getAlleWoningen();
+  return TALEN.flatMap((t) =>
+    woningen.map((w) => ({
+      params: { taal: taalPad(t.id) || undefined, slug: w.slug },
+      props: { woning: w, taal: t.id },
+    }))
+  );
+}
+
+const { woning: d } = Astro.props;
+const taal = schoneTaal(Astro.props.taal);
+const a = (naar) => link(taal, naar);
+const w = woorden(taal);
+const instellingen = await getInstellingen(taal);
+const t = (id) => tekst(instellingen.teksten, id);
+const merk = logoAttributen(instellingen.logo);
+
+const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
+// Jaartal uit de bouwdatum, net als in de footer van de site.
+const JAAR = new Date().getFullYear();
+const ind = magazineIndeling(d);
+const feiten = magazineFeiten(d, taal);
+
+// Wat Caro voor deze woning zelf heeft ingevuld. Leeg = de standaard, dus
+// hieronder staat overal `eigen.x || het standaardantwoord`.
+const eigen = ind.eigen;
+
+const plek = [d.plaats, d.regio].filter(Boolean).join(', ');
+const coverTitel = eigen.cover_titel || d.titel;
+const coverRegel = eigen.cover_regel || plek;
+const toonPrijs = eigen.toon_prijs && !!d.prijs;
+const verhaalKop = eigen.verhaal_kop || t('hero_eyebrow');
+const verhaalTitel = eigen.verhaal_titel || d.titel;
+const slotZin = eigen.slot_zin || t('magazine_slot');
+const status = statusVan(d.status);
+// De voorbehouden die Caro heeft meegegeven: één regel op de voorkant, het
+// hele blokje op de achterkant. Alle woningen delen ze, dus ze komen uit de
+// vaste teksten en niet uit het magazine van deze ene woning.
+const voorbehoud = t('magazine_voorbehoud');
+const kleineLetters = (t('magazine_klein') || '')
+  .split(/\n{2,}|\n/).map((r) => r.trim()).filter(Boolean);
+
+const alineas = (eigen.verhaal_tekst || d.omschrijving || '')
+  .split(/\n{2,}|\n/).map((s) => s.trim()).filter(Boolean);
+const binnen = d.kenmerken_binnen || [];
+const buiten = d.kenmerken_buiten || [];
+const afstanden = d.afstanden || [];
+const heeftKenmerken = eigen.toon_kenmerken
+  && (binnen.length > 0 || buiten.length > 0 || afstanden.length > 0);
+
+// Paginanummers lopen door over alle vellen; de voorkant krijgt er geen.
+let nr = 1;
+const volgende = () => ++nr;
+// voorkant + verhaal + fotopagina's + (kenmerken) + achterkant
+const aantalPaginas = 2 + ind.fotopaginas.length + (heeftKenmerken ? 1 : 0) + 1;
+
+// De miniaturen onderaan, in dezelfde volgorde als de vellen. Een tekstpagina
+// heeft geen beeld; die krijgt een leeg vlakje met alleen het nummer.
+const miniaturen = [
+  { beeld: ind.cover },
+  { beeld: ind.zijfoto ? ind.zijfoto.src : '' },
+  ...ind.fotopaginas.map((p) => ({ beeld: p.fotos[0].src })),
+  ...(heeftKenmerken ? [{ beeld: '' }] : []),
+  { beeld: ind.slotfoto ? ind.slotfoto.src : ind.cover },
+].map((m, i) => ({ ...m, nr: i + 1 }));
+
+// Eén leeg vel vóór de voorkant, zodat de cover alleen staat zoals bij een echt
+// boekje. Is het totaal daarna oneven, dan sluit er ook een leeg vel achteraan.
+const sluitLeeg = (1 + aantalPaginas) % 2 === 1;
+
+const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
+---
+<!doctype html>
+<html lang={taal}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{titel}</title>
+  <meta name="robots" content="noindex, nofollow" />
+  {TALEN.map((x) => <link rel="alternate" hreflang={x.id} href={link(x.id, `/woning/${d.slug}/magazine/`)} />)}
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href={lettertypeUrl(instellingen.lettertype)} rel="stylesheet" />
+  <style is:inline set:html={paletCss(instellingen.palet, instellingen.keuzes, instellingen.lettertype)}></style>
+</head>
+<body class="mg-body">
+  <script is:inline>document.documentElement.classList.add('heeft-js');</script>
+
+  <!-- Alleen op het scherm; verdwijnt bij afdrukken. -->
+  <div class="mg-balk">
+    <div class="wat"><b>{d.titel}</b> — <span class="mg-teller" id="teller">1</span> {w('mg_van_de')} {aantalPaginas}</div>
+    <div class="knoppen">
+      <a class="mg-terug" href={a(`/woning/${d.slug}/`)}>{w('mg_terug')}</a>
+      <!-- De bezoeker landt in de taal van de pagina, maar kan het boekje ook
+           in een andere taal openen en bewaren. Verdwijnt bij het afdrukken. -->
+      <div class="mg-talen" role="group" aria-label={w('mg_taal')}>
+        {TALEN.map((x) => (
+          <a href={link(x.id, `/woning/${d.slug}/magazine/`)} hreflang={x.id} lang={x.id}
+             class={x.id === taal ? 'nu' : undefined}
+             aria-current={x.id === taal ? 'true' : undefined}
+             title={x.naam}>{x.kort}</a>
+        ))}
+      </div>
+      <button class="mg-knop mg-knop-stil" type="button" id="schermvullend">{w('mg_volscherm')}</button>
+      <button class="mg-knop" type="button" id="bewaar">{w('mg_pdf')}</button>
+    </div>
+  </div>
+  <div class="mg-voortgang"><i id="voortgang"></i></div>
+
+  <div class="mg-lezer">
+  <button class="mg-pijl vorige" type="button" id="vorige" aria-label={w('mg_vorige')}>‹</button>
+  <button class="mg-pijl volgende" type="button" id="volgende" aria-label={w('mg_volgende')}>›</button>
+  <div class="mg-hint" id="hint">{w('mg_veeg')}</div>
+  <div class="mg-flip" id="flip" aria-hidden="true"></div>
+  <div class="mg-stapel" id="stapel" tabindex="0">
+
+    <!-- Leeg vel: laat de voorkant alleen staan, zoals een dichtgeslagen boekje. -->
+    <div class="mg-vel leeg" aria-hidden="true"></div>
+
+    <!-- ---------- Voorkant ---------- -->
+    <div class="mg-vel"><section class="mg-pag mg-cover">
+      {ind.cover && <div class="beeld"><img src={ind.cover} alt={coverTitel} /></div>}
+      <div class="waas"></div>
+      <div class="inhoud">
+        <div class="merk">
+          <img src={merk.url} alt="" />
+          <span class="naam">{t('footer_naam')}<small>{t('footer_regel')}</small></span>
+        </div>
+        <div>
+          {status && <span class={`status ${status.klasse}`}>{status.naam}</span>}
+          <h1>{coverTitel}</h1>
+          {coverRegel && <div class="plek">{coverRegel}</div>}
+          {toonPrijs ? <div class="prijs">{euro(d.prijs)}</div> : null}
+          {voorbehoud && <p class="voorbehoud">{voorbehoud}</p>}
+        </div>
+      </div>
+      <MagazineVoet teksten={instellingen.teksten} jaar={JAAR} taal={taal} />
+    </section></div>
+
+    <!-- ---------- Het verhaal ---------- -->
+    <div class="mg-vel"><section class={ind.zijfoto ? 'mg-pag met-bleed' : 'mg-pag'}>
+      {ind.zijfoto && (
+        <div class="zijbleed"><img src={ind.zijfoto.src} alt={ind.zijfoto.label || d.titel} /></div>
+      )}
+      <div class="vulling">
+        <p class="mg-kop">{verhaalKop}</p>
+        <h2>{verhaalTitel}</h2>
+        <div class="mg-verhaal">
+          <div class="kolom">
+            {alineas.length
+              ? alineas.map((a) => <p>{a}</p>)
+              : <p>{plek ? `${verhaalTitel} in ${plek}.` : verhaalTitel}</p>}
+          </div>
+        </div>
+        {feiten.length > 0 && (
+          <div class="mg-feiten" style={`--feiten:${feiten.length}`}>
+            {feiten.map((f) => (
+              <div class="f"><div class="n">{f.waarde}</div><div class="l">{f.label}</div></div>
+            ))}
+          </div>
+        )}
+      </div>
+      <MagazineVoet teksten={instellingen.teksten} jaar={JAAR} taal={taal} />
+      <div class="paginanr">{volgende()}</div>
+    </section></div>
+
+    <!-- ---------- Fotopagina's ---------- -->
+    {ind.fotopaginas.map((p, i) => (
+      <div class="mg-vel"><section class={p.vorm === 'een' ? 'mg-pag op-beeld' : 'mg-pag'}>
+        <div class={`mg-fotos ${p.vorm}`}>
+          {p.fotos.map((f) => (
+            <figure>
+              <img src={f.src} alt={f.label || d.titel} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+              {f.label && <figcaption>{f.label}</figcaption>}
+            </figure>
+          ))}
+        </div>
+        <MagazineVoet teksten={instellingen.teksten} jaar={JAAR} taal={taal} />
+        <div class="paginanr">{volgende()}</div>
+      </section></div>
+    ))}
+
+    <!-- ---------- Kenmerken en ligging ---------- -->
+    {heeftKenmerken && (
+      <div class="mg-vel"><section class="mg-pag">
+        <div class="vulling">
+          <p class="mg-kop">{w('mg_in_het_kort')}</p>
+          <h2>{w('kenmerken')}</h2>
+          <div class="mg-twee">
+            <div>
+              <p class="mg-sub">{w('binnen')}</p>
+              <ul class="mg-lijst">{binnen.map((k) => <li>{k}</li>)}</ul>
+            </div>
+            <div>
+              <p class="mg-sub">{w('buiten')}</p>
+              <ul class="mg-lijst">{buiten.map((k) => <li>{k}</li>)}</ul>
+            </div>
+          </div>
+
+          {afstanden.length > 0 && (
+            <div class="mg-afstanden">
+              {afstanden.map((a) => (
+                <div class="rij"><span>{a.plek}</span><b>{a.tijd}</b></div>
+              ))}
+            </div>
+          )}
+
+          {plek && (
+            <div class="mg-ligging">
+              <p class="mg-sub" style="margin-bottom:2mm">{w('mg_ligging')}</p>
+              <div class="plek">{plek}</div>
+              <p>{w('mg_adres')}</p>
+            </div>
+          )}
+        </div>
+        <MagazineVoet teksten={instellingen.teksten} jaar={JAAR} taal={taal} />
+        <div class="paginanr">{volgende()}</div>
+      </section></div>
+    )}
+
+    <!-- ---------- Achterkant ---------- -->
+    <div class="mg-vel"><section class="mg-pag donker">
+      <div class="mg-slot">
+        <div class="beeld">
+          {ind.slotfoto
+            ? <img src={ind.slotfoto.src} alt={ind.slotfoto.label || d.titel} loading="lazy" decoding="async" />
+            : (ind.cover && <img src={ind.cover} alt={d.titel} />)}
+        </div>
+        <div class="onder">
+          <div>
+            <div class="merk">
+              <img src={merk.url} alt="" />
+              <span class="naam">{t('footer_naam')}<small>{t('footer_regel')}</small></span>
+            </div>
+            <p class="zin">{slotZin}</p>
+          </div>
+          <div>
+            <div class="mg-contact">
+              <div><span>{w('mg_telefoon')}</span>{t('tel_weergave')}</div>
+              <div><span>{w('mg_email')}</span>{t('email')}</div>
+              <div><span>{w('mg_registratie')}</span>{t('footer_raicv')}</div>
+            </div>
+            <div class="mg-klein">
+              {kleineLetters.map((r) => <p>{r}</p>)}
+            </div>
+          </div>
+        </div>
+      </div>
+        <MagazineVoet teksten={instellingen.teksten} jaar={JAAR} taal={taal} />
+    </section></div>
+
+    {sluitLeeg && <div class="mg-vel leeg" aria-hidden="true"></div>}
+
+  </div>
+  </div>
+
+  <!-- ---------- Miniaturen ---------- -->
+  <div class="mg-strip" id="strip">
+    {miniaturen.map((m) => (
+      <button class="mg-mini" type="button" data-nr={m.nr} aria-label={`${w('mg_ga_naar')} ${m.nr}`}>
+        <span class={m.beeld ? 'doek' : 'doek tekst'}>
+          {m.beeld && <img src={m.beeld} alt="" loading="lazy" decoding="async" />}
+        </span>
+        <span class="nr">{m.nr}</span>
+      </button>
+    ))}
+  </div>
+
+  <script define:vars={{ PAGINAS: aantalPaginas, VOLSCHERM_AAN: w('mg_volscherm'), VOLSCHERM_UIT: w('mg_volscherm_uit') }}>
+    (function () {
+      var lezer    = document.querySelector('.mg-lezer');
+      var stapel   = document.getElementById('stapel');
+      var vellen   = stapel.querySelectorAll('.mg-vel');
+      var strip    = document.getElementById('strip');
+      var minis    = strip ? strip.querySelectorAll('.mg-mini') : [];
+      var teller   = document.getElementById('teller');
+      var balkje   = document.getElementById('voortgang');
+      var vorige   = document.getElementById('vorige');
+      var volgende = document.getElementById('volgende');
+      var bewaar   = document.getElementById('bewaar');
+      var volscherm= document.getElementById('schermvullend');
+      var lege     = document.querySelectorAll('.mg-vel.leeg').length;
+      var totaal   = vellen.length;            // wordt in meet() goedgezet
+      var perBeeld = 1;                        // 1 of 2 pagina's tegelijk
+
+      /* Op een telefoon staan de lege vellen op display:none — die tellen dan
+         niet mee in de scrollbreedte, en vel 0 is meteen de voorkant. In
+         spreiding tellen ze wél mee en is vel 0 het lege vel vóór de cover. */
+      function velNaarPagina(v) { return perBeeld === 2 ? v : v + 1; }
+      function paginaNaarVel(nr) { return perBeeld === 2 ? nr : nr - 1; }
+
+      /* ---------- Alles precies laten passen ----------
+         210 x 297 mm bij 96 dpi = 793.7 x 1122.5 px. In spreiding krijgt elke
+         pagina de helft van de breedte. */
+      function meet() {
+        var vw = document.documentElement.clientWidth;
+        var vh = window.innerHeight;
+        perBeeld = vw >= 900 ? 2 : 1;
+        lezer.classList.toggle('spreiding', perBeeld === 2);
+        totaal = perBeeld === 2 ? vellen.length : vellen.length - lege;
+
+        var boven = 0;
+        ['.mg-balk', '.mg-voortgang', '.mg-strip'].forEach(function (kies) {
+          var el = document.querySelector(kies);
+          if (el && getComputedStyle(el).display !== 'none') boven += el.getBoundingClientRect().height;
+        });
+        var hoogte = Math.max(300, vh - boven);
+        var rand = vw < 700 ? 20 : 36;
+        var perPagina = (stapel.clientWidth || vw) / perBeeld;
+        var f = Math.min((perPagina - rand) / 793.7, (hoogte - 28) / 1122.5);
+        f = Math.max(0.12, Math.min(f, 1));
+        var r = document.documentElement.style;
+        r.setProperty('--mg-schaal', f.toFixed(4));
+        r.setProperty('--mg-vel-h', hoogte + 'px');
+      }
+
+      function velBreedte() { return (stapel.clientWidth || 1) / perBeeld; }
+
+      /* Waar begint het huidige beeld? In spreiding altijd op een even vel. */
+      function huidige() {
+        var i = Math.round(stapel.scrollLeft / velBreedte());
+        if (perBeeld === 2) i -= (i % 2);
+        return Math.max(0, Math.min(totaal - perBeeld, i));
+      }
+
+      function beschrijf(v) {
+        if (perBeeld === 1) return String(velNaarPagina(v));
+        if (v === 0) return '1';
+        var links = v, rechts = Math.min(v + 1, PAGINAS);
+        return links === rechts ? String(links) : links + '–' + rechts;
+      }
+
+      var doel = null;
+      function bijwerken() {
+        var v = doel !== null ? doel : huidige();
+        teller.textContent = beschrijf(v);
+        balkje.style.width = Math.min(100, ((v + perBeeld) / totaal) * 100) + '%';
+        vorige.disabled = v <= 0;
+        volgende.disabled = v >= totaal - perBeeld;
+        for (var k = 0; k < minis.length; k++) {
+          var nr = Number(minis[k].dataset.nr);
+          var aan = perBeeld === 2
+            ? (v === 0 ? nr === 1 : (nr === v || nr === v + 1))
+            : nr === velNaarPagina(v);
+          minis[k].classList.toggle('nu', aan);
+        }
+      }
+
+      /* ---------- Het blader-gevoel ----------
+         Er draait echt een vel om. Belangrijk: we **verhuizen** de vier echte
+         pagina's naar deze laag in plaats van ze te kopiëren. Een kopie moet
+         opnieuw opgemaakt en getekend worden — dat gaf een korte flits waarin
+         de pagina op ware grootte verscheen en daarna ineenschrompelde. Een
+         verhuisde pagina houdt gewoon zijn eigen schaal.
+
+         De laag toont in zijn eentje zowel het vóór- als het ná-beeld:
+           0 graden  = de spreiding die je verlaat
+           180 graden = de spreiding die je krijgt
+         Daardoor hoeft de scroll eronder pas aan het eind te verspringen, en
+         is er geen enkel moment waarop je iets ziet wisselen. */
+      /* ---------- Meetlat ----------
+         Zet ?meetlat achter de webadres-regel en er verschijnt rechtsonder een
+         kadertje dat bijhoudt wat je deed en wat de lezer daarop deed. Handig
+         om op afstand te zien waaróm er iets verspringt. Zonder die toevoeging
+         gebeurt er niets. */
+      var METEN = location.search.indexOf('meetlat') > -1;
+      var meetVak = null, meetRegels = [], meetT0 = performance.now();
+      function noteer(tekst) {
+        if (!METEN) return;
+        if (!meetVak) {
+          meetVak = document.createElement('div');
+          meetVak.style.cssText = 'position:fixed;right:10px;bottom:10px;z-index:99999;width:340px;' +
+            'max-height:52vh;overflow:auto;background:rgba(10,20,24,.94);color:#dff;' +
+            'font:11px/1.45 ui-monospace,Menlo,monospace;padding:10px 12px;border-radius:10px;' +
+            'box-shadow:0 8px 30px rgba(0,0,0,.5);white-space:pre-wrap';
+          document.body.appendChild(meetVak);
+        }
+        meetRegels.push(((performance.now() - meetT0) / 1000).toFixed(2).padStart(6) + 's  ' + tekst);
+        if (meetRegels.length > 40) meetRegels.shift();
+        meetVak.textContent = 'MEETLAT — doe nu het gebaar dat verspringt\n\n' + meetRegels.join('\n');
+        meetVak.scrollTop = meetVak.scrollHeight;
+      }
+
+      var flip = document.getElementById('flip');
+      var stilAan = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var bezig = false;
+      var FLIPDUUR = 560;
+      var geleend = [];
+
+      /* Verhuist de pagina uit vel `velIndex` naar `doelEl`; onthoudt waar hij
+         vandaan komt. Een leeg vel (de spacer vóór de voorkant) levert niets —
+         dan blijft die helft leeg, precies zoals het hoort. */
+      function leen(velIndex, doelEl) {
+        var vel = vellen[velIndex];
+        var pag = vel && vel.querySelector('.mg-pag');
+        if (!pag || !doelEl) return;
+        geleend.push({ pag: pag, vel: vel });
+        doelEl.appendChild(pag);
+      }
+      function terugzetten() {
+        for (var i = 0; i < geleend.length; i++) geleend[i].vel.appendChild(geleend[i].pag);
+        geleend = [];
+      }
+
+      function vak(klasse) {
+        var el = document.createElement('div');
+        el.className = klasse;
+        return el;
+      }
+
+      /* Draait van `van` naar `naar` (beide linker-velindexen van een spreiding). */
+      function bladerOm(van, naar) {
+        var vooruit = naar > van;
+        flip.innerHTML = '';
+
+        var links  = vak('helft links');
+        var rechts = vak('helft rechts');
+        var blad   = vak('blad');
+        var voor   = vak('kant voor');
+        var achter = vak('kant achter');
+        blad.appendChild(voor);
+        blad.appendChild(achter);
+        flip.appendChild(links);
+        flip.appendChild(rechts);
+        flip.appendChild(blad);
+
+        // de helft die het omslaande vel pas aan het eind bedekt, en andersom
+        leen(vooruit ? van : naar, links);
+        leen(vooruit ? naar + 1 : van + 1, rechts);
+        // de twee kanten van het vel zelf
+        leen(vooruit ? van + 1 : naar + 1, voor);
+        leen(vooruit ? naar : van, achter);
+
+        var start = vooruit ? 0 : -180;
+        var eind  = vooruit ? -180 : 0;
+        blad.style.transform = 'rotateY(' + start + 'deg)';
+        // eronder mag niets bewegen zolang het vel draait
+        stapel.style.overflowX = 'hidden';
+        noteer('  omslaan START ' + van + ' -> ' + naar);
+        flip.classList.add('aan');
+        // even laten doorrekenen, anders slaat de browser de overgang over
+        void blad.offsetWidth;
+        flip.classList.add('draait');
+        // De curve mag niet te vlak beginnen: met een trage aanloop lijkt het
+        // alsof er na de klik eerst niets gebeurt en het dan ineens springt.
+        blad.style.transition = 'transform ' + FLIPDUUR + 'ms cubic-bezier(.33,.18,.22,1)';
+        blad.style.transform = 'rotateY(' + eind + 'deg)';
+
+        setTimeout(function () {
+          // pagina's terug, scroll goedzetten en de laag weghalen — in één tik,
+          // zodat er niets tussenin te zien is
+          terugzetten();
+          stapel.style.overflowX = '';
+          ganaar(naar, true);
+          flip.classList.remove('aan', 'draait');
+          flip.innerHTML = '';
+          bezig = false;
+          noteer('  omslaan klaar, staat nu op beeld ' + huidige());
+        }, FLIPDUUR + 30);
+      }
+
+      /* Eén stap gaat zacht; een sprong meteen — anders zit je seconden naar
+         een voorbijrazend boekje te kijken. */
+      function ganaar(v, meteen) {
+        if (perBeeld === 2) v -= (v % 2);
+        v = Math.max(0, Math.min(totaal - perBeeld, v));
+        var x = Math.round(v * velBreedte());
+        doel = v;
+        clearTimeout(stapel._doelWeg);
+        stapel._doelWeg = setTimeout(function () { doel = null; bijwerken(); }, 900);
+        if (meteen) {
+          stapel.style.scrollBehavior = 'auto';
+          stapel.scrollLeft = x;
+          stapel.style.scrollBehavior = '';
+        } else {
+          stapel.scrollTo({ left: x, behavior: 'smooth' });
+        }
+        bijwerken();
+      }
+
+      /* Eén beeld verder of terug: met omslaande pagina waar dat kan, anders
+         gewoon schuiven (telefoon, 'minder beweging', of een grote sprong). */
+      function stap(richting, bron) {
+        if (bezig) { noteer('STAP geweigerd (' + (bron || '?') + ') — nog bezig'); return; }
+        var van = huidige();
+        var naar = Math.max(0, Math.min(totaal - perBeeld, van + richting * perBeeld));
+        noteer('STAP via ' + (bron || '?') + ': beeld ' + van + ' -> ' + naar);
+        if (naar === van) return;
+        if (perBeeld !== 2 || stilAan || !flip) { ganaar(naar); return; }
+        bezig = true;
+        doel = naar;               // teller en miniaturen meteen goed
+        bijwerken();
+        voorlaadRond(naar);
+        bladerOm(van, naar);
+      }
+
+      vorige.addEventListener('click', function () { stap(-1, 'pijl links'); });
+      volgende.addEventListener('click', function () { stap(1, 'pijl rechts'); });
+
+      for (var k = 0; k < minis.length; k++) {
+        (function (knop) {
+          knop.addEventListener('click', function () {
+            if (bezig) return;
+            var doelVel = paginaNaarVel(Number(knop.dataset.nr));
+            if (perBeeld === 2) doelVel -= (doelVel % 2);
+            var nu = huidige();
+            // buurspreiding? dan slaat de pagina netjes om in plaats van te wisselen
+            if (Math.abs(doelVel - nu) === perBeeld) { stap(doelVel > nu ? 1 : -1, 'miniatuur'); return; }
+            noteer('MINIATUUR sprong: beeld ' + nu + ' -> ' + doelVel);
+            ganaar(doelVel, true);
+          });
+        })(minis[k]);
+      }
+
+      document.addEventListener('keydown', function (e) {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); stap(1, 'toets ' + e.key); }
+        else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); stap(-1, 'toets ' + e.key); }
+        else if (e.key === 'Home') { e.preventDefault(); ganaar(0, true); }
+        else if (e.key === 'End')  { e.preventDefault(); ganaar(totaal - perBeeld, true); }
+      });
+
+      /* Een muiswiel of trackpad scrollt verticaal; hier hoort dat te bladeren.
+         Let op: een trackpad stuurt géén losse tikjes maar een stroom van
+         tientallen gebeurtenissen, die na het loslaten nog doorloopt. Met een
+         simpele tijdslimiet blader je daardoor met één veeg drie pagina's door
+         — en omdat de animatie maar één omslag laat zien, lijkt het alsof het
+         beeld erna verspringt. Daarom: één gebaar is één pagina. Pas als er
+         200 ms lang geen enkele gebeurtenis meer komt, telt het als een nieuw
+         gebaar. */
+      /* Een trackpad-veeg is één lange sliert signalen die na het loslaten
+         uitdooft: eerst tientallen per seconde, aan het staartje nog maar een
+         paar. Die gaten aan het eind kunnen ruim een tiende seconde zijn. Een
+         korte pauzedrempel ziet zo'n gat aan voor "nieuw gebaar" en bladert
+         dus twee of drie pagina's door op één veeg. Vandaar een ruime stilte
+         van 450 ms én een minimale rusttijd na elke stap. */
+      var WIELSTILTE = 450, WIELRUST = 550;
+      var wielVrij = true, wielTimer, wielTeller = 0, laatsteStap = 0;
+      stapel.addEventListener('wheel', function (e) {
+        if (e.deltaMode !== 0) return;
+        if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;   // horizontaal = schuiven
+        e.preventDefault();
+        wielTeller++;
+        clearTimeout(wielTimer);
+        wielTimer = setTimeout(function () {
+          wielVrij = true;
+          noteer('VEEG klaar: ' + wielTeller + ' signalen');
+          wielTeller = 0;
+        }, WIELSTILTE);
+        if (!wielVrij || bezig) return;
+        if (Date.now() - laatsteStap < WIELRUST) return;
+        wielVrij = false;
+        laatsteStap = Date.now();
+        stap(e.deltaY > 0 ? 1 : -1, 'veeg/wiel');
+      }, { passive: false });
+
+      var wachten;
+      stapel.addEventListener('scroll', function () {
+        clearTimeout(wachten);
+        wachten = setTimeout(function () {
+          if (bezig) return;                    // het omslaan bepaalt zelf waar we zijn
+          if (huidige() === doel) { clearTimeout(stapel._doelWeg); doel = null; }
+          bijwerken();
+          voorlaadRond(huidige());
+        }, 90);
+      });
+
+      /* Bij het schalen verspringt de scrollpositie; blijf op hetzelfde vel. */
+      var opnieuw;
+      function herschik() {
+        var v = huidige();
+        clearTimeout(opnieuw);
+        opnieuw = setTimeout(function () { meet(); ganaar(v, true); }, 120);
+      }
+      window.addEventListener('resize', herschik);
+      document.addEventListener('fullscreenchange', herschik);
+
+      /* ---------- Volledig scherm ---------- */
+      if (volscherm) {
+        if (!document.documentElement.requestFullscreen) {
+          volscherm.hidden = true;
+        } else {
+          volscherm.addEventListener('click', function () {
+            if (document.fullscreenElement) document.exitFullscreen();
+            else document.documentElement.requestFullscreen().catch(function () {});
+          });
+          document.addEventListener('fullscreenchange', function () {
+            volscherm.textContent = document.fullscreenElement ? VOLSCHERM_UIT : VOLSCHERM_AAN;
+          });
+        }
+      }
+
+      /* Haal de beelden van de spreiding hierna alvast op, zodat er tijdens
+         het omslaan geen foto staat in te laden. */
+      function voorlaadRond(v) {
+        for (var i = v; i < Math.min(vellen.length, v + 4); i++) {
+          var b = vellen[i] && vellen[i].querySelectorAll('img[loading="lazy"]');
+          if (b) for (var j = 0; j < b.length; j++) b[j].loading = 'eager';
+        }
+      }
+
+      meet();
+      lezer.classList.add('gemeten');
+      bijwerken();
+      voorlaadRond(0);
+
+      /* De veeg-hint verdwijnt zodra iemand iets doet, en anders na acht tellen. */
+      var hint = document.getElementById('hint');
+      var hintWeg = function () {
+        if (!hint) return;
+        hint.classList.add('weg');
+        setTimeout(function () { if (hint) hint.hidden = true; }, 500);
+        hint = null;
+      };
+      stapel.addEventListener('scroll', hintWeg, { once: true });
+      stapel.addEventListener('touchstart', hintWeg, { once: true, passive: true });
+      setTimeout(hintWeg, 8000);
+
+      /* ---------- Bewaren als PDF ----------
+         De foto's verderop laden pas als je erheen bladert. Voor het afdrukken
+         moeten ze er wél allemaal zijn, anders komen er lege vlakken op papier. */
+      function allesLaden() {
+        var beelden = [].slice.call(document.querySelectorAll('.mg-stapel img[loading="lazy"]'));
+        beelden.forEach(function (b) { b.loading = 'eager'; });
+        var nogBezig = beelden.filter(function (b) { return !b.complete; });
+        if (!nogBezig.length) return Promise.resolve();
+        return Promise.race([
+          Promise.all(nogBezig.map(function (b) {
+            return new Promise(function (klaar) {
+              b.addEventListener('load', klaar, { once: true });
+              b.addEventListener('error', klaar, { once: true });
+            });
+          })),
+          new Promise(function (klaar) { setTimeout(klaar, 8000); }),
+        ]);
+      }
+
+      bewaar.addEventListener('click', function () {
+        var tekst = bewaar.textContent;
+        bewaar.disabled = true;
+        bewaar.textContent = 'Even geduld…';
+        allesLaden().then(function () {
+          bewaar.disabled = false;
+          bewaar.textContent = tekst;
+          window.print();
+        });
+      });
+
+      window.addEventListener('beforeprint', function () {
+        document.querySelectorAll('.mg-stapel img[loading="lazy"]').forEach(function (b) { b.loading = 'eager'; });
+      });
+    })();
+  </script>
+</body>
+</html>

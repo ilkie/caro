@@ -241,6 +241,19 @@ footer.site a:hover{color:#fff}
 .st-wacht-diep{--st-kleur:var(--st-wacht-diep)}
 .st-klaar{--st-kleur:var(--st-klaar)}
 .card .status,.spotlight .badge{box-shadow:0 2px 10px rgba(0,0,0,.22)}
+
+/* ---------- Verkocht rustiger tonen ----------
+   Caro zet dit aan of uit onder Vormgeving. Aan = een woning die verkocht is
+   (of verkocht onder voorbehoud) valt terug: de foto verliest zijn kleur en de
+   prijs krijgt een streep. De woning blíjft staan — dat is het punt, het laat
+   zien dát er verkocht wordt — maar de aandacht gaat naar wat nog te koop is.
+   Het labeltje houdt zijn eigen kleur, anders zie je niet meer wat er aan de
+   hand is. */
+.card.is-af .img img,.spotlight.is-af .img img{filter:grayscale(.88) brightness(.97);transition:filter .3s}
+.card.is-af:hover .img img,.spotlight.is-af:hover .img img{filter:grayscale(.35) brightness(1)}
+.card.is-af .prijs,.spotlight.is-af .prijs,.wp-af .prijs{text-decoration:line-through;
+  text-decoration-thickness:1px;opacity:.55}
+.card.is-af h3,.spotlight.is-af h3{opacity:.82}
 .card .body{padding:22px 24px 26px;display:flex;flex-direction:column;flex:1}
 .card h3{font-size:1.6rem;line-height:1.05}
 .card .plaats{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px}
