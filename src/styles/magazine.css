@@ -140,6 +140,11 @@
    voorkant zorgt dat de cover alleen staat, precies als bij een echt boekje;
    daarna vallen de paren vanzelf goed (2|3, 4|5, ...). */
 .mg-lezer{position:relative;background:#2c3338}
+/* Tot JavaScript de schaal heeft berekend staan de vellen op ware grootte
+   (210 x 297 mm). Zonder deze regel zie je bij het openen één tel een veel te
+   grote pagina die daarna ineenschrompelt. De klasse `heeft-js` wordt meteen
+   gezet, dus zonder JavaScript blijft alles gewoon zichtbaar. */
+.heeft-js .mg-lezer:not(.gemeten) .mg-stapel{visibility:hidden}
 .mg-stapel{display:flex;flex-direction:row;align-items:stretch;gap:0;padding:0;
   overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;
   -webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
@@ -205,6 +210,12 @@
 .mg-flip .kant{position:absolute;inset:0;display:flex;align-items:center;
   justify-content:flex-start;backface-visibility:hidden;overflow:hidden}
 .mg-flip .kant.achter{transform:rotateY(180deg)}
+/* De echte pagina's worden hierheen verhuisd (niet gekopieerd), dus ze houden
+   hun eigen `scale(var(--mg-schaal))` uit de basisregel. Alleen het krimppunt
+   moet naar de rugzijde — anders zweeft de pagina in zijn layoutvak. */
+.mg-flip .helft.links .mg-pag{transform-origin:right center}
+.mg-flip .helft.rechts .mg-pag,.mg-flip .kant .mg-pag{transform-origin:left center}
+.mg-flip .mg-pag{box-shadow:none}
 /* het schaduwvlak dat over de omslaande pagina trekt */
 .mg-flip .kant::after{content:"";position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(90deg,rgba(0,0,0,.42),rgba(0,0,0,0) 55%);opacity:0;
@@ -252,7 +263,7 @@
   .mg-body,.mg-lezer{background:#fff}
   /* !important omdat de spreidingsregels (drie klassen diep) anders winnen —
      die gelden ook nog bij afdrukken op een breed scherm. */
-  .mg-stapel{display:block !important;overflow:visible;scroll-snap-type:none;padding:0}
+  .mg-stapel{display:block !important;visibility:visible !important;overflow:visible;scroll-snap-type:none;padding:0}
   .mg-vel{display:block !important;height:auto;padding:0;overflow:visible;
     justify-content:flex-start !important;break-after:page;page-break-after:always}
   .mg-vel.leeg{display:none !important}

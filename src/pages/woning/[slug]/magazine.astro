@@ -71,6 +71,7 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
   <style is:inline set:html={paletCss(instellingen.palet, instellingen.keuzes, instellingen.lettertype)}></style>
 </head>
 <body class="mg-body">
+  <script is:inline>document.documentElement.classList.add('heeft-js');</script>
 
   <!-- Alleen op het scherm; verdwijnt bij afdrukken. -->
   <div class="mg-balk">
@@ -318,77 +319,88 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
       }
 
       /* ---------- Het blader-gevoel ----------
-         Er draait echt een vel om. Voorkant = de rechterpagina die je verlaat,
-         achterkant = de linkerpagina die je krijgt. Onder de draaiende pagina
-         staat de nieuwe spreiding al klaar; de helft die pas aan het eind
-         bedekt wordt, leggen we er als stilstaande kopie overheen. */
+         Er draait echt een vel om. Belangrijk: we **verhuizen** de vier echte
+         pagina's naar deze laag in plaats van ze te kopiëren. Een kopie moet
+         opnieuw opgemaakt en getekend worden — dat gaf een korte flits waarin
+         de pagina op ware grootte verscheen en daarna ineenschrompelde. Een
+         verhuisde pagina houdt gewoon zijn eigen schaal.
+
+         De laag toont in zijn eentje zowel het vóór- als het ná-beeld:
+           0 graden  = de spreiding die je verlaat
+           180 graden = de spreiding die je krijgt
+         Daardoor hoeft de scroll eronder pas aan het eind te verspringen, en
+         is er geen enkel moment waarop je iets ziet wisselen. */
       var flip = document.getElementById('flip');
       var stilAan = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var bezig = false;
-      var FLIPDUUR = 620;
+      var FLIPDUUR = 560;
+      var geleend = [];
 
-      function kopie(velIndex) {
+      /* Verhuist de pagina uit vel `velIndex` naar `doelEl`; onthoudt waar hij
+         vandaan komt. Een leeg vel (de spacer vóór de voorkant) levert niets —
+         dan blijft die helft leeg, precies zoals het hoort. */
+      function leen(velIndex, doelEl) {
         var vel = vellen[velIndex];
         var pag = vel && vel.querySelector('.mg-pag');
-        if (!pag) return null;
-        var k = pag.cloneNode(true);
-        k.style.transform = 'scale(' + (getComputedStyle(document.documentElement)
-          .getPropertyValue('--mg-schaal').trim() || 1) + ')';
-        k.style.transformOrigin = 'left center';
-        k.style.boxShadow = 'none';
-        return k;
+        if (!pag || !doelEl) return;
+        geleend.push({ pag: pag, vel: vel });
+        doelEl.appendChild(pag);
+      }
+      function terugzetten() {
+        for (var i = 0; i < geleend.length; i++) geleend[i].vel.appendChild(geleend[i].pag);
+        geleend = [];
       }
 
-      function vulHelft(klasse, velIndex, origin) {
-        var h = document.createElement('div');
-        h.className = 'helft ' + klasse;
-        var k = kopie(velIndex);
-        if (k) { k.style.transformOrigin = origin; h.appendChild(k); }
-        return h;
-      }
-
-      function vulKant(klasse, velIndex, origin) {
-        var kant = document.createElement('div');
-        kant.className = 'kant ' + klasse;
-        var k = kopie(velIndex);
-        if (k) { k.style.transformOrigin = origin; kant.appendChild(k); }
-        return kant;
+      function vak(klasse) {
+        var el = document.createElement('div');
+        el.className = klasse;
+        return el;
       }
 
       /* Draait van `van` naar `naar` (beide linker-velindexen van een spreiding). */
-      function bladerOm(van, naar, klaar) {
+      function bladerOm(van, naar) {
         var vooruit = naar > van;
         flip.innerHTML = '';
-        // de helft die tijdens het omslaan nog het oude beeld moet tonen
-        flip.appendChild(vooruit
-          ? vulHelft('links', van, 'right center')
-          : vulHelft('rechts', van + 1, 'left center'));
 
-        var blad = document.createElement('div');
-        blad.className = 'blad';
-        // voorkant staat bij 0 graden op de rechterhelft, achterkant bij 180
-        blad.appendChild(vulKant('voor',   vooruit ? van + 1 : naar + 1, 'left center'));
-        blad.appendChild(vulKant('achter', vooruit ? naar : van,          'left center'));
+        var links  = vak('helft links');
+        var rechts = vak('helft rechts');
+        var blad   = vak('blad');
+        var voor   = vak('kant voor');
+        var achter = vak('kant achter');
+        blad.appendChild(voor);
+        blad.appendChild(achter);
+        flip.appendChild(links);
+        flip.appendChild(rechts);
         flip.appendChild(blad);
+
+        // de helft die het omslaande vel pas aan het eind bedekt, en andersom
+        leen(vooruit ? van : naar, links);
+        leen(vooruit ? naar + 1 : van + 1, rechts);
+        // de twee kanten van het vel zelf
+        leen(vooruit ? van + 1 : naar + 1, voor);
+        leen(vooruit ? naar : van, achter);
 
         var start = vooruit ? 0 : -180;
         var eind  = vooruit ? -180 : 0;
         blad.style.transform = 'rotateY(' + start + 'deg)';
         flip.classList.add('aan');
-        // eerst laten tekenen, dan pas de overgang aanzetten
-        requestAnimationFrame(function () {
-          requestAnimationFrame(function () {
-            flip.classList.add('draait');
-            blad.style.transition = 'transform ' + FLIPDUUR + 'ms cubic-bezier(.32,.02,.2,1)';
-            blad.style.transform = 'rotateY(' + eind + 'deg)';
-          });
-        });
+        // even laten doorrekenen, anders slaat de browser de overgang over
+        void blad.offsetWidth;
+        flip.classList.add('draait');
+        // De curve mag niet te vlak beginnen: met een trage aanloop lijkt het
+        // alsof er na de klik eerst niets gebeurt en het dan ineens springt.
+        blad.style.transition = 'transform ' + FLIPDUUR + 'ms cubic-bezier(.33,.18,.22,1)';
+        blad.style.transform = 'rotateY(' + eind + 'deg)';
+
         setTimeout(function () {
+          // pagina's terug, scroll goedzetten en de laag weghalen — in één tik,
+          // zodat er niets tussenin te zien is
+          terugzetten();
+          ganaar(naar, true);
           flip.classList.remove('aan', 'draait');
           flip.innerHTML = '';
           bezig = false;
-          if (klaar) klaar();
-        }, FLIPDUUR + 40);
+        }, FLIPDUUR + 30);
       }
 
       /* Eén stap gaat zacht; een sprong meteen — anders zit je seconden naar
@@ -419,7 +431,9 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
         if (naar === van) return;
         if (perBeeld !== 2 || stilAan || !flip) { ganaar(naar); return; }
         bezig = true;
-        ganaar(naar, true);        // eronder staat de nieuwe spreiding meteen klaar
+        doel = naar;               // teller en miniaturen meteen goed
+        bijwerken();
+        voorlaadRond(naar);
         bladerOm(van, naar);
       }
 
@@ -454,8 +468,10 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
       stapel.addEventListener('scroll', function () {
         clearTimeout(wachten);
         wachten = setTimeout(function () {
+          if (bezig) return;                    // het omslaan bepaalt zelf waar we zijn
           if (huidige() === doel) { clearTimeout(stapel._doelWeg); doel = null; }
           bijwerken();
+          voorlaadRond(huidige());
         }, 90);
       });
 
@@ -484,8 +500,19 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
         }
       }
 
+      /* Haal de beelden van de spreiding hierna alvast op, zodat er tijdens
+         het omslaan geen foto staat in te laden. */
+      function voorlaadRond(v) {
+        for (var i = v; i < Math.min(vellen.length, v + 4); i++) {
+          var b = vellen[i] && vellen[i].querySelectorAll('img[loading="lazy"]');
+          if (b) for (var j = 0; j < b.length; j++) b[j].loading = 'eager';
+        }
+      }
+
       meet();
+      lezer.classList.add('gemeten');
       bijwerken();
+      voorlaadRond(0);
 
       /* De veeg-hint verdwijnt zodra iemand iets doet, en anders na acht tellen. */
       var hint = document.getElementById('hint');
