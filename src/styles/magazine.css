@@ -19,6 +19,10 @@
   font:inherit;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
   padding:11px 22px;border-radius:var(--r-pill)}
 .mg-knop:hover{filter:brightness(1.12)}
+/* de tweede knop is ondergeschikt aan 'Bewaar als PDF' */
+.mg-knop-stil{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35)}
+.mg-knop-stil:hover{background:rgba(255,255,255,.12);filter:none}
+@media (max-width:900px){ .mg-knop-stil{display:none} }
 .mg-terug{color:#fff;opacity:.8;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
   border-bottom:1px solid rgba(255,255,255,.35);padding-bottom:2px}
 .mg-terug:hover{opacity:1}
@@ -61,22 +65,29 @@
 .mg-pag h2{font-family:var(--serif);font-size:26pt;font-weight:500;line-height:1.02;font-stretch:70%;
   margin-bottom:6mm}
 /* vult de ruimte tussen de kop en de feitenbalk, zodat de zijfoto meegroeit */
-.mg-verhaal{display:grid;grid-template-columns:1fr 62mm;gap:10mm;flex:1;min-height:0;
-  padding-bottom:9mm}
+.mg-verhaal{flex:1;min-height:0;padding-bottom:9mm}
+/* De foto staat als vaste kolom tegen de buitenrand, over de volle hoogte van
+   het vel. Dat geeft de pagina gewicht, ook als de omschrijving kort is. */
+.mg-pag .zijbleed{position:absolute;top:0;right:0;bottom:0;width:74mm;overflow:hidden}
+.mg-pag .zijbleed img{width:100%;height:100%;object-fit:cover;display:block}
+.mg-pag.met-bleed .vulling{padding-right:86mm}
 .mg-verhaal p{font-size:10.5pt;line-height:1.65;margin-bottom:4mm;color:var(--ink)}
-.mg-verhaal .kolom{max-width:88mm}
-.mg-verhaal .zijfoto{height:100%;min-height:0;overflow:hidden;border-radius:2px}
-.mg-verhaal .zijfoto img{width:100%;height:100%;object-fit:cover}
+.mg-verhaal .kolom{padding-top:2mm}
 
-.mg-feiten{display:grid;grid-template-columns:repeat(var(--feiten,5),1fr);gap:0;margin-top:auto;
-  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.mg-feiten .f{padding:6mm 4mm;text-align:center;border-right:1px solid var(--line)}
-.mg-feiten .f:last-child{border-right:0}
-.mg-feiten .n{font-family:var(--serif);font-size:19pt;color:var(--accent-deep);line-height:1;font-stretch:80%}
-.mg-feiten .l{font-size:6.8pt;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:2.5mm}
+/* Naast de doorlopende foto is de kolom smal; de feiten staan daarom onder
+   elkaar met een dun lijntje ertussen, label links en getal rechts. */
+.mg-feiten{margin-top:auto;border-top:1px solid var(--line)}
+.mg-feiten .f{display:flex;justify-content:space-between;align-items:baseline;gap:8mm;
+  padding:3.2mm 0;border-bottom:1px solid var(--line)}
+.mg-feiten .n{order:2;font-family:var(--serif);font-size:15pt;color:var(--accent-deep);
+  line-height:1;font-stretch:80%;white-space:nowrap}
+.mg-feiten .l{font-size:6.8pt;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
 
 /* ---------- Fotopagina's ---------- */
-.mg-fotos{position:absolute;inset:0;display:grid;gap:3mm;padding:3mm}
+/* Ritme: één foto vult het hele vel, meerdere krijgen een rustige witrand.
+   Dat verschil maakt het blad meteen een brochure in plaats van een raster. */
+.mg-fotos{position:absolute;inset:0;display:grid;gap:5mm;padding:14mm}
+.mg-fotos.een{padding:0;gap:0}
 .mg-fotos.een{grid-template-rows:1fr}
 .mg-fotos.twee{grid-template-rows:1fr 1fr}
 .mg-fotos.drie{grid-template-rows:1.35fr 1fr;grid-template-columns:1fr 1fr}
@@ -122,18 +133,39 @@
   opacity:.6;margin-bottom:1.5mm}
 .mg-klein{font-size:7.5pt;opacity:.6;margin-top:8mm}
 
-/* ---------- De lezer: één pagina in beeld, zijwaarts bladeren ---------- */
-/* Het is bewust gewone horizontale scroll met scroll-snap: vegen op een
-   telefoon werkt dan vanzelf, zonder JavaScript en zonder haperingen. De
-   pijltjes en het toetsenbord schuiven diezelfde scroll op. */
-.mg-lezer{position:relative}
+/* ---------- De lezer ----------
+   Zoals je een tijdschrift openslaat: op een breed scherm twee pagina's naast
+   elkaar, op een telefoon één. Het is bewust gewone horizontale scroll met
+   scroll-snap — vegen werkt daardoor zonder JavaScript. Een leeg vel vóór de
+   voorkant zorgt dat de cover alleen staat, precies als bij een echt boekje;
+   daarna vallen de paren vanzelf goed (2|3, 4|5, ...). */
+.mg-lezer{position:relative;background:#2c3338}
 .mg-stapel{display:flex;flex-direction:row;align-items:stretch;gap:0;padding:0;
   overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;
   -webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
 .mg-stapel::-webkit-scrollbar{display:none}
 .mg-vel{flex:0 0 100%;height:var(--mg-vel-h,80vh);display:flex;align-items:center;
   justify-content:center;overflow:hidden;scroll-snap-align:center;scroll-snap-stop:always}
+.mg-vel.leeg{display:none}
 .mg-pag{transform:scale(var(--mg-schaal,1));transform-origin:center center;flex-shrink:0}
+
+/* Twee naast elkaar zodra er ruimte voor is. Snappen gebeurt dan alleen op de
+   linkerhelft van elk paar — dat zijn de oneven kinderen (1e, 3e, 5e ...). */
+@media (min-width:900px){
+  .mg-lezer.spreiding .mg-vel{flex:0 0 50%;display:flex;scroll-snap-align:none}
+  .mg-lezer.spreiding .mg-vel:nth-child(odd){scroll-snap-align:start}
+  /* de rug: linkerpagina's schaduwen naar rechts en andersom */
+  .mg-lezer.spreiding .mg-vel:nth-child(even){justify-content:flex-start}
+  .mg-lezer.spreiding .mg-vel:nth-child(odd){justify-content:flex-end}
+  .mg-lezer.spreiding .mg-vel:nth-child(even) .mg-pag{box-shadow:-14px 0 30px -18px rgba(0,0,0,.75)}
+  .mg-lezer.spreiding .mg-vel:nth-child(odd) .mg-pag{box-shadow:14px 0 30px -18px rgba(0,0,0,.75)}
+  /* Een `transform: scale()` verandert het layoutvak niet: dat blijft 210mm
+     breed. Zonder deze twee regels zweeft de verkleinde pagina in het midden
+     van dat vak en gaapt er een gat bij de rug. Door het krimppunt naar de
+     rugzijde te leggen, sluiten de twee pagina's tegen elkaar aan. */
+  .mg-lezer.spreiding .mg-vel:nth-child(odd)  .mg-pag{transform-origin:right center}
+  .mg-lezer.spreiding .mg-vel:nth-child(even) .mg-pag{transform-origin:left center}
+}
 
 /* Pijltjes; op een aanraakscherm verdwijnen ze, daar veeg je gewoon. */
 .mg-pijl{position:absolute;top:50%;transform:translateY(-50%);z-index:20;
@@ -146,10 +178,7 @@
 .mg-pijl.volgende{right:14px}
 @media (hover:none){ .mg-pijl{display:none} }
 
-/* Op een aanraakscherm zijn er geen pijltjes, dus vertellen we één keer dat
-   je kunt vegen. Verdwijnt zodra je het doet. */
-/* rechtsboven, want daar staat op een voorkant meestal lucht — niet over de
-   titel of de prijs heen */
+/* Eenmalige uitleg op een aanraakscherm, rechtsboven waar meestal lucht staat. */
 .mg-hint{position:absolute;top:14px;right:14px;z-index:25;
   background:rgba(20,40,48,.72);color:#fff;border-radius:999px;padding:7px 14px;
   font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
@@ -157,6 +186,50 @@
 .mg-hint[hidden]{display:none}
 .mg-hint.weg{opacity:0}
 @media (hover:hover){ .mg-hint{display:none} }
+
+/* ---------- Het blader-gevoel ----------
+   Bij het omslaan draait er echt een vel om: de voorkant is de rechterpagina
+   die je verlaat, de achterkant de linkerpagina die je krijgt. Daaronder ligt
+   al de nieuwe spreiding, plus een stilstaande kopie van de helft die pas aan
+   het eind bedekt wordt. Alleen op een breed scherm, en nooit als iemand
+   'minder beweging' heeft ingesteld. */
+.mg-flip{position:absolute;inset:0;z-index:30;pointer-events:none;display:none;
+  perspective:2600px;perspective-origin:50% 50%}
+.mg-flip.aan{display:block}
+.mg-flip .helft{position:absolute;top:0;bottom:0;width:50%;display:flex;align-items:center;
+  overflow:hidden}
+.mg-flip .helft.links{left:0;justify-content:flex-end}
+.mg-flip .helft.rechts{right:0;justify-content:flex-start}
+.mg-flip .blad{position:absolute;top:0;bottom:0;left:50%;width:50%;
+  transform-style:preserve-3d;transform-origin:left center;will-change:transform}
+.mg-flip .kant{position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:flex-start;backface-visibility:hidden;overflow:hidden}
+.mg-flip .kant.achter{transform:rotateY(180deg)}
+/* het schaduwvlak dat over de omslaande pagina trekt */
+.mg-flip .kant::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(0,0,0,.42),rgba(0,0,0,0) 55%);opacity:0;
+  transition:opacity .18s linear}
+.mg-flip.draait .kant::after{opacity:1}
+@media (prefers-reduced-motion:reduce){ .mg-flip{display:none !important} }
+
+/* ---------- Miniaturen onderaan ---------- */
+.mg-strip{display:none;gap:8px;padding:12px 16px;background:var(--wp-bg);
+  overflow-x:auto;scrollbar-width:thin;align-items:flex-end}
+.mg-strip::-webkit-scrollbar{height:6px}
+.mg-strip::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:3px}
+@media (min-width:900px){ .mg-strip{display:flex} }
+.mg-mini{flex:0 0 auto;width:42px;cursor:pointer;border:0;background:none;padding:0;
+  opacity:.55;transition:.15s}
+.mg-mini:hover{opacity:.85}
+.mg-mini.nu{opacity:1}
+.mg-mini .doek{width:42px;height:59px;border-radius:2px;overflow:hidden;background:var(--cream);
+  border:1px solid rgba(255,255,255,.18);display:grid;place-items:center}
+.mg-mini.nu .doek{border-color:var(--accent-op-donker);box-shadow:0 0 0 2px var(--accent-op-donker)}
+.mg-mini .doek img{width:100%;height:100%;object-fit:cover}
+.mg-mini .doek.tekst{background:var(--sand)}
+.mg-mini .nr{display:block;font-size:.6rem;color:rgba(255,255,255,.6);margin-top:4px;
+  font-variant-numeric:tabular-nums}
+.mg-mini.nu .nr{color:#fff}
 
 /* Voortgang: een dun streepje onder de balk. */
 .mg-voortgang{height:3px;background:rgba(255,255,255,.15)}
@@ -175,13 +248,16 @@
 /* ---------- Afdrukken: terug naar een stapel losse vellen ---------- */
 @page{size:A4 portrait;margin:0}
 @media print{
-  .mg-balk,.mg-pijl,.mg-voortgang{display:none}
-  .mg-body{background:#fff}
-  .mg-stapel{display:block;overflow:visible;scroll-snap-type:none;padding:0}
-  .mg-vel{display:block;height:auto;padding:0;overflow:visible;
-    break-after:page;page-break-after:always}
+  .mg-balk,.mg-pijl,.mg-voortgang,.mg-strip,.mg-hint,.mg-flip{display:none !important}
+  .mg-body,.mg-lezer{background:#fff}
+  /* !important omdat de spreidingsregels (drie klassen diep) anders winnen —
+     die gelden ook nog bij afdrukken op een breed scherm. */
+  .mg-stapel{display:block !important;overflow:visible;scroll-snap-type:none;padding:0}
+  .mg-vel{display:block !important;height:auto;padding:0;overflow:visible;
+    justify-content:flex-start !important;break-after:page;page-break-after:always}
+  .mg-vel.leeg{display:none !important}
   .mg-vel:last-child{break-after:auto;page-break-after:auto}
-  .mg-pag{transform:none;box-shadow:none;margin:0}
+  .mg-pag{transform:none !important;box-shadow:none !important;margin:0}
   /* achtergrondkleuren en -foto's meeprinten */
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }

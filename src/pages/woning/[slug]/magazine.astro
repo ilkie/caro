@@ -40,6 +40,20 @@ const volgende = () => ++nr;
 // voorkant + verhaal + fotopagina's + (kenmerken) + achterkant
 const aantalPaginas = 2 + ind.fotopaginas.length + (heeftKenmerken ? 1 : 0) + 1;
 
+// De miniaturen onderaan, in dezelfde volgorde als de vellen. Een tekstpagina
+// heeft geen beeld; die krijgt een leeg vlakje met alleen het nummer.
+const miniaturen = [
+  { beeld: ind.cover },
+  { beeld: ind.zijfoto ? ind.zijfoto.src : '' },
+  ...ind.fotopaginas.map((p) => ({ beeld: p.fotos[0].src })),
+  ...(heeftKenmerken ? [{ beeld: '' }] : []),
+  { beeld: ind.slotfoto ? ind.slotfoto.src : ind.cover },
+].map((m, i) => ({ ...m, nr: i + 1 }));
+
+// Eén leeg vel vóór de voorkant, zodat de cover alleen staat zoals bij een echt
+// boekje. Is het totaal daarna oneven, dan sluit er ook een leeg vel achteraan.
+const sluitLeeg = (1 + aantalPaginas) % 2 === 1;
+
 const plek = [d.plaats, d.regio].filter(Boolean).join(', ');
 const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
 ---
@@ -63,6 +77,7 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
     <div class="wat"><b>{d.titel}</b> — <span class="mg-teller" id="teller">1</span> van de {aantalPaginas}</div>
     <div class="knoppen">
       <a class="mg-terug" href={`/woning/${d.slug}/`}>← terug naar de woning</a>
+      <button class="mg-knop mg-knop-stil" type="button" id="schermvullend">Volledig scherm</button>
       <button class="mg-knop" type="button" id="bewaar">Bewaar als PDF</button>
     </div>
   </div>
@@ -72,7 +87,11 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
   <button class="mg-pijl vorige" type="button" id="vorige" aria-label="Vorige pagina">‹</button>
   <button class="mg-pijl volgende" type="button" id="volgende" aria-label="Volgende pagina">›</button>
   <div class="mg-hint" id="hint">Veeg om te bladeren →</div>
+  <div class="mg-flip" id="flip" aria-hidden="true"></div>
   <div class="mg-stapel" id="stapel" tabindex="0">
+
+    <!-- Leeg vel: laat de voorkant alleen staan, zoals een dichtgeslagen boekje. -->
+    <div class="mg-vel leeg" aria-hidden="true"></div>
 
     <!-- ---------- Voorkant ---------- -->
     <div class="mg-vel"><section class="mg-pag mg-cover">
@@ -93,7 +112,10 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
     </section></div>
 
     <!-- ---------- Het verhaal ---------- -->
-    <div class="mg-vel"><section class="mg-pag">
+    <div class="mg-vel"><section class={ind.zijfoto ? 'mg-pag met-bleed' : 'mg-pag'}>
+      {ind.zijfoto && (
+        <div class="zijbleed"><img src={ind.zijfoto.src} alt={ind.zijfoto.label || d.titel} /></div>
+      )}
       <div class="vulling">
         <p class="mg-kop">{t('hero_eyebrow')}</p>
         <h2>{d.titel}</h2>
@@ -103,9 +125,6 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
               ? alineas.map((a) => <p>{a}</p>)
               : <p>{`${d.titel} in ${plek}.`}</p>}
           </div>
-          {ind.zijfoto && (
-            <div class="zijfoto"><img src={ind.zijfoto.src} alt={ind.zijfoto.label || d.titel} /></div>
-          )}
         </div>
         {feiten.length > 0 && (
           <div class="mg-feiten" style={`--feiten:${feiten.length}`}>
@@ -201,59 +220,184 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
       </div>
     </section></div>
 
+    {sluitLeeg && <div class="mg-vel leeg" aria-hidden="true"></div>}
+
   </div>
   </div>
 
-  <script>
+  <!-- ---------- Miniaturen ---------- -->
+  <div class="mg-strip" id="strip">
+    {miniaturen.map((m) => (
+      <button class="mg-mini" type="button" data-nr={m.nr} aria-label={`Ga naar pagina ${m.nr}`}>
+        <span class={m.beeld ? 'doek' : 'doek tekst'}>
+          {m.beeld && <img src={m.beeld} alt="" loading="lazy" decoding="async" />}
+        </span>
+        <span class="nr">{m.nr}</span>
+      </button>
+    ))}
+  </div>
+
+  <script define:vars={{ PAGINAS: aantalPaginas }}>
     (function () {
+      var lezer    = document.querySelector('.mg-lezer');
       var stapel   = document.getElementById('stapel');
       var vellen   = stapel.querySelectorAll('.mg-vel');
+      var strip    = document.getElementById('strip');
+      var minis    = strip ? strip.querySelectorAll('.mg-mini') : [];
       var teller   = document.getElementById('teller');
-      var balk     = document.getElementById('voortgang');
+      var balkje   = document.getElementById('voortgang');
       var vorige   = document.getElementById('vorige');
       var volgende = document.getElementById('volgende');
       var bewaar   = document.getElementById('bewaar');
-      var totaal   = vellen.length;
+      var volscherm= document.getElementById('schermvullend');
+      var lege     = document.querySelectorAll('.mg-vel.leeg').length;
+      var totaal   = vellen.length;            // wordt in meet() goedgezet
+      var perBeeld = 1;                        // 1 of 2 pagina's tegelijk
+
+      /* Op een telefoon staan de lege vellen op display:none — die tellen dan
+         niet mee in de scrollbreedte, en vel 0 is meteen de voorkant. In
+         spreiding tellen ze wél mee en is vel 0 het lege vel vóór de cover. */
+      function velNaarPagina(v) { return perBeeld === 2 ? v : v + 1; }
+      function paginaNaarVel(nr) { return perBeeld === 2 ? nr : nr - 1; }
 
       /* ---------- Alles precies laten passen ----------
-         Eén heel vel moet in beeld staan, dus we schalen op de kleinste van
-         breedte en hoogte. 210 x 297 mm bij 96 dpi = 793.7 x 1122.5 px. */
+         210 x 297 mm bij 96 dpi = 793.7 x 1122.5 px. In spreiding krijgt elke
+         pagina de helft van de breedte. */
       function meet() {
         var vw = document.documentElement.clientWidth;
         var vh = window.innerHeight;
+        perBeeld = vw >= 900 ? 2 : 1;
+        lezer.classList.toggle('spreiding', perBeeld === 2);
+        totaal = perBeeld === 2 ? vellen.length : vellen.length - lege;
+
         var boven = 0;
-        var kop = document.querySelector('.mg-balk');
-        var streep = document.querySelector('.mg-voortgang');
-        if (kop) boven += kop.getBoundingClientRect().height;
-        if (streep) boven += streep.getBoundingClientRect().height;
-        var hoogte = Math.max(320, vh - boven);
-        var rand = vw < 700 ? 20 : 40;
-        var f = Math.min((vw - rand) / 793.7, (hoogte - 28) / 1122.5);
-        f = Math.max(0.15, Math.min(f, 1));
+        ['.mg-balk', '.mg-voortgang', '.mg-strip'].forEach(function (kies) {
+          var el = document.querySelector(kies);
+          if (el && getComputedStyle(el).display !== 'none') boven += el.getBoundingClientRect().height;
+        });
+        var hoogte = Math.max(300, vh - boven);
+        var rand = vw < 700 ? 20 : 36;
+        var perPagina = (stapel.clientWidth || vw) / perBeeld;
+        var f = Math.min((perPagina - rand) / 793.7, (hoogte - 28) / 1122.5);
+        f = Math.max(0.12, Math.min(f, 1));
         var r = document.documentElement.style;
         r.setProperty('--mg-schaal', f.toFixed(4));
         r.setProperty('--mg-vel-h', hoogte + 'px');
       }
 
-      /* ---------- Waar zijn we? ---------- */
+      function velBreedte() { return (stapel.clientWidth || 1) / perBeeld; }
+
+      /* Waar begint het huidige beeld? In spreiding altijd op een even vel. */
       function huidige() {
-        var breedte = stapel.clientWidth || 1;
-        return Math.max(0, Math.min(totaal - 1, Math.round(stapel.scrollLeft / breedte)));
+        var i = Math.round(stapel.scrollLeft / velBreedte());
+        if (perBeeld === 2) i -= (i % 2);
+        return Math.max(0, Math.min(totaal - perBeeld, i));
       }
-      var doel = null;   // waar we heen onderweg zijn; null = waar we nu staan
+
+      function beschrijf(v) {
+        if (perBeeld === 1) return String(velNaarPagina(v));
+        if (v === 0) return '1';
+        var links = v, rechts = Math.min(v + 1, PAGINAS);
+        return links === rechts ? String(links) : links + '–' + rechts;
+      }
+
+      var doel = null;
       function bijwerken() {
-        var i = doel !== null ? doel : huidige();
-        teller.textContent = String(i + 1);
-        balk.style.width = ((i + 1) / totaal * 100) + '%';
-        vorige.disabled = i <= 0;
-        volgende.disabled = i >= totaal - 1;
+        var v = doel !== null ? doel : huidige();
+        teller.textContent = beschrijf(v);
+        balkje.style.width = Math.min(100, ((v + perBeeld) / totaal) * 100) + '%';
+        vorige.disabled = v <= 0;
+        volgende.disabled = v >= totaal - perBeeld;
+        for (var k = 0; k < minis.length; k++) {
+          var nr = Number(minis[k].dataset.nr);
+          var aan = perBeeld === 2
+            ? (v === 0 ? nr === 1 : (nr === v || nr === v + 1))
+            : nr === velNaarPagina(v);
+          minis[k].classList.toggle('nu', aan);
+        }
       }
-      /* Een stap verder gaat zacht; een sprong naar begin of eind meteen —
-         anders zit je seconden naar een voorbijrazend boekje te kijken. */
-      function ganaar(i, meteen) {
-        i = Math.max(0, Math.min(totaal - 1, i));
-        var x = i * stapel.clientWidth;
-        doel = i;
+
+      /* ---------- Het blader-gevoel ----------
+         Er draait echt een vel om. Voorkant = de rechterpagina die je verlaat,
+         achterkant = de linkerpagina die je krijgt. Onder de draaiende pagina
+         staat de nieuwe spreiding al klaar; de helft die pas aan het eind
+         bedekt wordt, leggen we er als stilstaande kopie overheen. */
+      var flip = document.getElementById('flip');
+      var stilAan = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var bezig = false;
+      var FLIPDUUR = 620;
+
+      function kopie(velIndex) {
+        var vel = vellen[velIndex];
+        var pag = vel && vel.querySelector('.mg-pag');
+        if (!pag) return null;
+        var k = pag.cloneNode(true);
+        k.style.transform = 'scale(' + (getComputedStyle(document.documentElement)
+          .getPropertyValue('--mg-schaal').trim() || 1) + ')';
+        k.style.transformOrigin = 'left center';
+        k.style.boxShadow = 'none';
+        return k;
+      }
+
+      function vulHelft(klasse, velIndex, origin) {
+        var h = document.createElement('div');
+        h.className = 'helft ' + klasse;
+        var k = kopie(velIndex);
+        if (k) { k.style.transformOrigin = origin; h.appendChild(k); }
+        return h;
+      }
+
+      function vulKant(klasse, velIndex, origin) {
+        var kant = document.createElement('div');
+        kant.className = 'kant ' + klasse;
+        var k = kopie(velIndex);
+        if (k) { k.style.transformOrigin = origin; kant.appendChild(k); }
+        return kant;
+      }
+
+      /* Draait van `van` naar `naar` (beide linker-velindexen van een spreiding). */
+      function bladerOm(van, naar, klaar) {
+        var vooruit = naar > van;
+        flip.innerHTML = '';
+        // de helft die tijdens het omslaan nog het oude beeld moet tonen
+        flip.appendChild(vooruit
+          ? vulHelft('links', van, 'right center')
+          : vulHelft('rechts', van + 1, 'left center'));
+
+        var blad = document.createElement('div');
+        blad.className = 'blad';
+        // voorkant staat bij 0 graden op de rechterhelft, achterkant bij 180
+        blad.appendChild(vulKant('voor',   vooruit ? van + 1 : naar + 1, 'left center'));
+        blad.appendChild(vulKant('achter', vooruit ? naar : van,          'left center'));
+        flip.appendChild(blad);
+
+        var start = vooruit ? 0 : -180;
+        var eind  = vooruit ? -180 : 0;
+        blad.style.transform = 'rotateY(' + start + 'deg)';
+        flip.classList.add('aan');
+        // eerst laten tekenen, dan pas de overgang aanzetten
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            flip.classList.add('draait');
+            blad.style.transition = 'transform ' + FLIPDUUR + 'ms cubic-bezier(.32,.02,.2,1)';
+            blad.style.transform = 'rotateY(' + eind + 'deg)';
+          });
+        });
+        setTimeout(function () {
+          flip.classList.remove('aan', 'draait');
+          flip.innerHTML = '';
+          bezig = false;
+          if (klaar) klaar();
+        }, FLIPDUUR + 40);
+      }
+
+      /* Eén stap gaat zacht; een sprong meteen — anders zit je seconden naar
+         een voorbijrazend boekje te kijken. */
+      function ganaar(v, meteen) {
+        if (perBeeld === 2) v -= (v % 2);
+        v = Math.max(0, Math.min(totaal - perBeeld, v));
+        var x = v * velBreedte();
+        doel = v;
         clearTimeout(stapel._doelWeg);
         stapel._doelWeg = setTimeout(function () { doel = null; bijwerken(); }, 900);
         if (meteen) {
@@ -266,15 +410,34 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
         bijwerken();
       }
 
-      vorige.addEventListener('click', function () { ganaar(huidige() - 1); });
-      volgende.addEventListener('click', function () { ganaar(huidige() + 1); });
+      /* Eén beeld verder of terug: met omslaande pagina waar dat kan, anders
+         gewoon schuiven (telefoon, 'minder beweging', of een grote sprong). */
+      function stap(richting) {
+        if (bezig) return;
+        var van = huidige();
+        var naar = Math.max(0, Math.min(totaal - perBeeld, van + richting * perBeeld));
+        if (naar === van) return;
+        if (perBeeld !== 2 || stilAan || !flip) { ganaar(naar); return; }
+        bezig = true;
+        ganaar(naar, true);        // eronder staat de nieuwe spreiding meteen klaar
+        bladerOm(van, naar);
+      }
+
+      vorige.addEventListener('click', function () { stap(-1); });
+      volgende.addEventListener('click', function () { stap(1); });
+
+      for (var k = 0; k < minis.length; k++) {
+        (function (knop) {
+          knop.addEventListener('click', function () { ganaar(paginaNaarVel(Number(knop.dataset.nr)), true); });
+        })(minis[k]);
+      }
 
       document.addEventListener('keydown', function (e) {
         if (e.metaKey || e.ctrlKey || e.altKey) return;
-        if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); ganaar(huidige() + 1); }
-        else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); ganaar(huidige() - 1); }
+        if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); stap(1); }
+        else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); stap(-1); }
         else if (e.key === 'Home') { e.preventDefault(); ganaar(0, true); }
-        else if (e.key === 'End')  { e.preventDefault(); ganaar(totaal - 1, true); }
+        else if (e.key === 'End')  { e.preventDefault(); ganaar(totaal - perBeeld, true); }
       });
 
       /* Een muiswiel scrollt verticaal; hier hoort dat te bladeren. */
@@ -284,7 +447,7 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
         var nu = Date.now();
         if (nu - (stapel._wiel || 0) < 420) return;
         stapel._wiel = nu;
-        ganaar(huidige() + (e.deltaY > 0 ? 1 : -1));
+        stap(e.deltaY > 0 ? 1 : -1);
       }, { passive: false });
 
       var wachten;
@@ -298,14 +461,28 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
 
       /* Bij het schalen verspringt de scrollpositie; blijf op hetzelfde vel. */
       var opnieuw;
-      window.addEventListener('resize', function () {
-        var i = huidige();
+      function herschik() {
+        var v = huidige();
         clearTimeout(opnieuw);
-        opnieuw = setTimeout(function () {
-          meet();
-          ganaar(i, true);
-        }, 120);
-      });
+        opnieuw = setTimeout(function () { meet(); ganaar(v, true); }, 120);
+      }
+      window.addEventListener('resize', herschik);
+      document.addEventListener('fullscreenchange', herschik);
+
+      /* ---------- Volledig scherm ---------- */
+      if (volscherm) {
+        if (!document.documentElement.requestFullscreen) {
+          volscherm.hidden = true;
+        } else {
+          volscherm.addEventListener('click', function () {
+            if (document.fullscreenElement) document.exitFullscreen();
+            else document.documentElement.requestFullscreen().catch(function () {});
+          });
+          document.addEventListener('fullscreenchange', function () {
+            volscherm.textContent = document.fullscreenElement ? 'Verlaat volledig scherm' : 'Volledig scherm';
+          });
+        }
+      }
 
       meet();
       bijwerken();
@@ -323,11 +500,10 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
       setTimeout(hintWeg, 8000);
 
       /* ---------- Bewaren als PDF ----------
-         De foto's verderop in het boekje laden pas als je erheen bladert. Voor
-         het afdrukken moeten ze er wél allemaal zijn, anders komen er lege
-         vlakken op papier. Daarom eerst alles ophalen, dan pas printen. */
+         De foto's verderop laden pas als je erheen bladert. Voor het afdrukken
+         moeten ze er wél allemaal zijn, anders komen er lege vlakken op papier. */
       function allesLaden() {
-        var beelden = [].slice.call(document.querySelectorAll('img[loading="lazy"]'));
+        var beelden = [].slice.call(document.querySelectorAll('.mg-stapel img[loading="lazy"]'));
         beelden.forEach(function (b) { b.loading = 'eager'; });
         var nogBezig = beelden.filter(function (b) { return !b.complete; });
         if (!nogBezig.length) return Promise.resolve();
@@ -353,9 +529,8 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
         });
       });
 
-      // Voor wie zelf Ctrl+P doet: dan in elk geval de opdracht geven.
       window.addEventListener('beforeprint', function () {
-        document.querySelectorAll('img[loading="lazy"]').forEach(function (b) { b.loading = 'eager'; });
+        document.querySelectorAll('.mg-stapel img[loading="lazy"]').forEach(function (b) { b.loading = 'eager'; });
       });
     })();
   </script>
