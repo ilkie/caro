@@ -242,7 +242,7 @@
         {
           "id": "email",
           "naam": "E-mailadres",
-          "standaard": "caro.realestate.spain@gmail.com"
+          "standaard": "contact@caroleriche.com"
         }
       ]
     },
@@ -306,6 +306,27 @@
           "type": "pagina",
           "hint": "Een lege regel begint een nieuwe alinea.",
           "standaard": "Deze tekst is nog niet ingevuld. Zet hier de tekst die je van je gestor of jurist krijgt; zolang dit veld leeg is, ziet een bezoeker precies deze regel."
+        }
+      ]
+    },
+    {
+      "id": "magazinevoet",
+      "naam": "Kleine lettertjes in het magazine",
+      "uitleg": "De voorbehouden in het boekje: één regel op de voorkant en het hele blokje op de achterkant. Ze staan in elk magazine, van elke woning.",
+      "velden": [
+        {
+          "id": "magazine_voorbehoud",
+          "naam": "Regel op de voorkant",
+          "type": "lang",
+          "hint": "Staat klein onderaan de voorkant, onder de prijs.",
+          "standaard": "Information and availability subject to change. Please contact us for the latest information."
+        },
+        {
+          "id": "magazine_klein",
+          "naam": "Kleine lettertjes op de achterkant",
+          "type": "pagina",
+          "hint": "Een lege regel begint een nieuwe alinea. De laatste alinea komt er iets duidelijker uit te staan — daar horen de naam en de gegevens.",
+          "standaard": "The information contained in this property magazine is provided for general information purposes only and is based on information available to Carine Leriche at the time of publication. Prices, availability, measurements, features, photographs and other property details may be subject to change and may contain errors or omissions.\n\nInformation concerning ownership, planning status, licences, permits, certificates, tourist licences, utilities, charges, taxes and other legal or administrative matters should be independently verified before entering into a transaction.\n\nThis magazine does not constitute a contractual offer or guarantee that the information provided is complete, accurate or up to date. Carine Leriche recommends that prospective buyers carry out the appropriate legal, technical and financial checks before committing to a purchase.\n\nCarine Leriche · NIF/NIE Y7836853P · RAICV nº 3994 · contact@caroleriche.com · caroleriche.com"
         }
       ]
     }

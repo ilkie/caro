@@ -43,6 +43,12 @@ const toonPrijs = eigen.toon_prijs && !!d.prijs;
 const verhaalKop = eigen.verhaal_kop || t('hero_eyebrow');
 const verhaalTitel = eigen.verhaal_titel || d.titel;
 const slotZin = eigen.slot_zin || t('magazine_slot');
+// De voorbehouden die Caro heeft meegegeven: één regel op de voorkant, het
+// hele blokje op de achterkant. Alle woningen delen ze, dus ze komen uit de
+// vaste teksten en niet uit het magazine van deze ene woning.
+const voorbehoud = t('magazine_voorbehoud');
+const kleineLetters = (t('magazine_klein') || '')
+  .split(/\n{2,}|\n/).map((r) => r.trim()).filter(Boolean);
 
 const alineas = (eigen.verhaal_tekst || d.omschrijving || '')
   .split(/\n{2,}|\n/).map((s) => s.trim()).filter(Boolean);
@@ -125,6 +131,7 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
           <h1>{coverTitel}</h1>
           {coverRegel && <div class="plek">{coverRegel}</div>}
           {toonPrijs ? <div class="prijs">{euro(d.prijs)}</div> : null}
+          {voorbehoud && <p class="voorbehoud">{voorbehoud}</p>}
         </div>
       </div>
       <MagazineVoet teksten={instellingen.teksten} jaar={JAAR} />
@@ -233,10 +240,9 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
               <div><span>E-mail</span>{t('email')}</div>
               <div><span>Registratie</span>{t('footer_raicv')}</div>
             </div>
-            <p class="mg-klein">
-              Dit magazine is samengesteld op basis van de gegevens zoals ze op dat moment bekend waren.
-              Aan de inhoud kunnen geen rechten worden ontleend.
-            </p>
+            <div class="mg-klein">
+              {kleineLetters.map((r) => <p>{r}</p>)}
+            </div>
           </div>
         </div>
       </div>

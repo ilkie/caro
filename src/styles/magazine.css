@@ -76,6 +76,9 @@
   margin-bottom:5mm;max-width:150mm}
 .mg-cover .plek{font-size:11pt;letter-spacing:.06em;opacity:.92}
 .mg-cover .prijs{font-family:var(--serif);font-size:22pt;margin-top:4mm;font-stretch:80%}
+/* Het voorbehoud van Caro: klein, maar wel leesbaar over de foto heen. */
+.mg-cover .voorbehoud{font-size:7pt;line-height:1.45;opacity:.8;margin-top:5mm;max-width:105mm;
+  text-shadow:0 1px 4px rgba(0,0,0,.5)}
 
 /* ---------- Verhaal ---------- */
 .mg-kop{font-size:7.5pt;letter-spacing:.28em;text-transform:uppercase;color:var(--accent2);
@@ -136,7 +139,9 @@
 
 /* ---------- Achterkant ---------- */
 .mg-slot{position:absolute;inset:0;display:flex;flex-direction:column}
-.mg-slot .beeld{height:150mm;overflow:hidden}
+/* Iets lager dan voorheen (150 mm): de kleine lettertjes eronder zijn met het
+   voorbehoud van Caro flink langer geworden en hebben die ruimte nodig. */
+.mg-slot .beeld{height:138mm;overflow:hidden}
 .mg-slot .beeld img{width:100%;height:100%;object-fit:cover}
 .mg-slot .onder{flex:1;padding:14mm 16mm 24mm;display:flex;flex-direction:column;justify-content:space-between}
 .mg-slot .merk{display:flex;align-items:center;gap:10px}
@@ -149,7 +154,14 @@
 .mg-contact{display:flex;gap:12mm;flex-wrap:wrap;font-size:9.5pt}
 .mg-contact div span{display:block;font-size:6.8pt;letter-spacing:.2em;text-transform:uppercase;
   opacity:.6;margin-bottom:1.5mm}
-.mg-klein{font-size:7.5pt;opacity:.6;margin-top:8mm}
+/* De kleine lettertjes op de achterkant. Bewust echt klein en rustig: het is
+   een voorbehoud, geen boodschap. De laatste alinea bevat de naam en de
+   gegevens en mag daarom iets beter leesbaar zijn dan de rest. */
+/* Doorzichtigheid stapelt: een kind kan nooit minder doorzichtig zijn dan zijn
+   ouder. Daarom staat de opacity op de alinea's zelf en niet op het blok. */
+.mg-klein{font-size:6.4pt;line-height:1.5;margin-top:6mm;max-width:172mm}
+.mg-klein p{margin:0 0 2mm;opacity:.5}
+.mg-klein p:last-child{margin-bottom:0;opacity:.78;letter-spacing:.02em}
 
 /* ---------- De lezer ----------
    Zoals je een tijdschrift openslaat: op een breed scherm twee pagina's naast
