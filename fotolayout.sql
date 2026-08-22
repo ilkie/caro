@@ -33,6 +33,7 @@ comment on column public.instellingen.fotolayout is
 -- 2. Per woning afwijken (leeg = volgt de standaard)
 -- ------------------------------------------------------------
 alter table public.woningen add column if not exists fotolayout jsonb;
+alter table public.woningen add column if not exists magazine jsonb;
 
 alter table public.instellingen
   add column if not exists logo jsonb
@@ -54,7 +55,7 @@ select
   slaapkamers, badkamers, woonoppervlak, perceel, bouwjaar,
   hero, video, omschrijving,
   kenmerken_binnen, kenmerken_buiten,
-  galerij, afstanden, fotolayout,
+  galerij, afstanden, fotolayout, magazine,
   volgorde, uitgelicht,
   round(lat::numeric, 2)::float8 as lat,
   round(lon::numeric, 2)::float8 as lon

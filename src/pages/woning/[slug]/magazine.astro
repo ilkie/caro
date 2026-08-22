@@ -28,11 +28,26 @@ const merk = logoAttributen(instellingen.logo);
 const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
 const ind = magazineIndeling(d);
 const feiten = magazineFeiten(d);
-const alineas = (d.omschrijving || '').split(/\n{2,}|\n/).map((s) => s.trim()).filter(Boolean);
+
+// Wat Caro voor deze woning zelf heeft ingevuld. Leeg = de standaard, dus
+// hieronder staat overal `eigen.x || het standaardantwoord`.
+const eigen = ind.eigen;
+
+const plek = [d.plaats, d.regio].filter(Boolean).join(', ');
+const coverTitel = eigen.cover_titel || d.titel;
+const coverRegel = eigen.cover_regel || plek;
+const toonPrijs = eigen.toon_prijs && !!d.prijs;
+const verhaalKop = eigen.verhaal_kop || t('hero_eyebrow');
+const verhaalTitel = eigen.verhaal_titel || d.titel;
+const slotZin = eigen.slot_zin || t('magazine_slot');
+
+const alineas = (eigen.verhaal_tekst || d.omschrijving || '')
+  .split(/\n{2,}|\n/).map((s) => s.trim()).filter(Boolean);
 const binnen = d.kenmerken_binnen || [];
 const buiten = d.kenmerken_buiten || [];
 const afstanden = d.afstanden || [];
-const heeftKenmerken = binnen.length > 0 || buiten.length > 0 || afstanden.length > 0;
+const heeftKenmerken = eigen.toon_kenmerken
+  && (binnen.length > 0 || buiten.length > 0 || afstanden.length > 0);
 
 // Paginanummers lopen door over alle vellen; de voorkant krijgt er geen.
 let nr = 1;
@@ -54,7 +69,6 @@ const miniaturen = [
 // boekje. Is het totaal daarna oneven, dan sluit er ook een leeg vel achteraan.
 const sluitLeeg = (1 + aantalPaginas) % 2 === 1;
 
-const plek = [d.plaats, d.regio].filter(Boolean).join(', ');
 const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
 ---
 <!doctype html>
@@ -96,7 +110,7 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
 
     <!-- ---------- Voorkant ---------- -->
     <div class="mg-vel"><section class="mg-pag mg-cover">
-      {ind.cover && <div class="beeld"><img src={ind.cover} alt={d.titel} /></div>}
+      {ind.cover && <div class="beeld"><img src={ind.cover} alt={coverTitel} /></div>}
       <div class="waas"></div>
       <div class="inhoud">
         <div class="merk">
@@ -105,9 +119,9 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
         </div>
         <div>
           {d.status && <span class="status">{d.status}</span>}
-          <h1>{d.titel}</h1>
-          {plek && <div class="plek">{plek}</div>}
-          {d.prijs ? <div class="prijs">{euro(d.prijs)}</div> : null}
+          <h1>{coverTitel}</h1>
+          {coverRegel && <div class="plek">{coverRegel}</div>}
+          {toonPrijs ? <div class="prijs">{euro(d.prijs)}</div> : null}
         </div>
       </div>
     </section></div>
@@ -118,13 +132,13 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
         <div class="zijbleed"><img src={ind.zijfoto.src} alt={ind.zijfoto.label || d.titel} /></div>
       )}
       <div class="vulling">
-        <p class="mg-kop">{t('hero_eyebrow')}</p>
-        <h2>{d.titel}</h2>
+        <p class="mg-kop">{verhaalKop}</p>
+        <h2>{verhaalTitel}</h2>
         <div class="mg-verhaal">
           <div class="kolom">
             {alineas.length
               ? alineas.map((a) => <p>{a}</p>)
-              : <p>{`${d.titel} in ${plek}.`}</p>}
+              : <p>{plek ? `${verhaalTitel} in ${plek}.` : verhaalTitel}</p>}
           </div>
         </div>
         {feiten.length > 0 && (
@@ -204,7 +218,7 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
               <img src={merk.url} alt="" />
               <span class="naam">{t('footer_naam')}<small>{t('footer_regel')}</small></span>
             </div>
-            <p class="zin">{t('magazine_slot')}</p>
+            <p class="zin">{slotZin}</p>
           </div>
           <div>
             <div class="mg-contact">

@@ -35,6 +35,7 @@ alter table public.instellingen
   add column if not exists fotolayout jsonb
   default '{"stijl":"kolommen","kolommen":3,"marge":"normaal"}'::jsonb;
 alter table public.woningen add column if not exists fotolayout jsonb;
+alter table public.woningen add column if not exists magazine jsonb;
 alter table public.instellingen
   add column if not exists logo jsonb
   default '{"bron":"standaard","url":"","vorm":"cirkel-feller","formaat":"normaal","naam":"naam-ondertitel","op_donker":"zoals-hij-is"}'::jsonb;
@@ -47,7 +48,7 @@ select
   slaapkamers, badkamers, woonoppervlak, perceel, bouwjaar,
   hero, video, omschrijving,
   kenmerken_binnen, kenmerken_buiten,
-  galerij, afstanden, fotolayout,
+  galerij, afstanden, fotolayout, magazine,
   volgorde, uitgelicht,
   -- afgerond op ~1 km; het exacte adrespunt blijft in de tabel
   round(lat::numeric, 2)::float8 as lat,

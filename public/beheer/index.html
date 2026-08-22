@@ -10,7 +10,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --teal:#298296; --teal-deep:#1E5A69; --terra:#B15B3C;
+  --teal:#298296; --teal-deep:#1E5A69; --terra:#B15B3C; --terracotta:#B15B3C;
   --cream:#FBF7F1; --sand:#F1E8DB; --line:#e7ddcf;
   --ink:#173039; --muted:#6b7b80; --white:#fff;
   --r:14px; --shadow:0 6px 24px rgba(23,48,57,.08);
@@ -186,7 +186,7 @@ textarea{min-height:90px;resize:vertical}
 .tk-kop .rechts{display:flex;align-items:center;gap:10px;font-size:.75rem;color:var(--muted)}
 .tk-herstel{background:none;border:0;color:var(--teal);font:inherit;font-size:.75rem;cursor:pointer;padding:0;text-decoration:underline}
 .tk-herstel[disabled]{color:var(--muted);opacity:.45;cursor:default;text-decoration:none}
-.tk-lang{color:var(--terracotta)}
+.tk-lang{color:var(--terra)}
 .tk-veld .hint{margin-top:4px}
 .tk-gewijzigd input,.tk-gewijzigd textarea{border-color:var(--teal);background:rgba(41,130,150,.04)}
 
@@ -270,6 +270,41 @@ textarea{min-height:90px;resize:vertical}
 .lg-bij{color:var(--muted);font-size:.75rem;padding:8px 16px 12px}
 .lg-status{font-size:.78rem;color:var(--muted);margin-top:8px}
 .lg-status.fout{color:var(--terra)}
+
+/* ---------- Magazine per woning ---------- */
+.mgz-uit{color:var(--muted);font-size:.8rem;margin:0 0 12px;max-width:70ch}
+.mgz-balk{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
+.mgz-balk .mgz-kijk{font-size:.78rem;color:var(--teal)}
+.mgz-groep{border:1px solid var(--line);border-radius:14px;background:#fff;padding:16px 18px;margin-bottom:12px}
+.mgz-groep > h4{font-size:.94rem;font-weight:600;margin:0}
+.mgz-groep > .uit{color:var(--muted);font-size:.79rem;margin:2px 0 14px}
+.mgz-veld{margin-bottom:16px}
+.mgz-veld:last-child{margin-bottom:0}
+.mgz-vkop{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:5px}
+.mgz-vkop label{margin:0;font-size:.85rem;font-weight:500}
+.mgz-gewijzigd input,.mgz-gewijzigd textarea{border-color:var(--teal);background:rgba(41,130,150,.04)}
+.mgz-kiezer{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px}
+.mgz-tegel{flex:0 0 auto;width:78px;height:60px;border:2px solid var(--line);border-radius:9px;background:#fff;
+  padding:0;cursor:pointer;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
+.mgz-tegel img{width:100%;height:100%;object-fit:cover;display:block}
+.mgz-tegel.actief{border-color:var(--teal);box-shadow:0 0 0 2px rgba(41,130,150,.18)}
+.mgz-tegel.auto{font-size:.68rem;line-height:1.25;color:var(--muted);text-align:center;padding:4px}
+.mgz-tegel.actief.auto{color:var(--teal)}
+.mgz-tegel .nr{position:absolute;left:3px;bottom:3px;background:rgba(0,0,0,.55);color:#fff;font-size:.6rem;
+  border-radius:4px;padding:0 4px;line-height:1.5}
+.mgz-weg{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px}
+.mgz-weg button{position:relative;border:2px solid var(--line);border-radius:9px;background:#fff;padding:0;
+  cursor:pointer;overflow:hidden;aspect-ratio:4/3;display:block}
+.mgz-weg img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .12s}
+.mgz-weg button.eruit img{opacity:.3;filter:grayscale(1)}
+.mgz-weg button.eruit{border-color:var(--terra)}
+.mgz-weg .merk{position:absolute;inset:auto 0 0 0;font-size:.62rem;padding:3px 0;background:rgba(23,48,57,.72);color:#fff}
+.mgz-weg button.eruit .merk{background:var(--terra);font-weight:600}
+.mgz-aan{display:flex;align-items:center;gap:8px;font-size:.85rem}
+.mgz-aan input{width:auto;margin:0}
+/* De standaard staat als grijze schuine tekst in het veld, zodat je meteen
+   ziet dat het een suggestie is en niet iets wat je hebt ingevuld. */
+#mgzVelden input::placeholder,#mgzVelden textarea::placeholder{color:var(--muted);opacity:.8;font-style:italic}
 </style>
 </head>
 <body>
@@ -511,7 +546,7 @@ textarea{min-height:90px;resize:vertical}
 
   <div class="hl-blok" id="hl-magazine">
     <h2>Het magazine bij een woning <span>MAAKT ZICHZELF</span></h2>
-    <p>Bij elke woning hoort een <b>magazine</b>: een net vormgegeven boekje op A4 dat een bezoeker in de browser kan doorbladeren, en kan bewaren, printen of doorsturen. Je hoeft er niets voor te doen — het wordt gemaakt van wat je al bij de woning hebt ingevuld, en het verandert vanzelf mee zodra je iets aanpast.</p>
+    <p>Bij elke woning hoort een <b>magazine</b>: een net vormgegeven boekje op A4 dat een bezoeker in de browser kan doorbladeren, en kan bewaren, printen of doorsturen. Je hoeft er niets voor te doen — het wordt gemaakt van wat je al bij de woning hebt ingevuld, en het verandert vanzelf mee zodra je iets aanpast. Wil je bij &eacute;&eacute;n woning toch iets anders &mdash; een andere voorfoto, een eigen verhaal &mdash; dan kan dat ook; zie <i>Zelf iets anders in het magazine zetten</i> verderop.</p>
     <h3>Wat erin staat</h3>
     <ul>
       <li><b>De voorkant</b> — je hoofdfoto over de hele pagina, met je logo, de titel, de plaats en de prijs.</li>
@@ -529,6 +564,16 @@ textarea{min-height:90px;resize:vertical}
       <li><b>Op een telefoon of tablet</b> staat er één pagina tegelijk in beeld en veeg je met je duim naar links en rechts. De eerste keer staat er even "veeg om te bladeren" in de hoek; dat verdwijnt zodra je het doet. Wil je een stukje tekst beter zien, dan kun je gewoon inzoomen met twee vingers.</li>
       <li>Bovenin zie je waar je bent — "6–7 van de 13" — en het streepje eronder loopt vol naarmate je verder komt.</li>
     </ul>
+    <h3>Zelf iets anders in het magazine zetten</h3>
+    <p>Het boekje maakt zichzelf, maar je bent niet aan het resultaat vastgeklonken. Open een woning, scrol naar <b>Magazine</b>, en je kunt voor d&eacute;ze woning alles overschrijven: een andere voorfoto, een eigen kop, een eigen verhaal, een andere slotzin. Wat je leeg laat, blijft gewoon automatisch.</p>
+    <ul>
+      <li><b>Grijze tekst in een veld is de standaard.</b> Staat er lichtgrijs "Casa Paz" in het titelveld, dan is dat wat er in het magazine komt zolang jij niets typt. Zodra je zelf iets invult, kleurt het veld op &mdash; zo zie je in &eacute;&eacute;n oogopslag wat je hebt aangepast.</li>
+      <li><b>Foto's kies je door erop te klikken.</b> Bij de voorfoto, de foto naast het verhaal en de foto op de achterkant staat een rijtje met al je foto's. De eerste tegel is <b>Automatisch</b> &mdash; dan kiest het magazine hem zelf. Met <b>+ eigen foto</b> zet je er een beeld in dat alleen in het magazine komt en niet op de woningpagina.</li>
+      <li><b>Een foto weglaten</b> doe je onderaan bij <i>Foto's die niet in het magazine horen</i>. Klik hem aan en hij vervaagt: op de site blijft hij gewoon staan, in het boekje verschijnt hij niet meer.</li>
+      <li><b>De prijs op de voorkant</b> en <b>de pagina met kenmerken</b> kun je met een vinkje uitzetten. Handig als je een boekje wil dat je ook kunt meegeven zonder dat de prijs erop staat.</li>
+    </ul>
+    <div class="hl-tip"><b>Spijt?</b> Naast elk veld staat <b>terug naar de standaard</b> &mdash; dat zet alleen dat ene veld terug. Bovenaan het blok staat <b>Terug naar het standaardmagazine</b>: &eacute;&eacute;n klik en alles is weer zoals het automatisch was. Net als bij de teksten en de huisstijl kun je dus niets kapotmaken.</div>
+    <div class="hl-let"><b>Denk aan het adres.</b> Dit boekje gaat de deur uit &mdash; per mail, per WhatsApp, geprint. Zet het adres dus nooit in een van deze velden; plaats en regio zijn genoeg.</div>
     <h3>Bewaren als PDF</h3>
     <p>Bovenin staat de knop <b>Bewaar als PDF</b>. Op een computer verschijnt het printvenster waar je "Bewaren als PDF" kiest; op een iPhone gaat het via Delen &rarr; Print &rarr; knijpen om te vergroten &rarr; bewaren. Je krijgt dan alle pagina's onder elkaar als één net A4-document.</p>
     <div class="hl-tip"><b>Wil je zelf een magazine meesturen in een mail?</b> Open de woningpagina, klik op de knop, bewaar hem als PDF op je computer of telefoon, en hang hem aan je bericht. Handig na een bezichtiging.</div>
@@ -716,6 +761,14 @@ textarea{min-height:90px;resize:vertical}
       <div id="wflKeuzes" class="hidden"></div>
       <div class="fl-vb hidden" id="wflVoorbeeld"></div>
 
+      <div class="section-t">Magazine</div>
+      <div class="mgz-uit">Het magazine wordt vanzelf samengesteld uit alles wat hierboven staat. Wil je voor d&eacute;ze woning iets anders &mdash; een andere voorfoto, een eigen verhaal, een foto die je liever weglaat &mdash; dan regel je dat hier. Wat je leeg laat, volgt gewoon het standaardmagazine.</div>
+      <div class="mgz-balk">
+        <button class="btn btn-ghost btn-sm" id="mgzHerstelAlles" type="button">Terug naar het standaardmagazine</button>
+        <a class="mgz-kijk hidden" id="mgzKijk" href="#" target="_blank" rel="noopener">Magazine bekijken &rarr;</a>
+      </div>
+      <div id="mgzVelden"></div>
+
       <div class="section-t">Afstanden (locatie)</div>
       <div id="afstList"></div>
       <button class="btn btn-ghost btn-sm" id="addAfst" type="button">+ Afstand toevoegen</button>
@@ -862,8 +915,10 @@ function openForm(w){
   renderHero();
   galItems = (w.galerij||[]).map(g=>({ src:g.src, label:g.label||'', groot:!!g.groot, file:null }));
   wFotolayout = w.fotolayout ? flNormaliseer(w.fotolayout, FL_SITE) : null;
+  mgzLaad(w.magazine);
   renderGal();
   wflTeken();
+  mgzTeken();
   renderAfst(w.afstanden||[]);
   $('deleteBtn').style.visibility = w.id ? 'visible' : 'hidden';
   $('overlay').classList.remove('hidden');
@@ -876,7 +931,8 @@ $('f_titel').addEventListener('blur', ()=>{ if(!$('f_slug').value.trim()) $('f_s
 
 /* Hero preview */
 $('f_hero_file').addEventListener('change', (e)=>{ const f=e.target.files[0]; if(f){ heroData={src:URL.createObjectURL(f), file:f}; renderHero(); }});
-function renderHero(){ $('heroPrev').innerHTML = heroData.src ? `<img src="${heroData.src}"/>` : ''; }
+function renderHero(){ $('heroPrev').innerHTML = heroData.src ? `<img src="${heroData.src}"/>` : '';
+  if (typeof mgzTeken === 'function') mgzTeken(); }
 
 /* Galerij */
 $('f_gal_file').addEventListener('change', (e)=>{
@@ -900,6 +956,7 @@ function renderGal(){
     c.appendChild(row);
   });
   if (typeof wflTeken === 'function') wflTeken();
+  if (typeof mgzTeken === 'function') mgzTeken();
 }
 
 /* Afstanden */
@@ -945,16 +1002,25 @@ $('saveBtn').addEventListener('click', async ()=>{
   busy(true);
   try{
     // hero
+    // Een net geüploade foto krijgt pas nu zijn echte adres; het magazine
+    // verwijst nog naar het tijdelijke blob-adres, dus dat wisselen we om.
+    const mgzVervang = new Map();
     let heroUrl = heroData.src;
-    if (heroData.file) heroUrl = await uploadFile(heroData.file);
+    if (heroData.file){ heroUrl = await uploadFile(heroData.file); mgzVervang.set(heroData.src, heroUrl); }
     // galerij (een mislukte foto laat de rest doorgaan)
     const galerij = []; let mislukt = 0;
     for (const g of galItems){
       try{
         let src = g.src;
-        if (g.file) src = await uploadFile(g.file);
+        if (g.file){ src = await uploadFile(g.file); mgzVervang.set(g.src, src); }
         if (src) galerij.push({ src, label: g.label||'', groot: !!g.groot });
       }catch(e){ mislukt++; }
+    }
+    // foto's die alleen voor het magazine gekozen zijn, en ook echt gebruikt worden
+    for (const e of mgzEigen){
+      if (!e.file) continue;
+      if ([mgz.cover_foto, mgz.zijfoto, mgz.slotfoto].indexOf(e.src) === -1) continue;
+      try{ mgzVervang.set(e.src, await uploadFile(e.file)); }catch(err){ mislukt++; }
     }
     if (mislukt) toast(mislukt + ' foto(\'s) niet gelukt — de rest is opgeslagen');
     // afstanden
@@ -972,6 +1038,7 @@ $('saveBtn').addEventListener('click', async ()=>{
       kenmerken_binnen: lines($('f_kb_in').value), kenmerken_buiten: lines($('f_kb_uit').value),
       galerij, afstanden,
       fotolayout: wFotolayout,
+      magazine: mgzVoorOpslaan(mgzVervang),
       beschikbaar:$('f_beschikbaar').checked, uitgelicht:$('f_uitgelicht').checked,
       adres:$('f_adres').value.trim() || null,
       lat:$('f_lat').value ? Number($('f_lat').value) : null,
@@ -2107,6 +2174,284 @@ $('lgBestand').addEventListener('change', async (e) => {
     status.textContent = 'Uploaden mislukt: ' + (err.message || err);
   }
 });
+
+
+/* ================= Magazine per woning =================
+   Dezelfde afspraak als bij de teksten van de site: we bewaren alleen wat
+   afwijkt. Een leeg veld betekent "volg de standaard", en de standaard staat
+   als grijze tekst in het veld zodat je ziet wat er anders zou komen.
+   Wijkt er niets af, dan gaat er `null` naar de database en is het weer
+   precies het automatisch samengestelde magazine. */
+
+const MGZ_STANDAARD = {
+  cover_foto:'', cover_titel:'', cover_regel:'', toon_prijs:true,
+  verhaal_kop:'', verhaal_titel:'', verhaal_tekst:'', zijfoto:'',
+  slotfoto:'', slot_zin:'', toon_kenmerken:true, overslaan:[]
+};
+
+let mgz = mgzLeeg();
+let mgzEigen = [];   // foto's die alleen voor het magazine gekozen zijn: {src,file}
+
+function mgzLeeg(){ return Object.assign({}, MGZ_STANDAARD, { overslaan: [] }); }
+function mgzTekst(v){ return typeof v === 'string' ? v.trim() : ''; }
+function mgzUrl(v){
+  const u = mgzTekst(v);
+  if (!u) return '';
+  if (u.charAt(0) === '/' || /^https:\/\//i.test(u) || u.indexOf('blob:') === 0) return u;
+  return '';
+}
+
+/* Alle beelden die je bij deze woning kunt kiezen. */
+function mgzAlleFotos(){
+  const uit = [];
+  if (heroData && heroData.src) uit.push({ src: heroData.src, naam: 'Hoofdfoto' });
+  (galItems || []).forEach((g, i) => uit.push({ src: g.src, naam: g.label || ('Foto ' + (i + 1)) }));
+  mgzEigen.forEach(e => uit.push({ src: e.src, naam: 'Eigen magazinefoto' }));
+  const gezien = {};
+  return uit.filter(f => f.src && !gezien[f.src] && (gezien[f.src] = 1));
+}
+
+function mgzLaad(ruw){
+  const b = (ruw && typeof ruw === 'object' && !Array.isArray(ruw)) ? ruw : {};
+  mgzEigen = [];
+  mgz = {
+    cover_foto:  mgzUrl(b.cover_foto),
+    cover_titel: mgzTekst(b.cover_titel),
+    cover_regel: mgzTekst(b.cover_regel),
+    toon_prijs:  b.toon_prijs !== false,
+    verhaal_kop:   mgzTekst(b.verhaal_kop),
+    verhaal_titel: mgzTekst(b.verhaal_titel),
+    verhaal_tekst: typeof b.verhaal_tekst === 'string' ? b.verhaal_tekst : '',
+    zijfoto:  mgzUrl(b.zijfoto),
+    slotfoto: mgzUrl(b.slotfoto),
+    slot_zin: mgzTekst(b.slot_zin),
+    toon_kenmerken: b.toon_kenmerken !== false,
+    overslaan: (Array.isArray(b.overslaan) ? b.overslaan : []).map(mgzUrl).filter(Boolean)
+  };
+  // Een gekozen foto die niet (meer) bij de woning hoort, blijft gewoon kiesbaar.
+  ['cover_foto','zijfoto','slotfoto'].forEach(k => {
+    const u = mgz[k];
+    if (u && !mgzAlleFotos().some(f => f.src === u)) mgzEigen.push({ src: u, file: null });
+  });
+}
+
+/* Wat er in het magazine komt als dit veld leeg blijft — dat zetten we als
+   grijze tekst in het veld, zodat de standaard zichtbaar is zonder hem te
+   hoeven bewaren. */
+function mgzStandaardTekst(sleutel){
+  const plek = [$('f_plaats').value.trim(), $('f_regio').value.trim()].filter(Boolean).join(', ');
+  const titel = $('f_titel').value.trim();
+  if (sleutel === 'cover_titel' || sleutel === 'verhaal_titel') return titel || 'de titel van de woning';
+  if (sleutel === 'cover_regel') return plek || 'plaats en regio';
+  if (sleutel === 'verhaal_kop') return (tk && tk.hero_eyebrow) || '';
+  if (sleutel === 'verhaal_tekst') return $('f_omschrijving').value.trim() || 'de omschrijving hierboven';
+  if (sleutel === 'slot_zin') return (tk && tk.magazine_slot) || '';
+  return '';
+}
+
+const MGZ_GROEPEN = [
+  { naam:'Voorkant', uitleg:'De eerste pagina van het boekje.', velden:[
+    { id:'cover_foto',  naam:'Voorfoto',  soort:'foto', hint:'Standaard de hoofdfoto van de woning.' },
+    { id:'cover_titel', naam:'Titel',     soort:'tekst' },
+    { id:'cover_regel', naam:'Regel eronder', soort:'tekst', hint:'Zet hier nooit het adres neer &mdash; dit boekje gaat de deur uit.' },
+    { id:'toon_prijs',  naam:'Prijs op de voorkant tonen', soort:'aan' }
+  ]},
+  { naam:'Het verhaal', uitleg:'De pagina met de tekst en de feiten.', velden:[
+    { id:'verhaal_kop',   naam:'Kopje erboven', soort:'tekst' },
+    { id:'verhaal_titel', naam:'Titel',         soort:'tekst' },
+    { id:'verhaal_tekst', naam:'Verhaal',       soort:'lang',
+      hint:'Een lege regel begint een nieuwe alinea. Laat je dit leeg, dan komt de omschrijving van de woning in het magazine.' },
+    { id:'zijfoto',       naam:'Foto ernaast',  soort:'foto', hint:'Standaard de eerste foto uit de galerij.' }
+  ]},
+  { naam:'Achterkant', uitleg:'De laatste pagina, met je gegevens.', velden:[
+    { id:'slotfoto', naam:'Foto',    soort:'foto', hint:'Standaard de laatste foto uit de galerij.' },
+    { id:'slot_zin', naam:'Slotzin', soort:'tekst' }
+  ]},
+  { naam:"Foto's en pagina's", uitleg:'Wat er verder wel en niet in het boekje komt.', velden:[
+    { id:'toon_kenmerken', naam:'Pagina met kenmerken en ligging meenemen', soort:'aan' },
+    { id:'overslaan',      naam:"Foto's die niet in het magazine horen", soort:'weg',
+      hint:'Klik een foto aan om hem uit het magazine te laten. Op de woningpagina zelf blijft hij gewoon staan.' }
+  ]}
+];
+
+function mgzAfwijkend(id){
+  if (id === 'overslaan') return mgz.overslaan.length > 0;
+  return mgz[id] !== MGZ_STANDAARD[id];
+}
+
+function mgzErgensAfwijkend(){
+  return Object.keys(MGZ_STANDAARD).some(mgzAfwijkend);
+}
+
+function mgzTeken(){
+  const doel = $('mgzVelden');
+  if (!doel) return;
+  const fotos = mgzAlleFotos();
+  doel.innerHTML = '';
+
+  const slug = $('f_slug').value.trim();
+  const kijk = $('mgzKijk');
+  kijk.classList.toggle('hidden', !slug || !$('f_id').value);
+  if (slug) kijk.href = '/woning/' + slug + '/magazine/';
+  $('mgzHerstelAlles').disabled = !mgzErgensAfwijkend();
+
+  MGZ_GROEPEN.forEach(groep => {
+    const vak = document.createElement('div');
+    vak.className = 'mgz-groep';
+    vak.innerHTML = '<h4>' + groep.naam + '</h4><div class="uit">' + groep.uitleg + '</div>';
+
+    groep.velden.forEach(veld => {
+      const anders = mgzAfwijkend(veld.id);
+      const rij = document.createElement('div');
+      rij.className = 'mgz-veld' + (anders ? ' mgz-gewijzigd' : '');
+
+      if (veld.soort === 'aan'){
+        rij.innerHTML = '<label class="mgz-aan"><input type="checkbox"' + (mgz[veld.id] ? ' checked' : '') + '> ' +
+          veld.naam + '</label>' + (veld.hint ? '<div class="hint">' + veld.hint + '</div>' : '');
+        rij.querySelector('input').addEventListener('change', ev => {
+          mgz[veld.id] = ev.target.checked; mgzTeken();
+        });
+        vak.appendChild(rij);
+        return;
+      }
+
+      rij.innerHTML =
+        '<div class="mgz-vkop"><label>' + veld.naam + '</label>' +
+        '<button type="button" class="tk-herstel"' + (anders ? '' : ' disabled') + '>terug naar de standaard</button></div>';
+
+      if (veld.soort === 'foto'){
+        const kiezer = document.createElement('div');
+        kiezer.className = 'mgz-kiezer';
+        const auto = document.createElement('button');
+        auto.type = 'button';
+        auto.className = 'mgz-tegel auto' + (mgz[veld.id] ? '' : ' actief');
+        auto.innerHTML = '<span>Automatisch</span>';
+        auto.addEventListener('click', () => { mgz[veld.id] = ''; mgzTeken(); });
+        kiezer.appendChild(auto);
+        // meteen naast "Automatisch", zodat hij ook bij veel foto's in beeld blijft
+        const eigen = document.createElement('button');
+        eigen.type = 'button';
+        eigen.className = 'mgz-tegel auto';
+        eigen.innerHTML = '<span>+ eigen<br>foto</span>';
+        eigen.title = 'Een foto die alleen in het magazine komt';
+        eigen.addEventListener('click', () => mgzKiesEigenFoto(veld.id));
+        kiezer.appendChild(eigen);
+        fotos.forEach((f, i) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'mgz-tegel' + (mgz[veld.id] === f.src ? ' actief' : '');
+          b.title = f.naam;
+          b.innerHTML = '<img src="' + f.src + '" alt=""><span class="nr">' + (i + 1) + '</span>';
+          b.addEventListener('click', () => { mgz[veld.id] = f.src; mgzTeken(); });
+          kiezer.appendChild(b);
+        });
+        rij.appendChild(kiezer);
+        if (!fotos.length){
+          const leeg = document.createElement('div');
+          leeg.className = 'hint';
+          leeg.textContent = 'Nog geen foto’s bij deze woning.';
+          rij.appendChild(leeg);
+        }
+      } else if (veld.soort === 'weg'){
+        const rooster = document.createElement('div');
+        rooster.className = 'mgz-weg';
+        fotos.forEach(f => {
+          const eruit = mgz.overslaan.indexOf(f.src) !== -1;
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = eruit ? 'eruit' : '';
+          b.title = f.naam;
+          b.innerHTML = '<img src="' + f.src + '" alt=""><span class="merk">' +
+            (eruit ? 'niet in het magazine' : 'in het magazine') + '</span>';
+          b.addEventListener('click', () => {
+            const i = mgz.overslaan.indexOf(f.src);
+            if (i === -1) mgz.overslaan.push(f.src); else mgz.overslaan.splice(i, 1);
+            mgzTeken();
+          });
+          rooster.appendChild(b);
+        });
+        rij.appendChild(rooster);
+      } else {
+        const invoer = document.createElement(veld.soort === 'lang' ? 'textarea' : 'input');
+        if (veld.soort === 'lang') invoer.rows = 5;
+        invoer.value = mgz[veld.id];
+        invoer.placeholder = mgzStandaardTekst(veld.id);
+        invoer.addEventListener('input', () => {
+          // niet opnieuw tekenen tijdens het typen — dan spring je uit het veld
+          mgz[veld.id] = veld.soort === 'lang' ? invoer.value : invoer.value;
+          const nu = mgzAfwijkend(veld.id);
+          rij.classList.toggle('mgz-gewijzigd', nu);
+          rij.querySelector('.tk-herstel').disabled = !nu;
+          $('mgzHerstelAlles').disabled = !mgzErgensAfwijkend();
+        });
+        rij.appendChild(invoer);
+      }
+
+      if (veld.hint){
+        const h = document.createElement('div');
+        h.className = 'hint';
+        h.innerHTML = veld.hint;
+        rij.appendChild(h);
+      }
+      rij.querySelector('.tk-herstel').addEventListener('click', () => {
+        mgz[veld.id] = veld.id === 'overslaan' ? [] : MGZ_STANDAARD[veld.id];
+        mgzTeken();
+      });
+      vak.appendChild(rij);
+    });
+    doel.appendChild(vak);
+  });
+}
+
+/* Een foto die alleen in het magazine komt (dus niet in de galerij). */
+function mgzKiesEigenFoto(sleutel){
+  const kies = document.createElement('input');
+  kies.type = 'file';
+  kies.accept = 'image/*';
+  kies.addEventListener('change', () => {
+    const f = kies.files && kies.files[0];
+    if (!f) return;
+    const src = URL.createObjectURL(f);
+    mgzEigen.push({ src: src, file: f });
+    mgz[sleutel] = src;
+    mgzTeken();
+  });
+  kies.click();
+}
+
+$('mgzHerstelAlles').addEventListener('click', () => {
+  mgz = mgzLeeg();
+  mgzEigen = [];
+  mgzTeken();
+  toast('Het magazine staat weer op de standaard — klik op Opslaan om het door te voeren');
+});
+
+/* Wat er naar de database gaat. `vervang` koppelt een net geüploade foto aan
+   zijn definitieve adres. Wijkt er niets af, dan wordt het null. */
+function mgzVoorOpslaan(vervang){
+  const om = (u) => {
+    const n = (vervang && vervang.get(u)) || u;
+    return (n && n.indexOf('blob:') !== 0) ? n : '';
+  };
+  const bestaat = mgzAlleFotos().map(f => om(f.src)).filter(Boolean);
+  const kies = (u) => { const n = om(u); return bestaat.indexOf(n) !== -1 ? n : ''; };
+
+  const uit = {
+    cover_foto:  kies(mgz.cover_foto),
+    cover_titel: mgzTekst(mgz.cover_titel),
+    cover_regel: mgzTekst(mgz.cover_regel),
+    toon_prijs:  mgz.toon_prijs !== false,
+    verhaal_kop:   mgzTekst(mgz.verhaal_kop),
+    verhaal_titel: mgzTekst(mgz.verhaal_titel),
+    verhaal_tekst: mgzTekst(mgz.verhaal_tekst),
+    zijfoto:  kies(mgz.zijfoto),
+    slotfoto: kies(mgz.slotfoto),
+    slot_zin: mgzTekst(mgz.slot_zin),
+    toon_kenmerken: mgz.toon_kenmerken !== false,
+    overslaan: mgz.overslaan.map(om).filter(u => u && bestaat.indexOf(u) !== -1)
+  };
+  return JSON.stringify(uit) === JSON.stringify(mgzLeeg()) ? null : uit;
+}
 
 </script>
 </body>
