@@ -28,13 +28,14 @@
 .mg-terug:hover{opacity:1}
 
 /* De taalkeuze in de balk. Alleen op het scherm — op papier heeft een lezer
-   niets aan drie knopjes, en het boekje staat er dan al in de taal die hij
-   gekozen heeft. */
-.mg-talen{display:flex;gap:2px;align-items:center}
-.mg-talen a{color:#fff;opacity:.6;font-size:.68rem;letter-spacing:.1em;padding:6px 8px;
-  border-radius:var(--r-pill);transition:.15s}
-.mg-talen a:hover{opacity:1;background:rgba(255,255,255,.14)}
-.mg-talen a.nu{opacity:1;font-weight:600;background:rgba(255,255,255,.18)}
+   er niets aan, en het boekje staat er dan al in de taal die hij koos.
+   De vormgeving zelf staat in global.css bij `.taalkies`, zodat de knop hier
+   en die in het menu niet uit elkaar kunnen lopen. */
+.mg-balk .taalkies .lijst{background:var(--wp-panel);border-color:rgba(255,255,255,.18);
+  box-shadow:0 14px 34px -12px rgba(0,0,0,.6)}
+.mg-balk .taalkies .lijst a{color:rgba(255,255,255,.8)}
+.mg-balk .taalkies .lijst a:hover{background:rgba(255,255,255,.12);color:#fff}
+.mg-balk .taalkies .lijst a[aria-current]{color:#fff;background:rgba(255,255,255,.18)}
 
 .mg-stapel{padding:26px 16px 60px;display:flex;flex-direction:column;align-items:center;gap:26px}
 

@@ -66,6 +66,42 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.05;font-stretch:
 .ph .photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .ph .tag{position:absolute;left:12px;bottom:12px;z-index:3;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#fff;background:var(--ink-a55);padding:6px 12px;border-radius:var(--r-pill);font-weight:400}
 
+
+/* ---------- Taalkeuze ----------
+   Eén knop die uitklapt, in plaats van drie codes naast elkaar. Gebouwd op
+   <details>, dus hij werkt ook zonder JavaScript: klikken opent en sluit hem.
+   Het scriptje in de pagina doet alleen het extraatje — sluiten als je ernaast
+   klikt of op Escape drukt.
+
+   Dicht staat er alleen de code (EN); open staan de hele namen, want daar is
+   dan wél ruimte voor. Het bolletje-icoon maakt duidelijk dat het om taal gaat
+   en niet om een land — vandaar geen vlaggen. */
+.taalkies{position:relative}
+.taalkies > summary{display:flex;align-items:center;gap:6px;cursor:pointer;list-style:none;
+  padding:7px 10px;border-radius:var(--r-pill);color:var(--muted);font-size:.7rem;
+  letter-spacing:.1em;transition:.15s;user-select:none}
+.taalkies > summary::-webkit-details-marker{display:none}
+.taalkies > summary:hover{color:var(--accent);background:var(--sand)}
+.taalkies > summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.taalkies .bol{width:14px;height:14px;flex-shrink:0;opacity:.85}
+.taalkies .pijl{width:0;height:0;border:3.5px solid transparent;border-top-color:currentColor;
+  margin-top:3px;transition:transform .15s}
+.taalkies[open] > summary{color:var(--accent);background:var(--sand)}
+.taalkies[open] .pijl{transform:rotate(180deg);margin-top:-3px}
+.taalkies .lijst{position:absolute;top:calc(100% + 6px);right:0;z-index:80;min-width:140px;
+  background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:5px;
+  box-shadow:0 12px 30px -12px rgba(30,90,105,.45);display:flex;flex-direction:column;gap:1px}
+.taalkies .lijst a{display:block;padding:8px 12px;border-radius:8px;font-size:.82rem;
+  letter-spacing:0;color:var(--ink);white-space:nowrap;transition:.12s}
+.taalkies .lijst a:hover{background:var(--sand)}
+.taalkies .lijst a[aria-current]{color:var(--accent);font-weight:600;background:var(--sand)}
+
+/* Op de donkere woningpagina en in de balk van het magazine. */
+.theme-dark .taalkies > summary,.mg-balk .taalkies > summary{color:var(--cream-70)}
+.theme-dark .taalkies > summary:hover,.theme-dark .taalkies[open] > summary,
+.mg-balk .taalkies > summary:hover,.mg-balk .taalkies[open] > summary{
+  color:#fff;background:rgba(255,255,255,.14)}
+
 /* ---------- Nav ---------- */
 header.top{position:sticky;top:0;z-index:50;background:var(--cream-90);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;justify-content:space-between;height:76px}

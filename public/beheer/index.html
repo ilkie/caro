@@ -341,6 +341,15 @@ textarea{min-height:90px;resize:vertical}
 .tk-eentalig{border-left:2px solid var(--teal)}
 .tk-eentalig .tk-kop::after{content:'in alle talen hetzelfde';font-size:.68rem;color:var(--teal);
   margin-left:auto;padding-left:10px;white-space:nowrap}
+
+/* ---------- Voorbeeldvenster: waarnaar kijk je? ---------- */
+.vb-kop .vb-wissel{display:flex;gap:4px;margin-left:auto}
+.vb-kop .vb-wissel button{border:1px solid var(--line);background:#fff;border-radius:999px;
+  padding:5px 12px;font:inherit;font-size:.74rem;cursor:pointer;color:var(--muted);transition:.15s}
+.vb-kop .vb-wissel button:hover:not(:disabled){border-color:var(--teal);color:var(--teal)}
+.vb-kop .vb-wissel button.actief{border-color:var(--teal);background:rgba(41,130,150,.09);
+  color:var(--teal);font-weight:600}
+.vb-kop .vb-wissel button:disabled{opacity:.45;cursor:default}
 </style>
 </head>
 <body>
@@ -581,6 +590,7 @@ textarea{min-height:90px;resize:vertical}
       <li><b>Foto's bij een woning</b> — hoe de fotogalerij op een woningpagina eruitziet: de indeling (kolommen, raster of editorial), hoeveel foto's er naast elkaar staan en hoeveel ruimte ertussen zit. Dit geldt voor alle woningen; per woning kun je er alsnog van afwijken — zie <a href="#hl-fotos">De foto's</a>.</li>
       <li><b>Blokken op de homepage</b> — de header, de woningen, het fotografieblok, Over Caro en Contact. Verbergen kan, en met de pijltjes wissel je ze van plek.</li>
     </ul>
+    <div class="hl-tip"><b>Zie je rechts niets veranderen?</b> Boven het voorbeeld staan twee knopjes: <b>Homepage</b> en <b>Woningpagina</b>. De opmaak van de foto&rsquo;s is alleen op een woningpagina te zien &mdash; op de homepage staat geen fotogalerij. Klik je op een keuze bij <i>Foto&rsquo;s bij een woning</i>, dan springt het voorbeeld daar vanzelf heen en scrolt het naar de foto&rsquo;s toe.</div>
     <div class="hl-tip"><b>Niets is definitief tot je op Opslaan klikt.</b> En bevalt het toch niet? Met <b>Terug naar het hoofddesign</b> staat alles — kleuren, letters én blokken — in één klik weer zoals het hoort. Daarna nog even Opslaan.</div>
     <div class="hl-let"><b>Let op:</b> een stijl geldt voor de héle site, ook voor de donkere woningpagina's. Dat is expres: zo blijft alles bij elkaar horen. Je kunt niets kiezen wat onleesbaar wordt — kleuren die elkaar zouden bijten, worden automatisch een tint bijgeschoven.</div>
     <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
@@ -800,6 +810,10 @@ textarea{min-height:90px;resize:vertical}
           <div class="vb-kop">
             <p class="vg-kop" style="margin:0">Voorbeeld</p>
             <span class="st" id="vbStatus">laden…</span>
+            <div class="vb-wissel" id="vbWissel">
+              <button type="button" data-vb="home" class="actief">Homepage</button>
+              <button type="button" data-vb="woning" title="Hier zie je de fotogalerij">Woningpagina</button>
+            </div>
           </div>
           <iframe class="vb-frame" id="vbFrame" src="/" title="Voorbeeld van de site"></iframe>
         </div>
@@ -965,6 +979,7 @@ $('logoutBtn').addEventListener('click', async ()=>{ await sb.auth.signOut(); re
 async function loadWoningen(){
   await laadInteresse();
   const { data, error } = await sb.from('woningen').select('*').order('volgorde',{ascending:true});
+  if (!error && data) vbKiesWoning(data);
   const list = $('list');
   if (error){ list.innerHTML = '<div class="empty">Kon woningen niet laden: '+error.message+'</div>'; return; }
   if (!data.length){ list.innerHTML = '<div class="empty">Nog geen woningen. Klik op “+ Nieuwe woning” om te beginnen.</div>'; return; }
@@ -1446,7 +1461,20 @@ function ververVoorbeeld(){
     el.style.display = s.aan ? '' : 'none';
     if (voet) doc.body.insertBefore(el, voet);   // zet ze in de gekozen volgorde
   });
-  $('vbStatus').textContent = vg.secties.filter(s => s.aan).length + ' van de ' + vg.secties.length + ' blokken zichtbaar';
+  const galerijen = vbPasToe(doc);
+  vbPasMerkToe(doc);
+  vbToonGalerij(doc);
+
+  // Op de homepage staat geen fotogalerij; dan is "4 breed" kiezen zinloos
+  // zonder dat je begrijpt waarom er niets verandert. Zeg dat dus gewoon.
+  if (VB_WAT === 'woning'){
+    $('vbStatus').textContent = galerijen
+      ? 'De galerij staat op ' + vg.fotolayout.kolommen + ' breed'
+      : 'Deze woning heeft nog geen foto’s';
+  } else {
+    $('vbStatus').textContent = vg.secties.filter(s => s.aan).length + ' van de ' +
+      vg.secties.length + ' blokken zichtbaar';
+  }
 }
 
 /* tabs */
@@ -2155,10 +2183,16 @@ function flTekenVoorbeeld(doel, layout, groot, aantal){
 }
 
 /* ---- de standaard voor de hele site (tabblad Vormgeving) ---- */
+function vgNaarWoningVoorbeeld(){ if (typeof vbGaNaar === 'function') vbGaNaar('woning', true); }
+
 function tekenFotolayout(){
   if (!vg || !vg.fotolayout) return;
   flTekenKeuzes($('flKeuzes'), vg.fotolayout, () => {
     tekenFotolayout();
+    // De galerij is alleen op een woningpagina te zien — spring er vanzelf
+    // heen, anders kiest Caro iets en gebeurt er rechts zichtbaar niets.
+    if (VB_SLUG) vgNaarWoningVoorbeeld();
+    else ververVoorbeeld();
     $('vgOpslaan').disabled = JSON.stringify(vg) === vgOpgeslagen;
   });
   flTekenVoorbeeld($('flVoorbeeld'), vg.fotolayout);
@@ -2778,6 +2812,117 @@ function vgKolomHint(err){
     }
   }
   return null;
+}
+
+
+/* ================= Voorbeeldvenster =================
+   Het venster toont de laatst gebouwde site. Wat Caro links kiest wordt er
+   live ingespoten, zodat ze het ziet vóór ze opslaat. */
+
+let VB_WAT = 'home';       // 'home' of 'woning'
+let VB_SLUG = '';          // de woning die we laten zien
+let VB_AF = null;          // welke kaarten stonden er bij het laden als 'verkocht'
+
+/* Welke woning nemen we voor het voorbeeld? De eerste die op de site staat. */
+function vbKiesWoning(lijst){
+  const zichtbaar = (lijst || []).filter(w => w.beschikbaar !== false && w.slug);
+  VB_SLUG = zichtbaar.length ? zichtbaar[0].slug : '';
+  const knop = document.querySelector('#vbWissel [data-vb="woning"]');
+  if (knop){
+    knop.disabled = !VB_SLUG;
+    knop.title = VB_SLUG ? 'Hier zie je de fotogalerij'
+                         : 'Er staat nog geen woning op de site om te laten zien';
+  }
+}
+
+/* Na het openen van de woningpagina meteen naar de galerij scrollen. Anders
+   kijkt Caro naar de hero bovenaan en lijkt er nog steeds niets te gebeuren —
+   de foto's staan een heel eind lager op de pagina. */
+let VB_NAAR_GALERIJ = false;
+
+function vbToonGalerij(doc){
+  if (!VB_NAAR_GALERIJ) return;
+  const g = doc && doc.querySelector('.wp-gal');
+  const v = doc && doc.defaultView;
+  if (!g || !v) return;
+  VB_NAAR_GALERIJ = false;
+  // Eén keer scrollen is niet genoeg: de foto's in de kolommen-stijl hebben
+  // `height:auto` en laden lui, dus de pagina wordt ná het scrollen nog een
+  // stuk langer en de galerij zakt weer uit beeld. Daarom mikken we nog twee
+  // keer opnieuw, als het beeld tot rust is gekomen.
+  const mik = () => {
+    const el = doc.querySelector('.wp-gal');
+    if (el) v.scrollTo(0, Math.max(0, el.getBoundingClientRect().top + v.scrollY - 70));
+  };
+  mik();
+  setTimeout(mik, 350);
+  setTimeout(mik, 900);
+}
+
+function vbGaNaar(wat, naarGalerij){
+  if (wat === 'woning' && !VB_SLUG) return;
+  if (naarGalerij) VB_NAAR_GALERIJ = true;
+  VB_WAT = wat;
+  document.querySelectorAll('#vbWissel button').forEach(b =>
+    b.classList.toggle('actief', b.dataset.vb === wat));
+  const f = $('vbFrame');
+  const doel = wat === 'woning' ? '/woning/' + VB_SLUG + '/' : '/';
+  VB_AF = null;                       // ander document, opnieuw kijken
+  if (f && f.getAttribute('src') !== doel) f.setAttribute('src', doel);
+  else ververVoorbeeld();
+}
+
+document.querySelectorAll('#vbWissel button').forEach(b =>
+  b.addEventListener('click', () => vbGaNaar(b.dataset.vb)));
+
+/* De galerij, het logo en de verkocht-weergave in het venster bijwerken.
+   Dit gebeurt met JavaScript op de elementen zelf en niet met een <style>:
+   de galerij heeft `--gal-kolommen` als inline stijl staan, en daar wint een
+   stylesheet het niet van zonder overal !important. */
+function vbPasToe(doc){
+  if (!vg) return;
+
+  /* --- opmaak van de galerij --- */
+  if (vg.fotolayout && FL){
+    const m = FL.marges.find(x => x.id === vg.fotolayout.marge) || FL.marges[1];
+    const galerijen = doc.querySelectorAll('.wp-gal');
+    galerijen.forEach(g => {
+      FL.stijlen.forEach(x => g.classList.remove('g-' + x.id));
+      g.classList.add('g-' + vg.fotolayout.stijl);
+      g.style.setProperty('--gal-kolommen', vg.fotolayout.kolommen);
+      if (m) g.style.setProperty('--gal-gap', m.waarde);
+    });
+    return galerijen.length;
+  }
+  return 0;
+}
+
+/* Logo en verkocht-weergave apart, zodat vbPasToe kort blijft. */
+function vbPasMerkToe(doc){
+  if (!vg) return;
+  if (vg.logo && LG){
+    const f = (LG.formaten.find(x => x.id === vg.logo.formaat) || LG.formaten[1]);
+    doc.querySelectorAll('.brand').forEach(b => {
+      LG.vormen.forEach(x => b.classList.remove('v-' + x.id));
+      LG.namen.forEach(x => b.classList.remove('n-' + x.id));
+      b.classList.add('v-' + vg.logo.vorm, 'n-' + vg.logo.naam);
+      b.classList.toggle('logo-wit-op-donker', vg.logo.op_donker === 'wit');
+      if (f) b.style.setProperty('--brandh', f.hoogte);
+      const naam = b.querySelector('.name');
+      if (naam){
+        naam.style.display = vg.logo.naam === 'alleen-logo' ? 'none' : '';
+        const onder = naam.querySelector('small');
+        if (onder) onder.style.display = vg.logo.naam === 'naam-ondertitel' ? '' : 'none';
+      }
+    });
+  }
+  if (vg.weergave){
+    // Onthoud bij het eerste bezoek welke kaarten verkocht waren; daarna kunnen
+    // we het grijs aan- en uitzetten zonder de status opnieuw te hoeven weten.
+    if (!VB_AF) VB_AF = [...doc.querySelectorAll('.card.is-af, .spotlight.is-af')];
+    const rustig = vg.weergave.verkocht === 'rustig';
+    VB_AF.forEach(el => el.classList.toggle('is-af', rustig));
+  }
 }
 
 </script>

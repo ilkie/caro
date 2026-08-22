@@ -24,8 +24,9 @@ const taal = schoneTaal(taalRuw);
 const instellingen = await getInstellingen(taal);
 const t = (id) => tekst(instellingen.teksten, id);
 const a = (naar) => link(taal, naar);
+const huidigeTaal = TALEN.find((x) => x.id === taal) || TALEN[0];
 
-const SITE_VERSION = 'v1.39';
+const SITE_VERSION = 'v1.41';
 
 // Jaartal komt uit de bouwdatum, zodat het na de jaarwisseling vanzelf klopt.
 const JAAR = new Date().getFullYear();
@@ -75,26 +76,40 @@ const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%
             <a href={a('/#contact')}>{t('menu_contact')}</a>
             <a class="cta" href={a('/#contact')}>{t('menu_knop')}</a>
           </nav>
-          <div class="taalwissel">
-        {TALEN.map((x) => (
-          <a href={link(x.id, pad)} hreflang={x.id} lang={x.id}
-             class={x.id === taal ? 'nu' : undefined}
-             aria-current={x.id === taal ? 'true' : undefined}
-             title={x.naam}>{x.kort}</a>
-        ))}
-      </div>
+          <details class="taalkies">
+        <summary title={huidigeTaal.naam} aria-label={`Taal: ${huidigeTaal.naam}`}>
+          <svg class="bol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path>
+            <path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18"></path>
+          </svg>
+          <span>{huidigeTaal.kort}</span><i class="pijl"></i>
+        </summary>
+        <div class="lijst">
+          {TALEN.map((x) => (
+            <a href={link(x.id, pad)} hreflang={x.id} lang={x.id}
+               aria-current={x.id === taal ? 'true' : undefined}>{x.naam}</a>
+          ))}
+        </div>
+      </details>
           <button class="burger" aria-label="menu" type="button" onclick="var n=document.querySelector('.top nav');n.style.display=(getComputedStyle(n).display==='none'?'flex':'none')">☰</button>
         </Fragment>
       ) : (
         <Fragment>
-          <div class="taalwissel">
-        {TALEN.map((x) => (
-          <a href={link(x.id, pad)} hreflang={x.id} lang={x.id}
-             class={x.id === taal ? 'nu' : undefined}
-             aria-current={x.id === taal ? 'true' : undefined}
-             title={x.naam}>{x.kort}</a>
-        ))}
-      </div>
+          <details class="taalkies">
+        <summary title={huidigeTaal.naam} aria-label={`Taal: ${huidigeTaal.naam}`}>
+          <svg class="bol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path>
+            <path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18"></path>
+          </svg>
+          <span>{huidigeTaal.kort}</span><i class="pijl"></i>
+        </summary>
+        <div class="lijst">
+          {TALEN.map((x) => (
+            <a href={link(x.id, pad)} hreflang={x.id} lang={x.id}
+               aria-current={x.id === taal ? 'true' : undefined}>{x.naam}</a>
+          ))}
+        </div>
+      </details>
           <nav><a class="cta" href={whatsappLink(instellingen.teksten)}>{t('menu_knop_woning')}</a></nav>
         </Fragment>
       )}
@@ -119,17 +134,7 @@ const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%
     </div>
   </footer>
   <style>
-    /* De taalwissel: drie korte codes, de huidige taal opgelicht. Bewust geen
-       vlaggetjes — een vlag is een land en geen taal, en Engels heeft er drie
-       die evenveel recht hebben. */
-    .taalwissel{display:flex;align-items:center;gap:2px;font-size:.68rem;letter-spacing:.1em}
-    .taalwissel a{padding:6px 8px;border-radius:var(--r-pill);color:var(--muted);transition:.15s}
-    .taalwissel a:hover{color:var(--accent);background:var(--sand)}
-    .taalwissel a.nu{color:var(--accent);font-weight:600}
-    .theme-dark .taalwissel a{color:var(--cream-70)}
-    .theme-dark .taalwissel a:hover{color:#fff;background:rgba(255,255,255,.12)}
-    .theme-dark .taalwissel a.nu{color:#fff}
-    @media (max-width:900px){ .taalwissel{margin-left:auto;margin-right:6px} }
+    @media (max-width:900px){ .taalkies{margin-left:auto;margin-right:4px} }
     /* De juridische regel: de punten zijn scheidingstekens tussen de links, dus
        ze horen bij de opmaak en niet in de tekst — anders leest een schermlezer
        ze mee op. Vandaar `::before` in plaats van een punt in de HTML. */
@@ -144,6 +149,17 @@ const favicon = "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%
   </style>
 
   <script is:inline>
+    /* De taalkeuze werkt ook zonder dit scriptje; dit sluit hem alleen netjes
+       als je ergens anders klikt of op Escape drukt. */
+    document.addEventListener('click', function(e){
+      document.querySelectorAll('details.taalkies[open]').forEach(function(d){
+        if (!d.contains(e.target)) d.removeAttribute('open');
+      });
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') document.querySelectorAll('details.taalkies[open]')
+        .forEach(function(d){ d.removeAttribute('open'); });
+    });
     var io = new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
     document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
     document.querySelectorAll('.typed').forEach(function(el){

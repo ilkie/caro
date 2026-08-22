@@ -32,6 +32,7 @@ const { woning: d } = Astro.props;
 const taal = schoneTaal(Astro.props.taal);
 const a = (naar) => link(taal, naar);
 const w = woorden(taal);
+const huidigeTaal = TALEN.find((x) => x.id === taal) || TALEN[0];
 const instellingen = await getInstellingen(taal);
 const t = (id) => tekst(instellingen.teksten, id);
 const merk = logoAttributen(instellingen.logo);
@@ -106,7 +107,16 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
   <style is:inline set:html={paletCss(instellingen.palet, instellingen.keuzes, instellingen.lettertype)}></style>
 </head>
 <body class="mg-body">
-  <script is:inline>document.documentElement.classList.add('heeft-js');</script>
+  <script is:inline>document.documentElement.classList.add('heeft-js');
+    document.addEventListener('click', function(e){
+      document.querySelectorAll('details.taalkies[open]').forEach(function(d){
+        if (!d.contains(e.target)) d.removeAttribute('open');
+      });
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') document.querySelectorAll('details.taalkies[open]')
+        .forEach(function(d){ d.removeAttribute('open'); });
+    });</script>
 
   <!-- Alleen op het scherm; verdwijnt bij afdrukken. -->
   <div class="mg-balk">
@@ -115,14 +125,21 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
       <a class="mg-terug" href={a(`/woning/${d.slug}/`)}>{w('mg_terug')}</a>
       <!-- De bezoeker landt in de taal van de pagina, maar kan het boekje ook
            in een andere taal openen en bewaren. Verdwijnt bij het afdrukken. -->
-      <div class="mg-talen" role="group" aria-label={w('mg_taal')}>
-        {TALEN.map((x) => (
-          <a href={link(x.id, `/woning/${d.slug}/magazine/`)} hreflang={x.id} lang={x.id}
-             class={x.id === taal ? 'nu' : undefined}
-             aria-current={x.id === taal ? 'true' : undefined}
-             title={x.naam}>{x.kort}</a>
-        ))}
-      </div>
+      <details class="taalkies mg-talen">
+        <summary title={w('mg_taal')} aria-label={`${w('mg_taal')}: ${huidigeTaal.naam}`}>
+          <svg class="bol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path>
+            <path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18"></path>
+          </svg>
+          <span>{huidigeTaal.kort}</span><i class="pijl"></i>
+        </summary>
+        <div class="lijst">
+          {TALEN.map((x) => (
+            <a href={link(x.id, `/woning/${d.slug}/magazine/`)} hreflang={x.id} lang={x.id}
+               aria-current={x.id === taal ? 'true' : undefined}>{x.naam}</a>
+          ))}
+        </div>
+      </details>
       <button class="mg-knop mg-knop-stil" type="button" id="schermvullend">{w('mg_volscherm')}</button>
       <button class="mg-knop" type="button" id="bewaar">{w('mg_pdf')}</button>
     </div>
