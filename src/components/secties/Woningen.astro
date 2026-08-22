@@ -1,11 +1,16 @@
 ---
 // Spotlight + overzicht. Krijgt de woningen en de teksten mee van de homepage.
 import { tekst } from '../../lib/teksten.js';
+import { statusVan } from '../../lib/status.js';
 const { alle = [], teksten = {} } = Astro.props;
 const t = (id) => tekst(teksten, id);
 const uitgelicht = alle.find((w) => w.uitgelicht) || alle[0];
 const overige = alle.filter((w) => !uitgelicht || w.slug !== uitgelicht.slug);
 const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
+// Een cijfer dat niet is ingevuld hoort weg te vallen — anders staat er
+// " slk" zonder getal op de kaart.
+const cijfer = (n, achter) => (n === null || n === undefined || n === '' || Number(n) <= 0)
+  ? null : String(n) + ' ' + achter;
 ---
 <!-- WONINGEN: uitgelicht + overzicht -->
 <section class="pad" id="woningen" data-sectie="woningen">
@@ -19,7 +24,9 @@ const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
       <div class="spotlight reveal">
         <a href={`/woning/${uitgelicht.slug}/`} class="img">
           <img src={uitgelicht.hero} alt={uitgelicht.titel} onerror="this.remove()" />
-          <span class="badge">{uitgelicht.status}</span>
+          {statusVan(uitgelicht.status) && (
+            <span class={`badge ${statusVan(uitgelicht.status).klasse}`}>{statusVan(uitgelicht.status).naam}</span>
+          )}
         </a>
         <!-- Volgorde in de HTML = leesvolgorde op mobiel; op desktop plaatst
              het raster in global.css prijs en knop in de rechterkolom. -->
@@ -28,9 +35,8 @@ const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
           <div class="prijs">{euro(uitgelicht.prijs)}</div>
           <div class="plaats">{uitgelicht.plaats}</div>
           <div class="meta">
-            <span>{uitgelicht.slaapkamers} slaapkamers</span>
-            <span>{uitgelicht.badkamers} badkamers</span>
-            <span>{uitgelicht.woonoppervlak} m²</span>
+            {[cijfer(uitgelicht.slaapkamers, 'slaapkamers'), cijfer(uitgelicht.badkamers, 'badkamers'),
+              cijfer(uitgelicht.woonoppervlak, 'm²')].filter(Boolean).map((r) => <span>{r}</span>)}
           </div>
           <a class="go" href={`/woning/${uitgelicht.slug}/`}>{t('woningen_link')}</a>
         </div>
@@ -47,15 +53,16 @@ const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
             <a class="card" href={`/woning/${w.slug}/`}>
               <div class="img">
                 <img src={w.hero} alt={w.titel} loading="lazy" onerror="this.remove()" />
-                <span class="status">{w.status}</span>
+                {statusVan(w.status) && (
+                  <span class={`status ${statusVan(w.status).klasse}`}>{statusVan(w.status).kort}</span>
+                )}
               </div>
               <div class="body">
                 <h3>{w.titel}</h3>
                 <div class="plaats">{w.plaats}</div>
                 <div class="meta">
-                  <span>{w.slaapkamers} slk</span>
-                  <span>{w.badkamers} bad</span>
-                  <span>{w.woonoppervlak} m²</span>
+                  {[cijfer(w.slaapkamers, 'slk'), cijfer(w.badkamers, 'bad'),
+                    cijfer(w.woonoppervlak, 'm²')].filter(Boolean).map((r) => <span>{r}</span>)}
                 </div>
                 <div class="prijs">{euro(w.prijs)}</div>
                 <div class="link">{t('woningen_link')}</div>

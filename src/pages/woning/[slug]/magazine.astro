@@ -14,6 +14,7 @@ import { paletCss, lettertypeUrl } from '../../../lib/palet.js';
 import { tekst } from '../../../lib/teksten.js';
 import { logoAttributen } from '../../../lib/logo.js';
 import { magazineIndeling, magazineFeiten } from '../../../lib/magazine.js';
+import { statusVan } from '../../../lib/status.js';
 import MagazineVoet from '../../../components/MagazineVoet.astro';
 
 export async function getStaticPaths() {
@@ -43,6 +44,7 @@ const toonPrijs = eigen.toon_prijs && !!d.prijs;
 const verhaalKop = eigen.verhaal_kop || t('hero_eyebrow');
 const verhaalTitel = eigen.verhaal_titel || d.titel;
 const slotZin = eigen.slot_zin || t('magazine_slot');
+const status = statusVan(d.status);
 // De voorbehouden die Caro heeft meegegeven: één regel op de voorkant, het
 // hele blokje op de achterkant. Alle woningen delen ze, dus ze komen uit de
 // vaste teksten en niet uit het magazine van deze ene woning.
@@ -127,7 +129,7 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
           <span class="naam">{t('footer_naam')}<small>{t('footer_regel')}</small></span>
         </div>
         <div>
-          {d.status && <span class="status">{d.status}</span>}
+          {status && <span class={`status ${status.klasse}`}>{status.naam}</span>}
           <h1>{coverTitel}</h1>
           {coverRegel && <div class="plek">{coverRegel}</div>}
           {toonPrijs ? <div class="prijs">{euro(d.prijs)}</div> : null}

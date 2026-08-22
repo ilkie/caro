@@ -310,6 +310,17 @@ textarea{min-height:90px;resize:vertical}
 .tk-veld.tk-pagina textarea{min-height:280px;line-height:1.6}
 .tk-kop .tk-bekijk{font-size:.75rem;color:var(--teal);text-decoration:none;border-bottom:1px solid transparent}
 .tk-kop .tk-bekijk:hover{border-bottom-color:currentColor}
+
+/* ---------- Status van een woning ---------- */
+/* Vijf knoppen passen niet in een derde van een rij; die wringen zich dan in
+   vier regels onder elkaar. Het veld krijgt daarom de hele breedte. Kent een
+   browser `:has()` niet, dan blijft het gewoon in de kolom staan — lelijker,
+   maar niet stuk. */
+.grid3 > .field:has(#statusKeuze){grid-column:1 / -1}
+.st-rij{display:flex;flex-wrap:wrap;gap:6px}
+.st-rij .keuze i{background:var(--st-hex,var(--line));border-color:transparent}
+.st-rij .keuze.actief{border-color:var(--st-hex,var(--teal));background:var(--st-waas,rgba(41,130,150,.09))}
+.st-uit{color:var(--muted);font-size:.78rem;margin-top:7px;min-height:1.2em}
 </style>
 </head>
 <body>
@@ -387,6 +398,7 @@ textarea{min-height:90px;resize:vertical}
         <li><a href="#hl-kaart">De kaart en het adres</a></li>
         <li><a href="#hl-bezichtigingen">Bezichtigingen en notities</a></li>
         <li><a href="#hl-plek">Spotlight, volgorde en verbergen</a></li>
+        <li><a href="#hl-status">Te koop, gereserveerd of verkocht</a></li>
         <li><a href="#hl-cijfers">De cijfers onder elke woning</a></li>
         <li><a href="#hl-vormgeving">Kleuren, letters en blokken</a></li>
         <li><a href="#hl-logo">Je logo</a></li>
@@ -500,6 +512,22 @@ textarea{min-height:90px;resize:vertical}
       <li><b>Verwijderen</b> — kan ook, maar dat is definitief. Wil je hem alleen even weg? Gebruik dan "tonen op de site".</li>
     </ul>
     <a class="hl-omhoog" href="#hl-top">↑ terug naar boven</a>
+  </div>
+
+  <div class="hl-blok" id="hl-status">
+    <h2>Te koop, gereserveerd of verkocht <span>BIJ DE WONING</span></h2>
+    <p>Boven in het woningformulier staat <b>Status</b>. Dat is het gekleurde labeltje linksboven op de foto — op de homepage, op de woningpagina en op de voorkant van het magazine. Je kiest uit vijf standen:</p>
+    <ul>
+      <li><b>Te koop</b> &mdash; terracotta. De gewone stand; hier begint een nieuwe woning.</li>
+      <li><b>Beschikbaar</b> &mdash; groen. Vrij te bezichtigen, maar zonder de nadruk op verkoop.</li>
+      <li><b>Gereserveerd</b> &mdash; amber. Iemand heeft hem vastgelegd. Bezoekers zien dat er beweging in zit.</li>
+      <li><b>Verkocht onder voorbehoud</b> &mdash; donker amber. Verkocht, maar de ontbindende voorwaarden lopen nog.</li>
+      <li><b>Verkocht</b> &mdash; grijs. Rond.</li>
+    </ul>
+    <p>Het bolletje bij elke knop heeft precies de kleur die het labeltje op de site krijgt, dus je ziet vooraf wat je kiest. Onder de knoppen staat in &eacute;&eacute;n zin wat die stand betekent.</p>
+    <div class="hl-tip"><b>Laat een verkochte woning gerust staan.</b> Een grijs <i>verkocht</i>-labeltje is geen rommel op je site &mdash; het laat zien d&aacute;t je verkoopt. Wil je hem toch weg, zet hem dan op "niet tonen" bij <a href="#hl-plek">Spotlight, volgorde en verbergen</a>.</div>
+    <div class="hl-let"><b>De status verbergt de woning niet.</b> Ook bij <i>verkocht</i> blijft de pagina gewoon te bekijken, met prijs en al. Dat is met opzet; wil je hem echt van de site af, gebruik dan het vinkje "tonen op de site".</div>
+    <a class="hl-omhoog" href="#hl-top">&uarr; terug naar boven</a>
   </div>
 
   <div class="hl-blok" id="hl-cijfers">
@@ -746,7 +774,9 @@ textarea{min-height:90px;resize:vertical}
         <div class="field"><label>Plaats</label><input id="f_plaats" placeholder="Bijv. Moraira" /></div>
         <div class="field"><label>Regio</label><input id="f_regio" value="Costa Blanca" /></div>
         <div class="field"><label>Status</label>
-          <select id="f_status"><option>Te koop</option><option>Onder optie</option><option>Verkocht</option></select>
+          <input type="hidden" id="f_status" value="te-koop" />
+          <div class="st-rij" id="statusKeuze"></div>
+          <div class="st-uit" id="statusUitleg"></div>
         </div>
       </div>
       <div class="grid3">
@@ -864,6 +894,7 @@ async function refresh(){
     $('whoEmail').textContent = session.user.email;
     loadWoningen();
     Promise.all([laadFotolayout(), laadLogoOpties()]).then(laadVormgeving);
+    laadStatussen();
     laadTeksten();
   } else {
     $('app').classList.add('hidden');
@@ -913,7 +944,7 @@ function openForm(w){
   $('f_slug').value = w.slug || '';
   $('f_plaats').value = w.plaats || '';
   $('f_regio').value = w.regio || 'Costa Blanca';
-  $('f_status').value = w.status || 'Te koop';
+  stZet(w.status);
   $('f_prijs').value = w.prijs ?? '';
   $('f_bouwjaar').value = w.bouwjaar ?? '';
   $('f_volgorde').value = w.volgorde ?? 10;
@@ -2492,6 +2523,72 @@ function mgzVoorOpslaan(vervang){
     overslaan: mgz.overslaan.map(om).filter(u => u && bestaat.indexOf(u) !== -1)
   };
   return JSON.stringify(uit) === JSON.stringify(mgzLeeg()) ? null : uit;
+}
+
+
+/* ================= Status van een woning =================
+   De vijf mogelijkheden staan in /statussen.json — dezelfde bron als de site
+   (src/lib/status.js). Het verborgen veld `f_status` houdt het gekozen id
+   vast, zodat opslaan onveranderd blijft werken. */
+let ST = null;   // { standaard, statussen: [...] }
+
+async function laadStatussen(){
+  try { ST = await (await fetch('/statussen.json')).json(); }
+  catch(e){ ST = null; }
+  stTeken();
+}
+
+/* Zelfde afvlakking als in src/lib/status.js, zodat het dashboard exact
+   dezelfde oude teksten herkent als de site. */
+function stSleutel(ruw){
+  return String(ruw == null ? '' : ruw).toLowerCase().normalize('NFD')
+    .replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+}
+
+function stZoek(ruw){
+  if (!ST) return null;
+  const k = stSleutel(ruw);
+  if (!k) return null;
+  for (const s of ST.statussen){
+    if (stSleutel(s.id) === k || stSleutel(s.naam) === k || stSleutel(s.kort) === k) return s;
+    for (const oud of (s.oud || [])) if (stSleutel(oud) === k) return s;
+  }
+  return null;
+}
+
+/* Zet de keuze op wat er in de database stond. Onbekende tekst laten we staan
+   in het verborgen veld — dan gaat er bij het opslaan niets verloren — maar
+   we lichten wel de standaard op en zeggen erbij wat er nu écht op de site komt. */
+function stZet(ruw){
+  const gevonden = stZoek(ruw);
+  const tekst = (typeof ruw === 'string' ? ruw.trim() : '');
+  $('f_status').value = gevonden ? gevonden.id : (tekst || (ST ? ST.standaard : 'te-koop'));
+  stTeken();
+}
+
+function stTeken(){
+  const doel = $('statusKeuze');
+  if (!doel) return;
+  if (!ST){ doel.innerHTML = '<div class="empty">Kon statussen.json niet laden.</div>'; return; }
+  const nu = $('f_status').value;
+  const gevonden = stZoek(nu);
+  doel.innerHTML = '';
+  ST.statussen.forEach(s => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'keuze' + (gevonden && gevonden.id === s.id ? ' actief' : '');
+    b.style.setProperty('--st-hex', s.hex);
+    b.style.setProperty('--st-waas', s.hex + '1f');   // 12% dekking als achtergrond
+    b.title = s.uitleg || '';
+    b.innerHTML = '<i></i>' + s.naam;
+    b.addEventListener('click', () => { $('f_status').value = s.id; stTeken(); });
+    doel.appendChild(b);
+  });
+  const uit = $('statusUitleg');
+  if (gevonden) uit.textContent = gevonden.uitleg || '';
+  else if (nu) uit.innerHTML = 'Deze woning heeft nu de eigen tekst <b>' + escapeHtml(nu) +
+    '</b>. Die blijft staan tot je hierboven iets kiest.';
+  else uit.textContent = '';
 }
 
 </script>

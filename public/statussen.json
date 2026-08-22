@@ -1,0 +1,77 @@
+{
+  "toelichting": "De status van een woning: het labeltje linksboven op de foto. Gelezen door de site (src/lib/status.js) én door het beheer-dashboard, zodat er maar één bron is. `oud` vangt de vrije tekst op die er vóór v1.36 in de database stond. `hex` is dezelfde kleur als de variabele --st-… in global.css; het dashboard gebruikt hem voor het bolletje bij de keuzeknop. Wijzig je er één, wijzig dan allebei — test-status.mjs valt erover als ze uit elkaar lopen. Alleen 'te koop' volgt het gekozen palet, dus daar is de hex alleen de standaardwaarde.",
+  "standaard": "te-koop",
+  "statussen": [
+    {
+      "id": "te-koop",
+      "naam": "Te koop",
+      "kort": "Te koop",
+      "kleur": "verkoop",
+      "uitleg": "Gewoon in de verkoop. Dit is de stand waarin een nieuwe woning begint.",
+      "oud": [
+        "te koop",
+        "tekoop",
+        "for sale",
+        "en venta"
+      ],
+      "hex": "#B15B3C",
+      "volgt_palet": true
+    },
+    {
+      "id": "beschikbaar",
+      "naam": "Beschikbaar",
+      "kort": "Beschikbaar",
+      "kleur": "vrij",
+      "uitleg": "Vrij te bezichtigen, maar zonder de nadruk op verkoop. Handig voor woningen die je nog niet hard in de markt zet.",
+      "oud": [
+        "beschikbaar",
+        "available",
+        "disponible"
+      ],
+      "hex": "#3F7D63"
+    },
+    {
+      "id": "gereserveerd",
+      "naam": "Gereserveerd",
+      "kort": "Gereserveerd",
+      "kleur": "wacht",
+      "uitleg": "Iemand heeft hem vastgelegd. De woning blijft zichtbaar, maar bezoekers zien dat er beweging in zit.",
+      "oud": [
+        "gereserveerd",
+        "onder optie",
+        "optie",
+        "reserved",
+        "reservado"
+      ],
+      "hex": "#C8871F"
+    },
+    {
+      "id": "onder-voorbehoud",
+      "naam": "Verkocht onder voorbehoud",
+      "kort": "Onder voorbehoud",
+      "kleur": "wacht-diep",
+      "uitleg": "Verkocht, maar de ontbindende voorwaarden lopen nog.",
+      "oud": [
+        "verkocht onder voorbehoud",
+        "onder voorbehoud",
+        "voorlopig verkocht",
+        "sold subject to contract",
+        "vendido con reservas"
+      ],
+      "hex": "#9C5F1C"
+    },
+    {
+      "id": "verkocht",
+      "naam": "Verkocht",
+      "kort": "Verkocht",
+      "kleur": "klaar",
+      "uitleg": "Rond. De woning blijft op de site staan, met een rustig grijs label — dat laat zien dat je verkoopt.",
+      "oud": [
+        "verkocht",
+        "sold",
+        "vendido"
+      ],
+      "hex": "#5C5852"
+    }
+  ]
+}

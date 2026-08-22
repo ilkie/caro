@@ -6,6 +6,7 @@ import { kaartUrl, kaartBron } from '../../lib/kaart.js';
 import { tekst, mailLink, whatsappLink, telLink } from '../../lib/teksten.js';
 import { fotolayoutVan, galerijAttributen } from '../../lib/fotolayout.js';
 import { logoAttributen } from '../../lib/logo.js';
+import { statusVan } from '../../lib/status.js';
 
 export async function getStaticPaths() {
   const woningen = await getAlleWoningen();
@@ -13,6 +14,7 @@ export async function getStaticPaths() {
 }
 
 const { woning: d } = Astro.props;
+const status = statusVan(d.status);
 const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
 const galerij = d.galerij || [];
 const kenmerkenBinnen = d.kenmerken_binnen || [];
@@ -32,7 +34,9 @@ const gal = galerijAttributen(layout);
 const t = (id) => tekst(teksten, id);
 const kaart = kaartUrl(d.lat, d.lon, mapsSleutel);
 const heeftLocatie = !!kaart;
-const pageTitle = `${d.titel}, ${d.plaats} — ${d.status} | Caro Leriche`;
+const pageTitle = status
+  ? `${d.titel}, ${d.plaats} — ${status.naam} | Caro Leriche`
+  : `${d.titel}, ${d.plaats} | Caro Leriche`;
 const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaapkamers, ${d.woonoppervlak} m². Persoonlijk begeleid door Caro Leriche, Real Estate Spain.`;
 ---
 <Base title={pageTitle} description={pageDesc} nav="minimal" theme="dark">
@@ -51,7 +55,10 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
       </div>
       <h1 class="naam"><span class="typed" data-text={d.titel}></span><span class="caret"></span></h1>
       <div class="prijs">{euro(d.prijs)}</div>
-      <div class="sub">{d.status} · {d.plaats}{d.regio ? `, ${d.regio}` : ''}</div>
+      <div class="sub">
+        {status && <span class={`wp-status ${status.klasse}`}>{status.naam}</span>}
+        {d.plaats}{d.regio ? `, ${d.regio}` : ''}
+      </div>
       {heeftVideo && <button class="soundbtn" type="button" aria-label="Geluid aan of uit">🔈 tik voor geluid</button>}
     </div>
   </section>

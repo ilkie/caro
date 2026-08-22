@@ -37,6 +37,16 @@
   --accent-soft-30:rgba(42,115,133,0.3);
   --ink-a55:rgba(18,56,66,0.55);
   /* PALET-EINDE */
+  /* ---------- Status van een woning ----------
+     Vier van de vijf kleuren staan bewust los van het gekozen palet:
+     "gereserveerd" en "verkocht" zijn signalen, geen huisstijl, en ze moeten
+     in álle vijf de kleurstijlen hetzelfde betekenen. Alleen "te koop" volgt
+     het accent, want dat is de gewone stand van zaken. */
+  --st-verkoop:var(--accent2);      /* te koop — terracotta, zoals het altijd was */
+  --st-vrij:#3F7D63;                /* beschikbaar — rustig groen */
+  --st-wacht:#C8871F;               /* gereserveerd — amber, er zit beweging in */
+  --st-wacht-diep:#9C5F1C;          /* onder voorbehoud — dieper, dichter bij rond */
+  --st-klaar:#5C5852;               /* verkocht — grijs, zonder nadruk */
   --r-soft:14px;--r-pill:999px;
   --soft:0 22px 55px -26px rgba(30,90,105,.4);--soft2:0 14px 34px -18px rgba(30,90,105,.32);
   --serif:'Noto Serif Display','Cormorant Garamond',Georgia,serif;
@@ -196,7 +206,7 @@ footer.site a:hover{color:#fff}
 /* object-position hoger dan het midden: de uitsnede toont de woning i.p.v.
    vooral de ondergrond. Wil Caro nog hoger/lager: alleen dit percentage wijzigen. */
 .spotlight .img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
-.spotlight .badge{position:absolute;top:16px;left:16px;background:var(--accent2);color:#fff;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;padding:6px 13px;border-radius:var(--r-pill)}
+.spotlight .badge{position:absolute;top:16px;left:16px;background:var(--st-kleur,var(--accent2));color:#fff;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;padding:6px 13px;border-radius:var(--r-pill)}
 .spotlight .kick{position:absolute;top:16px;right:16px;background:var(--ink-a55);color:#fff;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;padding:6px 13px;border-radius:var(--r-pill);backdrop-filter:blur(4px)}
 /* Spotlight-info als raster van 2 kolommen × 3 rijen, op basislijn uitgelijnd:
    rij 1 = titel + prijs op dezelfde hoogte, rij 3 = kenmerken + knop op
@@ -214,7 +224,23 @@ footer.site a:hover{color:#fff}
 .card:hover{transform:translateY(-5px);box-shadow:var(--soft)}
 .card .img{position:relative;aspect-ratio:16/10;overflow:hidden;background:linear-gradient(135deg,var(--sand-deep),var(--sand-deeper))}
 .card .img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.card .status{position:absolute;top:12px;left:12px;background:var(--accent2);color:#fff;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;padding:5px 11px;border-radius:var(--r-pill)}
+.card .status{position:absolute;top:12px;left:12px;background:var(--st-kleur,var(--accent2));color:#fff;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;padding:5px 11px;border-radius:var(--r-pill);max-width:calc(100% - 24px)}
+
+/* De vijf statussen. Eén regel per kleur, gedeeld door het labeltje op de
+   kaart, dat op de spotlight en dat op de woningpagina — zo kunnen ze niet
+   uit elkaar lopen.
+
+   Let op: deze klassen zetten een variabele en niet rechtstreeks `background`.
+   Dat is nodig, want `.card .status` is twee klassen diep en wint het anders
+   van een losse `.st-klaar` — dan blijft elk labeltje terracotta, hoe je het
+   ook instelt. Een custom property kent die strijd niet: hij wordt op het
+   element zelf gezet en de achtergrondregel leest hem gewoon uit. */
+.st-verkoop{--st-kleur:var(--st-verkoop)}
+.st-vrij{--st-kleur:var(--st-vrij)}
+.st-wacht{--st-kleur:var(--st-wacht)}
+.st-wacht-diep{--st-kleur:var(--st-wacht-diep)}
+.st-klaar{--st-kleur:var(--st-klaar)}
+.card .status,.spotlight .badge{box-shadow:0 2px 10px rgba(0,0,0,.22)}
 .card .body{padding:22px 24px 26px;display:flex;flex-direction:column;flex:1}
 .card h3{font-size:1.6rem;line-height:1.05}
 .card .plaats{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px}
@@ -293,7 +319,10 @@ body.theme-dark{--wp-line:var(--cream-15);background:var(--wp-bg);color:var(--cr
 .wp-hero .stage img,.wp-hero .stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .wp-hero .naam{font-family:var(--serif);font-size:clamp(2rem,4vw,3rem);font-weight:400;margin-top:30px;letter-spacing:.03em;font-stretch:62.5%;min-height:1.1em}
 .wp-hero .prijs{font-family:var(--serif);font-size:1.5rem;color:var(--sand);margin-top:6px;font-stretch:70%}
-.wp-hero .sub{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-70);margin-top:8px}
+.wp-hero .sub{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-70);margin-top:8px;
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px}
+/* Hetzelfde labeltje als op de kaart, maar dan op de donkere woningpagina. */
+.wp-status{background:var(--st-kleur,var(--accent2));color:#fff;border-radius:var(--r-pill);padding:4px 12px;font-size:.6rem;letter-spacing:.16em}
 .wp-hero .soundbtn{position:static;margin-top:18px;display:inline-block;background:transparent;border:1px solid var(--cream-30);color:var(--cream);border-radius:999px;padding:8px 16px;font-size:.7rem;letter-spacing:.1em;cursor:pointer}
 
 /* Facts dark */
