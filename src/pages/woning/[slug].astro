@@ -73,6 +73,9 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
       <div class="eyebrow">Welkom thuis</div>
       <h2>{d.titel}</h2>
       {alineas.map((p) => <p>{p}</p>)}
+      <div class="btns" style="margin-top:26px">
+        <a class="btn btn-magazine" href={`/woning/${d.slug}/magazine/`} data-magazine>{t('magazine_knop')}</a>
+      </div>
     </div>
   </section>
 
@@ -231,6 +234,7 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
           <a class="btn btn-primary" href={whatsappLink(teksten)}>{t('contact_knop_whatsapp')}</a>
           <a class="btn btn-ghost" href={mailLink(teksten)}>{t('contact_knop_mail')}</a>
           <a class="btn btn-ghost" href={telLink(teksten)}>{t('tel_weergave')}</a>
+          <a class="btn btn-ghost" href={`/woning/${d.slug}/magazine/`} data-magazine>{t('magazine_knop')}</a>
         </div>
       </div>
     </div>
@@ -274,6 +278,7 @@ const pageDesc = `${d.titel} in ${d.plaats} (${d.regio}): ${d.slaapkamers} slaap
         if (h.indexOf('wa.me') > -1 || h.indexOf('whatsapp') > -1) tel('whatsapp');
         else if (h.indexOf('mailto:') === 0) tel('email');
         else if (h.indexOf('tel:') === 0) tel('telefoon');
+        else if (a.hasAttribute('data-magazine')) tel('magazine');
       });
     })();
   </script>

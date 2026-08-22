@@ -1,0 +1,363 @@
+---
+/**
+ * Het magazine van één woning: een A4-boekje dat de bezoeker als PDF bewaart.
+ *
+ * Bewust géén Base.astro: deze pagina heeft geen menu en geen footer, want die
+ * horen niet op papier. Het palet, het lettertype en het logo komen wél uit de
+ * instellingen, zodat het magazine meeverandert met de rest van de site.
+ */
+import '../../../styles/global.css';
+import '../../../styles/magazine.css';
+import { getAlleWoningen } from '../../../lib/supabase';
+import { getInstellingen } from '../../../lib/instellingen';
+import { paletCss, lettertypeUrl } from '../../../lib/palet.js';
+import { tekst } from '../../../lib/teksten.js';
+import { logoAttributen } from '../../../lib/logo.js';
+import { magazineIndeling, magazineFeiten } from '../../../lib/magazine.js';
+
+export async function getStaticPaths() {
+  const woningen = await getAlleWoningen();
+  return woningen.map((w) => ({ params: { slug: w.slug }, props: { woning: w } }));
+}
+
+const { woning: d } = Astro.props;
+const instellingen = await getInstellingen();
+const t = (id) => tekst(instellingen.teksten, id);
+const merk = logoAttributen(instellingen.logo);
+
+const euro = (n) => '€ ' + (n ?? 0).toLocaleString('nl-NL');
+const ind = magazineIndeling(d);
+const feiten = magazineFeiten(d);
+const alineas = (d.omschrijving || '').split(/\n{2,}|\n/).map((s) => s.trim()).filter(Boolean);
+const binnen = d.kenmerken_binnen || [];
+const buiten = d.kenmerken_buiten || [];
+const afstanden = d.afstanden || [];
+const heeftKenmerken = binnen.length > 0 || buiten.length > 0 || afstanden.length > 0;
+
+// Paginanummers lopen door over alle vellen; de voorkant krijgt er geen.
+let nr = 1;
+const volgende = () => ++nr;
+// voorkant + verhaal + fotopagina's + (kenmerken) + achterkant
+const aantalPaginas = 2 + ind.fotopaginas.length + (heeftKenmerken ? 1 : 0) + 1;
+
+const plek = [d.plaats, d.regio].filter(Boolean).join(', ');
+const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
+---
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{titel}</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href={lettertypeUrl(instellingen.lettertype)} rel="stylesheet" />
+  <style is:inline set:html={paletCss(instellingen.palet, instellingen.keuzes, instellingen.lettertype)}></style>
+</head>
+<body class="mg-body">
+
+  <!-- Alleen op het scherm; verdwijnt bij afdrukken. -->
+  <div class="mg-balk">
+    <div class="wat"><b>{d.titel}</b> — <span class="mg-teller" id="teller">1</span> van de {aantalPaginas}</div>
+    <div class="knoppen">
+      <a class="mg-terug" href={`/woning/${d.slug}/`}>← terug naar de woning</a>
+      <button class="mg-knop" type="button" id="bewaar">Bewaar als PDF</button>
+    </div>
+  </div>
+  <div class="mg-voortgang"><i id="voortgang"></i></div>
+
+  <div class="mg-lezer">
+  <button class="mg-pijl vorige" type="button" id="vorige" aria-label="Vorige pagina">‹</button>
+  <button class="mg-pijl volgende" type="button" id="volgende" aria-label="Volgende pagina">›</button>
+  <div class="mg-hint" id="hint">Veeg om te bladeren →</div>
+  <div class="mg-stapel" id="stapel" tabindex="0">
+
+    <!-- ---------- Voorkant ---------- -->
+    <div class="mg-vel"><section class="mg-pag mg-cover">
+      {ind.cover && <div class="beeld"><img src={ind.cover} alt={d.titel} /></div>}
+      <div class="waas"></div>
+      <div class="inhoud">
+        <div class="merk">
+          <img src={merk.url} alt="" />
+          <span class="naam">{t('footer_naam')}<small>{t('footer_regel')}</small></span>
+        </div>
+        <div>
+          {d.status && <span class="status">{d.status}</span>}
+          <h1>{d.titel}</h1>
+          {plek && <div class="plek">{plek}</div>}
+          {d.prijs ? <div class="prijs">{euro(d.prijs)}</div> : null}
+        </div>
+      </div>
+    </section></div>
+
+    <!-- ---------- Het verhaal ---------- -->
+    <div class="mg-vel"><section class="mg-pag">
+      <div class="vulling">
+        <p class="mg-kop">{t('hero_eyebrow')}</p>
+        <h2>{d.titel}</h2>
+        <div class="mg-verhaal">
+          <div class="kolom">
+            {alineas.length
+              ? alineas.map((a) => <p>{a}</p>)
+              : <p>{`${d.titel} in ${plek}.`}</p>}
+          </div>
+          {ind.zijfoto && (
+            <div class="zijfoto"><img src={ind.zijfoto.src} alt={ind.zijfoto.label || d.titel} /></div>
+          )}
+        </div>
+        {feiten.length > 0 && (
+          <div class="mg-feiten" style={`--feiten:${feiten.length}`}>
+            {feiten.map((f) => (
+              <div class="f"><div class="n">{f.waarde}</div><div class="l">{f.label}</div></div>
+            ))}
+          </div>
+        )}
+      </div>
+      <div class="paginanr">{volgende()}</div>
+    </section></div>
+
+    <!-- ---------- Fotopagina's ---------- -->
+    {ind.fotopaginas.map((p, i) => (
+      <div class="mg-vel"><section class="mg-pag">
+        <div class={`mg-fotos ${p.vorm}`}>
+          {p.fotos.map((f) => (
+            <figure>
+              <img src={f.src} alt={f.label || d.titel} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+              {f.label && <figcaption>{f.label}</figcaption>}
+            </figure>
+          ))}
+        </div>
+        <div class="paginanr">{volgende()}</div>
+      </section></div>
+    ))}
+
+    <!-- ---------- Kenmerken en ligging ---------- -->
+    {heeftKenmerken && (
+      <div class="mg-vel"><section class="mg-pag">
+        <div class="vulling">
+          <p class="mg-kop">In het kort</p>
+          <h2>Kenmerken</h2>
+          <div class="mg-twee">
+            <div>
+              <p class="mg-sub">Binnen</p>
+              <ul class="mg-lijst">{binnen.map((k) => <li>{k}</li>)}</ul>
+            </div>
+            <div>
+              <p class="mg-sub">Buiten</p>
+              <ul class="mg-lijst">{buiten.map((k) => <li>{k}</li>)}</ul>
+            </div>
+          </div>
+
+          {afstanden.length > 0 && (
+            <div class="mg-afstanden">
+              {afstanden.map((a) => (
+                <div class="rij"><span>{a.plek}</span><b>{a.tijd}</b></div>
+              ))}
+            </div>
+          )}
+
+          {plek && (
+            <div class="mg-ligging">
+              <p class="mg-sub" style="margin-bottom:2mm">Ligging</p>
+              <div class="plek">{plek}</div>
+              <p>Het exacte adres deel ik persoonlijk, bij een afspraak.</p>
+            </div>
+          )}
+        </div>
+        <div class="paginanr">{volgende()}</div>
+      </section></div>
+    )}
+
+    <!-- ---------- Achterkant ---------- -->
+    <div class="mg-vel"><section class="mg-pag donker">
+      <div class="mg-slot">
+        <div class="beeld">
+          {ind.slotfoto
+            ? <img src={ind.slotfoto.src} alt={ind.slotfoto.label || d.titel} loading="lazy" decoding="async" />
+            : (ind.cover && <img src={ind.cover} alt={d.titel} />)}
+        </div>
+        <div class="onder">
+          <div>
+            <div class="merk">
+              <img src={merk.url} alt="" />
+              <span class="naam">{t('footer_naam')}<small>{t('footer_regel')}</small></span>
+            </div>
+            <p class="zin">{t('magazine_slot')}</p>
+          </div>
+          <div>
+            <div class="mg-contact">
+              <div><span>Telefoon</span>{t('tel_weergave')}</div>
+              <div><span>E-mail</span>{t('email')}</div>
+              <div><span>Registratie</span>{t('footer_raicv')}</div>
+            </div>
+            <p class="mg-klein">
+              Dit magazine is samengesteld op basis van de gegevens zoals ze op dat moment bekend waren.
+              Aan de inhoud kunnen geen rechten worden ontleend.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section></div>
+
+  </div>
+  </div>
+
+  <script>
+    (function () {
+      var stapel   = document.getElementById('stapel');
+      var vellen   = stapel.querySelectorAll('.mg-vel');
+      var teller   = document.getElementById('teller');
+      var balk     = document.getElementById('voortgang');
+      var vorige   = document.getElementById('vorige');
+      var volgende = document.getElementById('volgende');
+      var bewaar   = document.getElementById('bewaar');
+      var totaal   = vellen.length;
+
+      /* ---------- Alles precies laten passen ----------
+         Eén heel vel moet in beeld staan, dus we schalen op de kleinste van
+         breedte en hoogte. 210 x 297 mm bij 96 dpi = 793.7 x 1122.5 px. */
+      function meet() {
+        var vw = document.documentElement.clientWidth;
+        var vh = window.innerHeight;
+        var boven = 0;
+        var kop = document.querySelector('.mg-balk');
+        var streep = document.querySelector('.mg-voortgang');
+        if (kop) boven += kop.getBoundingClientRect().height;
+        if (streep) boven += streep.getBoundingClientRect().height;
+        var hoogte = Math.max(320, vh - boven);
+        var rand = vw < 700 ? 20 : 40;
+        var f = Math.min((vw - rand) / 793.7, (hoogte - 28) / 1122.5);
+        f = Math.max(0.15, Math.min(f, 1));
+        var r = document.documentElement.style;
+        r.setProperty('--mg-schaal', f.toFixed(4));
+        r.setProperty('--mg-vel-h', hoogte + 'px');
+      }
+
+      /* ---------- Waar zijn we? ---------- */
+      function huidige() {
+        var breedte = stapel.clientWidth || 1;
+        return Math.max(0, Math.min(totaal - 1, Math.round(stapel.scrollLeft / breedte)));
+      }
+      var doel = null;   // waar we heen onderweg zijn; null = waar we nu staan
+      function bijwerken() {
+        var i = doel !== null ? doel : huidige();
+        teller.textContent = String(i + 1);
+        balk.style.width = ((i + 1) / totaal * 100) + '%';
+        vorige.disabled = i <= 0;
+        volgende.disabled = i >= totaal - 1;
+      }
+      /* Een stap verder gaat zacht; een sprong naar begin of eind meteen —
+         anders zit je seconden naar een voorbijrazend boekje te kijken. */
+      function ganaar(i, meteen) {
+        i = Math.max(0, Math.min(totaal - 1, i));
+        var x = i * stapel.clientWidth;
+        doel = i;
+        clearTimeout(stapel._doelWeg);
+        stapel._doelWeg = setTimeout(function () { doel = null; bijwerken(); }, 900);
+        if (meteen) {
+          stapel.style.scrollBehavior = 'auto';
+          stapel.scrollLeft = x;
+          stapel.style.scrollBehavior = '';
+        } else {
+          stapel.scrollTo({ left: x, behavior: 'smooth' });
+        }
+        bijwerken();
+      }
+
+      vorige.addEventListener('click', function () { ganaar(huidige() - 1); });
+      volgende.addEventListener('click', function () { ganaar(huidige() + 1); });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); ganaar(huidige() + 1); }
+        else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); ganaar(huidige() - 1); }
+        else if (e.key === 'Home') { e.preventDefault(); ganaar(0, true); }
+        else if (e.key === 'End')  { e.preventDefault(); ganaar(totaal - 1, true); }
+      });
+
+      /* Een muiswiel scrollt verticaal; hier hoort dat te bladeren. */
+      stapel.addEventListener('wheel', function (e) {
+        if (e.deltaMode !== 0 || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+        e.preventDefault();
+        var nu = Date.now();
+        if (nu - (stapel._wiel || 0) < 420) return;
+        stapel._wiel = nu;
+        ganaar(huidige() + (e.deltaY > 0 ? 1 : -1));
+      }, { passive: false });
+
+      var wachten;
+      stapel.addEventListener('scroll', function () {
+        clearTimeout(wachten);
+        wachten = setTimeout(function () {
+          if (huidige() === doel) { clearTimeout(stapel._doelWeg); doel = null; }
+          bijwerken();
+        }, 90);
+      });
+
+      /* Bij het schalen verspringt de scrollpositie; blijf op hetzelfde vel. */
+      var opnieuw;
+      window.addEventListener('resize', function () {
+        var i = huidige();
+        clearTimeout(opnieuw);
+        opnieuw = setTimeout(function () {
+          meet();
+          ganaar(i, true);
+        }, 120);
+      });
+
+      meet();
+      bijwerken();
+
+      /* De veeg-hint verdwijnt zodra iemand iets doet, en anders na acht tellen. */
+      var hint = document.getElementById('hint');
+      var hintWeg = function () {
+        if (!hint) return;
+        hint.classList.add('weg');
+        setTimeout(function () { if (hint) hint.hidden = true; }, 500);
+        hint = null;
+      };
+      stapel.addEventListener('scroll', hintWeg, { once: true });
+      stapel.addEventListener('touchstart', hintWeg, { once: true, passive: true });
+      setTimeout(hintWeg, 8000);
+
+      /* ---------- Bewaren als PDF ----------
+         De foto's verderop in het boekje laden pas als je erheen bladert. Voor
+         het afdrukken moeten ze er wél allemaal zijn, anders komen er lege
+         vlakken op papier. Daarom eerst alles ophalen, dan pas printen. */
+      function allesLaden() {
+        var beelden = [].slice.call(document.querySelectorAll('img[loading="lazy"]'));
+        beelden.forEach(function (b) { b.loading = 'eager'; });
+        var nogBezig = beelden.filter(function (b) { return !b.complete; });
+        if (!nogBezig.length) return Promise.resolve();
+        return Promise.race([
+          Promise.all(nogBezig.map(function (b) {
+            return new Promise(function (klaar) {
+              b.addEventListener('load', klaar, { once: true });
+              b.addEventListener('error', klaar, { once: true });
+            });
+          })),
+          new Promise(function (klaar) { setTimeout(klaar, 8000); }),
+        ]);
+      }
+
+      bewaar.addEventListener('click', function () {
+        var tekst = bewaar.textContent;
+        bewaar.disabled = true;
+        bewaar.textContent = 'Even geduld…';
+        allesLaden().then(function () {
+          bewaar.disabled = false;
+          bewaar.textContent = tekst;
+          window.print();
+        });
+      });
+
+      // Voor wie zelf Ctrl+P doet: dan in elk geval de opdracht geven.
+      window.addEventListener('beforeprint', function () {
+        document.querySelectorAll('img[loading="lazy"]').forEach(function (b) { b.loading = 'eager'; });
+      });
+    })();
+  </script>
+</body>
+</html>

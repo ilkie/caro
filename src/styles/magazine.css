@@ -1,0 +1,187 @@
+/* =========================================================
+   Magazine — één woning als bladerbaar A4-boekje.
+   Op het scherm staan de pagina's als losse vellen onder elkaar;
+   bij afdrukken (of "bewaren als PDF") wordt het echt A4, zonder marges.
+   De kleuren komen uit het palet dat Caro koos.
+   ========================================================= */
+
+.mg-body{background:#3a4247;margin:0;padding:0;font-family:var(--sans);color:var(--ink);
+  line-height:1.6;font-weight:300;-webkit-font-smoothing:antialiased}
+
+/* ---------- Balk bovenaan (nooit op papier) ---------- */
+.mg-balk{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:space-between;
+  gap:16px;flex-wrap:wrap;padding:14px 22px;background:var(--wp-bg);color:#fff;
+  box-shadow:0 2px 14px rgba(0,0,0,.3)}
+.mg-balk .wat{font-size:.82rem;letter-spacing:.02em;opacity:.9}
+.mg-balk .wat b{font-weight:500}
+.mg-balk .knoppen{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.mg-knop{background:var(--accent-op-donker);color:var(--knop-tekst-donker);border:0;cursor:pointer;
+  font:inherit;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  padding:11px 22px;border-radius:var(--r-pill)}
+.mg-knop:hover{filter:brightness(1.12)}
+.mg-terug{color:#fff;opacity:.8;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  border-bottom:1px solid rgba(255,255,255,.35);padding-bottom:2px}
+.mg-terug:hover{opacity:1}
+
+.mg-stapel{padding:26px 16px 60px;display:flex;flex-direction:column;align-items:center;gap:26px}
+
+/* ---------- Eén vel ---------- */
+.mg-pag{width:210mm;height:297mm;background:var(--cream);position:relative;overflow:hidden;
+  box-shadow:0 10px 40px rgba(0,0,0,.35);flex-shrink:0}
+.mg-pag .vulling{position:absolute;inset:0;padding:18mm 16mm;display:flex;flex-direction:column}
+.mg-pag .paginanr{position:absolute;right:16mm;bottom:9mm;font-size:8pt;letter-spacing:.18em;
+  color:var(--muted)}
+.mg-pag.donker{background:var(--wp-bg);color:#fff}
+.mg-pag.donker .paginanr{color:rgba(255,255,255,.55)}
+
+/* ---------- Voorkant ---------- */
+.mg-cover{background:var(--wp-bg)}
+.mg-cover .beeld{position:absolute;inset:0}
+.mg-cover .beeld img{width:100%;height:100%;object-fit:cover}
+.mg-cover .waas{position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(15,35,42,.55) 0%,rgba(15,35,42,.05) 38%,rgba(15,35,42,.86) 100%)}
+.mg-cover .inhoud{position:absolute;inset:0;padding:16mm;display:flex;flex-direction:column;
+  justify-content:space-between;color:#fff}
+.mg-cover .merk{display:flex;align-items:center;gap:10px}
+.mg-cover .merk img{height:16mm;width:auto;filter:brightness(0) invert(1)}
+.mg-cover .merk .naam{font-family:var(--serif);font-size:20pt;line-height:1;font-stretch:85%}
+.mg-cover .merk .naam small{display:block;font-family:var(--sans);font-size:6.5pt;letter-spacing:.2em;
+  text-transform:uppercase;margin-top:4px;opacity:.85}
+.mg-cover .status{display:inline-block;align-self:flex-start;border:1px solid rgba(255,255,255,.6);
+  border-radius:999px;padding:5px 14px;font-size:7.5pt;letter-spacing:.2em;text-transform:uppercase;
+  margin-bottom:7mm}
+.mg-cover h1{font-family:var(--serif);font-size:44pt;line-height:.98;font-weight:500;font-stretch:62.5%;
+  margin-bottom:5mm;max-width:150mm}
+.mg-cover .plek{font-size:11pt;letter-spacing:.06em;opacity:.92}
+.mg-cover .prijs{font-family:var(--serif);font-size:22pt;margin-top:4mm;font-stretch:80%}
+
+/* ---------- Verhaal ---------- */
+.mg-kop{font-size:7.5pt;letter-spacing:.28em;text-transform:uppercase;color:var(--accent2);
+  margin-bottom:4mm}
+.mg-pag h2{font-family:var(--serif);font-size:26pt;font-weight:500;line-height:1.02;font-stretch:70%;
+  margin-bottom:6mm}
+/* vult de ruimte tussen de kop en de feitenbalk, zodat de zijfoto meegroeit */
+.mg-verhaal{display:grid;grid-template-columns:1fr 62mm;gap:10mm;flex:1;min-height:0;
+  padding-bottom:9mm}
+.mg-verhaal p{font-size:10.5pt;line-height:1.65;margin-bottom:4mm;color:var(--ink)}
+.mg-verhaal .kolom{max-width:88mm}
+.mg-verhaal .zijfoto{height:100%;min-height:0;overflow:hidden;border-radius:2px}
+.mg-verhaal .zijfoto img{width:100%;height:100%;object-fit:cover}
+
+.mg-feiten{display:grid;grid-template-columns:repeat(var(--feiten,5),1fr);gap:0;margin-top:auto;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.mg-feiten .f{padding:6mm 4mm;text-align:center;border-right:1px solid var(--line)}
+.mg-feiten .f:last-child{border-right:0}
+.mg-feiten .n{font-family:var(--serif);font-size:19pt;color:var(--accent-deep);line-height:1;font-stretch:80%}
+.mg-feiten .l{font-size:6.8pt;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:2.5mm}
+
+/* ---------- Fotopagina's ---------- */
+.mg-fotos{position:absolute;inset:0;display:grid;gap:3mm;padding:3mm}
+.mg-fotos.een{grid-template-rows:1fr}
+.mg-fotos.twee{grid-template-rows:1fr 1fr}
+.mg-fotos.drie{grid-template-rows:1.35fr 1fr;grid-template-columns:1fr 1fr}
+.mg-fotos.drie > :first-child{grid-column:span 2}
+.mg-fotos.vier{grid-template-rows:1fr 1fr;grid-template-columns:1fr 1fr}
+.mg-fotos figure{position:relative;overflow:hidden;background:var(--sand);margin:0}
+.mg-fotos img{width:100%;height:100%;object-fit:cover;display:block}
+.mg-fotos figcaption{position:absolute;left:5mm;bottom:4mm;font-size:6.8pt;letter-spacing:.18em;
+  text-transform:uppercase;color:#fff;text-shadow:0 1px 5px rgba(0,0,0,.6)}
+.mg-vol{position:absolute;inset:0}
+.mg-vol img{width:100%;height:100%;object-fit:cover}
+
+/* ---------- Kenmerken en ligging ---------- */
+.mg-twee{display:grid;grid-template-columns:1fr 1fr;gap:10mm;align-items:start}
+.mg-lijst{list-style:none;margin:0;padding:0}
+.mg-lijst li{font-size:10pt;padding:3mm 0 3mm 6mm;border-bottom:1px solid var(--line);position:relative}
+.mg-lijst li::before{content:"";position:absolute;left:0;top:5.2mm;width:2.6mm;height:2.6mm;
+  border-radius:50%;background:var(--accent2)}
+.mg-sub{font-size:7.5pt;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 3mm}
+.mg-afstanden{margin-top:10mm;display:grid;grid-template-columns:1fr 1fr;gap:0 10mm}
+.mg-afstanden .rij{display:flex;justify-content:space-between;gap:6mm;font-size:10pt;
+  padding:3mm 0;border-bottom:1px solid var(--line)}
+.mg-afstanden .rij b{font-weight:500;color:var(--accent-deep)}
+.mg-ligging{margin-top:auto;padding:6mm;background:var(--sand);border-radius:3px}
+.mg-ligging .plek{font-family:var(--serif);font-size:16pt;font-stretch:80%}
+.mg-ligging p{font-size:9pt;color:var(--muted);margin-top:2mm}
+
+/* ---------- Achterkant ---------- */
+.mg-slot{position:absolute;inset:0;display:flex;flex-direction:column}
+.mg-slot .beeld{height:150mm;overflow:hidden}
+.mg-slot .beeld img{width:100%;height:100%;object-fit:cover}
+.mg-slot .onder{flex:1;padding:14mm 16mm;display:flex;flex-direction:column;justify-content:space-between}
+.mg-slot .merk{display:flex;align-items:center;gap:10px}
+.mg-slot .merk img{height:16mm;width:auto;filter:brightness(0) invert(1)}
+.mg-slot .merk .naam{font-family:var(--serif);font-size:20pt;line-height:1;font-stretch:85%}
+.mg-slot .merk .naam small{display:block;font-family:var(--sans);font-size:6.5pt;letter-spacing:.2em;
+  text-transform:uppercase;margin-top:4px;opacity:.85}
+.mg-slot .zin{font-family:var(--serif);font-size:17pt;line-height:1.25;font-stretch:80%;max-width:120mm;
+  margin:8mm 0}
+.mg-contact{display:flex;gap:12mm;flex-wrap:wrap;font-size:9.5pt}
+.mg-contact div span{display:block;font-size:6.8pt;letter-spacing:.2em;text-transform:uppercase;
+  opacity:.6;margin-bottom:1.5mm}
+.mg-klein{font-size:7.5pt;opacity:.6;margin-top:8mm}
+
+/* ---------- De lezer: één pagina in beeld, zijwaarts bladeren ---------- */
+/* Het is bewust gewone horizontale scroll met scroll-snap: vegen op een
+   telefoon werkt dan vanzelf, zonder JavaScript en zonder haperingen. De
+   pijltjes en het toetsenbord schuiven diezelfde scroll op. */
+.mg-lezer{position:relative}
+.mg-stapel{display:flex;flex-direction:row;align-items:stretch;gap:0;padding:0;
+  overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
+.mg-stapel::-webkit-scrollbar{display:none}
+.mg-vel{flex:0 0 100%;height:var(--mg-vel-h,80vh);display:flex;align-items:center;
+  justify-content:center;overflow:hidden;scroll-snap-align:center;scroll-snap-stop:always}
+.mg-pag{transform:scale(var(--mg-schaal,1));transform-origin:center center;flex-shrink:0}
+
+/* Pijltjes; op een aanraakscherm verdwijnen ze, daar veeg je gewoon. */
+.mg-pijl{position:absolute;top:50%;transform:translateY(-50%);z-index:20;
+  width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.35);
+  background:rgba(20,40,48,.55);color:#fff;font-size:1.3rem;line-height:1;cursor:pointer;
+  display:grid;place-items:center;backdrop-filter:blur(4px);transition:.15s}
+.mg-pijl:hover{background:rgba(20,40,48,.85)}
+.mg-pijl[disabled]{opacity:.25;cursor:default}
+.mg-pijl.vorige{left:14px}
+.mg-pijl.volgende{right:14px}
+@media (hover:none){ .mg-pijl{display:none} }
+
+/* Op een aanraakscherm zijn er geen pijltjes, dus vertellen we één keer dat
+   je kunt vegen. Verdwijnt zodra je het doet. */
+/* rechtsboven, want daar staat op een voorkant meestal lucht — niet over de
+   titel of de prijs heen */
+.mg-hint{position:absolute;top:14px;right:14px;z-index:25;
+  background:rgba(20,40,48,.72);color:#fff;border-radius:999px;padding:7px 14px;
+  font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
+  backdrop-filter:blur(4px);pointer-events:none;transition:opacity .4s}
+.mg-hint[hidden]{display:none}
+.mg-hint.weg{opacity:0}
+@media (hover:hover){ .mg-hint{display:none} }
+
+/* Voortgang: een dun streepje onder de balk. */
+.mg-voortgang{height:3px;background:rgba(255,255,255,.15)}
+.mg-voortgang i{display:block;height:100%;width:0;background:var(--accent-op-donker);
+  transition:width .25s}
+.mg-teller{font-variant-numeric:tabular-nums}
+
+@media (max-width:640px){
+  /* op een telefoon is de balk kostbare ruimte: alleen de knoppen blijven */
+  .mg-balk{padding:10px 14px}
+  .mg-balk .wat{display:none}
+  .mg-balk .knoppen{width:100%;justify-content:space-between}
+  .mg-hint{top:10px;right:10px}
+}
+
+/* ---------- Afdrukken: terug naar een stapel losse vellen ---------- */
+@page{size:A4 portrait;margin:0}
+@media print{
+  .mg-balk,.mg-pijl,.mg-voortgang{display:none}
+  .mg-body{background:#fff}
+  .mg-stapel{display:block;overflow:visible;scroll-snap-type:none;padding:0}
+  .mg-vel{display:block;height:auto;padding:0;overflow:visible;
+    break-after:page;page-break-after:always}
+  .mg-vel:last-child{break-after:auto;page-break-after:auto}
+  .mg-pag{transform:none;box-shadow:none;margin:0}
+  /* achtergrondkleuren en -foto's meeprinten */
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}

@@ -165,6 +165,12 @@ section.pad{padding:104px 0}
 .btn:hover{transform:translateY(-2px)}
 .btn-primary{background:#fff;color:var(--accent-deep);font-weight:600}
 .btn-ghost{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.4)}
+/* Knop naar het magazine. Op de donkere woningpagina staat hij niet op een
+   gekleurd vlak, dus daar werkt een doorzichtige lijn in de accentkleur beter
+   dan het melkwitte btn-ghost. */
+.btn-magazine{background:transparent;color:var(--accent-op-donker);border:1px solid var(--accent-op-donker)}
+.btn-magazine::before{content:"\2193";font-size:1.05em;line-height:1}
+.btn-magazine:hover{background:var(--accent-op-donker);color:var(--knop-tekst-donker)}
 
 footer.site{background:var(--accent-ink);color:rgba(255,255,255,.72);padding:44px 0;font-size:.82rem;letter-spacing:.03em}
 footer.site .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}

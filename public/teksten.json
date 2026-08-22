@@ -6,12 +6,36 @@
       "naam": "Menu bovenaan",
       "uitleg": "De namen in het menu en de knop rechtsboven.",
       "velden": [
-        { "id": "menu_woningen", "naam": "Menu: woningen", "standaard": "Woningen" },
-        { "id": "menu_fotografie", "naam": "Menu: fotografie", "standaard": "Fotografie" },
-        { "id": "menu_over", "naam": "Menu: over Caro", "standaard": "Over Caro" },
-        { "id": "menu_contact", "naam": "Menu: contact", "standaard": "Contact" },
-        { "id": "menu_knop", "naam": "Knop rechtsboven", "standaard": "Plan bezichtiging" },
-        { "id": "menu_knop_woning", "naam": "Knop op een woningpagina", "standaard": "WhatsApp Caro" }
+        {
+          "id": "menu_woningen",
+          "naam": "Menu: woningen",
+          "standaard": "Woningen"
+        },
+        {
+          "id": "menu_fotografie",
+          "naam": "Menu: fotografie",
+          "standaard": "Fotografie"
+        },
+        {
+          "id": "menu_over",
+          "naam": "Menu: over Caro",
+          "standaard": "Over Caro"
+        },
+        {
+          "id": "menu_contact",
+          "naam": "Menu: contact",
+          "standaard": "Contact"
+        },
+        {
+          "id": "menu_knop",
+          "naam": "Knop rechtsboven",
+          "standaard": "Plan bezichtiging"
+        },
+        {
+          "id": "menu_knop_woning",
+          "naam": "Knop op een woningpagina",
+          "standaard": "WhatsApp Caro"
+        }
       ]
     },
     {
@@ -19,10 +43,28 @@
       "naam": "Bovenaan de homepage",
       "uitleg": "Het eerste dat een bezoeker ziet, over de grote foto heen.",
       "velden": [
-        { "id": "hero_eyebrow", "naam": "Kleine regel erboven", "standaard": "Real Estate Spain" },
-        { "id": "hero_kop", "naam": "De grote zin", "standaard": "Meer dan een makelaar.", "max": 60 },
-        { "id": "hero_tekst", "naam": "Zin eronder", "type": "lang", "standaard": "Persoonlijk, met oog voor beeld, sfeer en verhaal — van de eerste kennismaking tot ver na de sleutel." },
-        { "id": "hero_knop", "naam": "Tekst op de knop", "standaard": "Neem contact op" }
+        {
+          "id": "hero_eyebrow",
+          "naam": "Kleine regel erboven",
+          "standaard": "Real Estate Spain"
+        },
+        {
+          "id": "hero_kop",
+          "naam": "De grote zin",
+          "standaard": "Meer dan een makelaar.",
+          "max": 60
+        },
+        {
+          "id": "hero_tekst",
+          "naam": "Zin eronder",
+          "type": "lang",
+          "standaard": "Persoonlijk, met oog voor beeld, sfeer en verhaal — van de eerste kennismaking tot ver na de sleutel."
+        },
+        {
+          "id": "hero_knop",
+          "naam": "Tekst op de knop",
+          "standaard": "Neem contact op"
+        }
       ]
     },
     {
@@ -30,10 +72,43 @@
       "naam": "Woningen",
       "uitleg": "De koppen boven de woning in de kijker en het overzicht.",
       "velden": [
-        { "id": "woningen_eyebrow", "naam": "Kleine regel", "standaard": "In de spotlight" },
-        { "id": "woningen_kop", "naam": "Kop", "standaard": "Woning in de kijker", "max": 60 },
-        { "id": "woningen_meer", "naam": "Boven het overzicht", "standaard": "Meer woningen" },
-        { "id": "woningen_link", "naam": "Link bij een woning", "standaard": "Bekijk woning →" }
+        {
+          "id": "woningen_eyebrow",
+          "naam": "Kleine regel",
+          "standaard": "In de spotlight"
+        },
+        {
+          "id": "woningen_kop",
+          "naam": "Kop",
+          "standaard": "Woning in de kijker",
+          "max": 60
+        },
+        {
+          "id": "woningen_meer",
+          "naam": "Boven het overzicht",
+          "standaard": "Meer woningen"
+        },
+        {
+          "id": "woningen_link",
+          "naam": "Link bij een woning",
+          "standaard": "Bekijk woning →"
+        },
+        {
+          "id": "magazine_knop",
+          "naam": "Knop: magazine downloaden",
+          "type": "kort",
+          "standaard": "Download het magazine",
+          "max": 40,
+          "hint": "Staat op de woningpagina, onder de omschrijving en bij het contactblok."
+        },
+        {
+          "id": "magazine_slot",
+          "naam": "Slotzin in het magazine",
+          "type": "lang",
+          "standaard": "Persoonlijk begeleid, van eerste bezichtiging tot sleutel.",
+          "max": 160,
+          "hint": "De laatste zin op de achterkant van het magazine."
+        }
       ]
     },
     {
@@ -41,10 +116,28 @@
       "naam": "Fotografie",
       "uitleg": "Het blok over dat je zelf fotografeert en filmt.",
       "velden": [
-        { "id": "fotografie_eyebrow", "naam": "Kleine regel", "standaard": "Ook fotografie" },
-        { "id": "fotografie_kop", "naam": "Kop", "standaard": "Ik fotografeer en film de woningen zelf", "max": 70 },
-        { "id": "fotografie_tekst", "naam": "Tekst", "type": "lang", "standaard": "Geen snelle standaard ‘kiekjes’: elke woning krijgt de aandacht die ze verdient, met de focus op licht, sfeer en verhaal — in foto én video. Wil je jouw woning zo in beeld gebracht zien? Vraag gerust naar de mogelijkheden." },
-        { "id": "fotografie_knop", "naam": "Tekst op de knop", "standaard": "Vraag naar fotografie" }
+        {
+          "id": "fotografie_eyebrow",
+          "naam": "Kleine regel",
+          "standaard": "Ook fotografie"
+        },
+        {
+          "id": "fotografie_kop",
+          "naam": "Kop",
+          "standaard": "Ik fotografeer en film de woningen zelf",
+          "max": 70
+        },
+        {
+          "id": "fotografie_tekst",
+          "naam": "Tekst",
+          "type": "lang",
+          "standaard": "Geen snelle standaard ‘kiekjes’: elke woning krijgt de aandacht die ze verdient, met de focus op licht, sfeer en verhaal — in foto én video. Wil je jouw woning zo in beeld gebracht zien? Vraag gerust naar de mogelijkheden."
+        },
+        {
+          "id": "fotografie_knop",
+          "naam": "Tekst op de knop",
+          "standaard": "Vraag naar fotografie"
+        }
       ]
     },
     {
@@ -52,10 +145,29 @@
       "naam": "Over Caro",
       "uitleg": "Je portret met het verhaal over je aanpak.",
       "velden": [
-        { "id": "over_eyebrow", "naam": "Kleine regel", "standaard": "Over Caro" },
-        { "id": "over_kop", "naam": "Kop", "standaard": "Eerst kennismaken, dan pas zoeken", "max": 70 },
-        { "id": "over_tekst1", "naam": "Eerste alinea", "type": "lang", "standaard": "Ik kijk niet alleen naar waar je wil wonen, maar luister vooral naar hoe je wil leven. Daarbij begin ik niet met eindeloze lijstjes met bezichtigingen, maar is jou leren kennen de allereerste stap." },
-        { "id": "over_tekst2", "naam": "Tweede alinea", "type": "lang", "standaard": "Op zoek naar een woning, of denk je aan bouwen in Spanje? Laten we kennismaken — dan zoek ik gericht met je mee." }
+        {
+          "id": "over_eyebrow",
+          "naam": "Kleine regel",
+          "standaard": "Over Caro"
+        },
+        {
+          "id": "over_kop",
+          "naam": "Kop",
+          "standaard": "Eerst kennismaken, dan pas zoeken",
+          "max": 70
+        },
+        {
+          "id": "over_tekst1",
+          "naam": "Eerste alinea",
+          "type": "lang",
+          "standaard": "Ik kijk niet alleen naar waar je wil wonen, maar luister vooral naar hoe je wil leven. Daarbij begin ik niet met eindeloze lijstjes met bezichtigingen, maar is jou leren kennen de allereerste stap."
+        },
+        {
+          "id": "over_tekst2",
+          "naam": "Tweede alinea",
+          "type": "lang",
+          "standaard": "Op zoek naar een woning, of denk je aan bouwen in Spanje? Laten we kennismaken — dan zoek ik gericht met je mee."
+        }
       ]
     },
     {
@@ -63,13 +175,46 @@
       "naam": "Contact",
       "uitleg": "Het gekleurde blok onderaan de homepage.",
       "velden": [
-        { "id": "contact_kop", "naam": "Kop", "standaard": "Op zoek naar jouw woning in Spanje?", "max": 70 },
-        { "id": "contact_tekst1", "naam": "Eerste alinea", "type": "lang", "standaard": "Vertel me waar je naar zoekt — ik begeleid je persoonlijk, ook als de juiste woning nog gevonden moet worden." },
-        { "id": "contact_tekst2", "naam": "Tweede alinea", "type": "lang", "standaard": "Ik help je niet alleen bij aankoop, maar ook bij verkoop: van woningen tot gronden en projecten. En omdat kopen of bouwen in Spanje veel vragen oproept, leg ik je het hele proces uit en blijf ik naast je staan — tot en met een eventueel bouwtraject." },
-        { "id": "contact_knop_whatsapp", "naam": "Knop: WhatsApp", "standaard": "WhatsApp Caro" },
-        { "id": "contact_knop_mail", "naam": "Knop: e-mail", "standaard": "Stuur een e-mail" },
-        { "id": "contact_woning_kop", "naam": "Kop op een woningpagina", "standaard": "Deze woning met eigen ogen zien?", "max": 70 },
-        { "id": "contact_woning_tekst", "naam": "Tekst op een woningpagina", "type": "lang", "standaard": "Ik begeleid je persoonlijk — plan een vrijblijvende bezichtiging, ter plaatse of via een videorondleiding." }
+        {
+          "id": "contact_kop",
+          "naam": "Kop",
+          "standaard": "Op zoek naar jouw woning in Spanje?",
+          "max": 70
+        },
+        {
+          "id": "contact_tekst1",
+          "naam": "Eerste alinea",
+          "type": "lang",
+          "standaard": "Vertel me waar je naar zoekt — ik begeleid je persoonlijk, ook als de juiste woning nog gevonden moet worden."
+        },
+        {
+          "id": "contact_tekst2",
+          "naam": "Tweede alinea",
+          "type": "lang",
+          "standaard": "Ik help je niet alleen bij aankoop, maar ook bij verkoop: van woningen tot gronden en projecten. En omdat kopen of bouwen in Spanje veel vragen oproept, leg ik je het hele proces uit en blijf ik naast je staan — tot en met een eventueel bouwtraject."
+        },
+        {
+          "id": "contact_knop_whatsapp",
+          "naam": "Knop: WhatsApp",
+          "standaard": "WhatsApp Caro"
+        },
+        {
+          "id": "contact_knop_mail",
+          "naam": "Knop: e-mail",
+          "standaard": "Stuur een e-mail"
+        },
+        {
+          "id": "contact_woning_kop",
+          "naam": "Kop op een woningpagina",
+          "standaard": "Deze woning met eigen ogen zien?",
+          "max": 70
+        },
+        {
+          "id": "contact_woning_tekst",
+          "naam": "Tekst op een woningpagina",
+          "type": "lang",
+          "standaard": "Ik begeleid je persoonlijk — plan een vrijblijvende bezichtiging, ter plaatse of via een videorondleiding."
+        }
       ]
     },
     {
@@ -77,10 +222,28 @@
       "naam": "Je gegevens",
       "uitleg": "Verandert je nummer of adres? Pas het hier aan; de site past alle knoppen en links aan.",
       "velden": [
-        { "id": "tel_weergave", "naam": "Telefoonnummer zoals het er staat", "standaard": "+34 604 27 29 07" },
-        { "id": "tel_nummer", "naam": "Telefoonnummer om te bellen", "standaard": "+34604272907", "hint": "Zonder spaties, met landcode." },
-        { "id": "whatsapp", "naam": "WhatsApp-nummer", "standaard": "34604272907", "hint": "Alleen cijfers, met landcode, zonder plus." },
-        { "id": "email", "naam": "E-mailadres", "standaard": "caro.realestate.spain@gmail.com" }
+        {
+          "id": "tel_weergave",
+          "naam": "Telefoonnummer zoals het er staat",
+          "standaard": "+34 604 27 29 07"
+        },
+        {
+          "id": "tel_nummer",
+          "naam": "Telefoonnummer om te bellen",
+          "standaard": "+34604272907",
+          "hint": "Zonder spaties, met landcode."
+        },
+        {
+          "id": "whatsapp",
+          "naam": "WhatsApp-nummer",
+          "standaard": "34604272907",
+          "hint": "Alleen cijfers, met landcode, zonder plus."
+        },
+        {
+          "id": "email",
+          "naam": "E-mailadres",
+          "standaard": "caro.realestate.spain@gmail.com"
+        }
       ]
     },
     {
@@ -88,9 +251,21 @@
       "naam": "Onderaan elke pagina",
       "uitleg": "De regels in de voettekst.",
       "velden": [
-        { "id": "footer_naam", "naam": "Naam", "standaard": "Caro Leriche" },
-        { "id": "footer_regel", "naam": "Regel eronder", "standaard": "Real Estate Spain" },
-        { "id": "footer_raicv", "naam": "Registratie", "standaard": "RAICV 3994" }
+        {
+          "id": "footer_naam",
+          "naam": "Naam",
+          "standaard": "Caro Leriche"
+        },
+        {
+          "id": "footer_regel",
+          "naam": "Regel eronder",
+          "standaard": "Real Estate Spain"
+        },
+        {
+          "id": "footer_raicv",
+          "naam": "Registratie",
+          "standaard": "RAICV 3994"
+        }
       ]
     }
   ]
