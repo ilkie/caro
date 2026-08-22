@@ -383,6 +383,8 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
         var start = vooruit ? 0 : -180;
         var eind  = vooruit ? -180 : 0;
         blad.style.transform = 'rotateY(' + start + 'deg)';
+        // eronder mag niets bewegen zolang het vel draait
+        stapel.style.overflowX = 'hidden';
         flip.classList.add('aan');
         // even laten doorrekenen, anders slaat de browser de overgang over
         void blad.offsetWidth;
@@ -396,6 +398,7 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
           // pagina's terug, scroll goedzetten en de laag weghalen — in één tik,
           // zodat er niets tussenin te zien is
           terugzetten();
+          stapel.style.overflowX = '';
           ganaar(naar, true);
           flip.classList.remove('aan', 'draait');
           flip.innerHTML = '';
@@ -408,7 +411,7 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
       function ganaar(v, meteen) {
         if (perBeeld === 2) v -= (v % 2);
         v = Math.max(0, Math.min(totaal - perBeeld, v));
-        var x = v * velBreedte();
+        var x = Math.round(v * velBreedte());
         doel = v;
         clearTimeout(stapel._doelWeg);
         stapel._doelWeg = setTimeout(function () { doel = null; bijwerken(); }, 900);
@@ -454,13 +457,23 @@ const titel = `${d.titel} — magazine | ${t('footer_naam')}`;
         else if (e.key === 'End')  { e.preventDefault(); ganaar(totaal - perBeeld, true); }
       });
 
-      /* Een muiswiel scrollt verticaal; hier hoort dat te bladeren. */
+      /* Een muiswiel of trackpad scrollt verticaal; hier hoort dat te bladeren.
+         Let op: een trackpad stuurt géén losse tikjes maar een stroom van
+         tientallen gebeurtenissen, die na het loslaten nog doorloopt. Met een
+         simpele tijdslimiet blader je daardoor met één veeg drie pagina's door
+         — en omdat de animatie maar één omslag laat zien, lijkt het alsof het
+         beeld erna verspringt. Daarom: één gebaar is één pagina. Pas als er
+         200 ms lang geen enkele gebeurtenis meer komt, telt het als een nieuw
+         gebaar. */
+      var wielRust = true, wielTimer;
       stapel.addEventListener('wheel', function (e) {
-        if (e.deltaMode !== 0 || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+        if (e.deltaMode !== 0) return;
+        if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;   // horizontaal = schuiven
         e.preventDefault();
-        var nu = Date.now();
-        if (nu - (stapel._wiel || 0) < 420) return;
-        stapel._wiel = nu;
+        clearTimeout(wielTimer);
+        wielTimer = setTimeout(function () { wielRust = true; }, 200);
+        if (!wielRust || bezig) return;
+        wielRust = false;
         stap(e.deltaY > 0 ? 1 : -1);
       }, { passive: false });
 
